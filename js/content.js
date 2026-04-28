@@ -120,7 +120,13 @@
 
   async function sendToPlayer(message) {
     message.dest = "player"
-    const result = await brapi.runtime.sendMessage(message)
+    let result
+    try {
+      result = await brapi.runtime.sendMessage(message)
+    } catch (err) {
+      // service worker restarted (idle timeout) — context is invalidated
+      return null
+    }
     if (result && result.error) throw result.error
     else return result
   }
