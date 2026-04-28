@@ -1,22 +1,32 @@
 # Read Aloud
 
-Firefox extension with a focus on a cleaner settings UI and better voice management.
+Firefox extension with a redesigned settings UI, in-page highlighting, favorites, and an offline TTS engine.
 
 See the [upstream repo](https://github.com/ken107/read-aloud) for general documentation, architecture, and API key setup.
 
 ---
 
-## Changes from upstream
+## Screenshots
 
-### Firefox compatibility
-- Background page uses `scripts` array instead of `service_worker` (MV3 Firefox requirement)
+**Redesigned settings page** — dark mode, voice filter chips, favorites, segmented highlighting control:
+
+![Settings page](img/options_redesigned.png)
+
+**In-page highlighting** — blue outline follows the currently-read paragraph directly on the page:
+
+![In-page highlighting](img/in_page_highlight.png)
+
+---
+
+## Changes from upstream
 
 ### Settings UI overhaul
 - **Voice filter chips** — clickable chips per provider/model family (Google Neural2, Google Chirp3-HD, etc.) instead of typing; one chip per family, not per language accent
 - **Favorites** — star button next to the voice dropdown; starred voices appear in a gold "★ Favorites" chip that filters the dropdown to just your picks
 - **Language picker** (`Sprache`) — inline checkbox dropdown above the voice selector, no separate tab
-- **Highlighting** — three-button segmented control (Popup / Window / Off) instead of a dropdown
+- **Highlighting** — three-button segmented control (Popup / Window / Off / In Page) instead of a dropdown
 - **Speed slider** shows live value while dragging; edit button switches to a manual number input
+- **Voice grouping** — dropdown split into Offline Voices / Online – Free / Cloud Voices / Experimental AI Voices
 - **Removed** pitch and volume controls (volume is set at OS level; pitch is rarely useful)
 - **Removed** native browser voices (espeak etc.) from the dropdown — poor quality
 - **Removed** empty optgroup separators from the voice dropdown
@@ -28,7 +38,35 @@ See the [upstream repo](https://github.com/ken107/read-aloud) for general docume
 - **Dark mode toggle** button in the options page header
 - **"About voice providers"** collapsible table — all providers with type (offline/free/paid), supported languages, notes, and links to docs and voice samples
 - **Auto-select hint** below the voice dropdown explains language-matching behavior and favorites priority
-- **Voice grouping** — dropdown split into Offline Voices / Online – Free / Cloud Voices / Experimental AI Voices
+
+### In-page highlighting
+New **In Page** option in the highlighting control (alongside Popup / Window / Off):
+- Highlights the currently-read block directly on the webpage with a semi-transparent blue outline
+- Uses element-level highlighting for pages with `<p>` tags; falls back to precise range-based highlighting for flat HTML (e.g. `<br><br>`-separated text)
+- Handles inline elements (footnotes, links, bold) within a highlighted range without wrapping the whole page
+- Highlighted block scrolls to 25% from the top of the viewport
+- **Click any block to seek** — while "In Page" mode is active, all readable blocks are clickable; clicking seeks TTS to that block (including click-position detection within single-container pages)
+- Highlighting is driven by the player (persists after popup is closed)
+
+### Supertonic TTS (offline, on-device)
+- Bundled Supertonic TTS engine running entirely in-browser via ONNX Runtime Web (WASM backend) in a Web Worker — no external service
+- Models (~250 MB) downloaded on demand from HuggingFace and cached in the browser Cache API (persistent, not subject to cache eviction)
+- **Install:** select "Supertonic Stimmen installieren…" in the voice dropdown; progress is shown inline; the 10 voices (F1–F5, M1–M5) appear only after download completes
+- Models are loaded from cache into the Worker on first use per session; subsequent sentences in the same session are instant
+- Supports en / ko / es / pt / fr
+- Dash-between-phrases is normalized to a comma before inference for more natural pausing
+
+### Auto-select voice
+When no specific voice is selected, a voice matching the **page language** is picked automatically. Priority order:
+
+1. **Favorited voice matching the page language** — whichever matching favorite you starred first wins
+2. Piper
+3. Google Translate
+4. Other voices
+
+The currently auto-selected voice is shown as `Auto: <voice name>` below the dropdown.
+
+To control which voice is picked for a language: star voices in your preferred order. The first favorited voice that supports the page language is used. To change priority, unfavorite and re-favorite in the desired order.
 
 ### Playback behavior
 - Changing settings (rate, voice, etc.) no longer stops playback — the player re-reads settings per sentence, so changes take effect at the next sentence boundary
@@ -44,41 +82,12 @@ Rate changes apply at the next sentence boundary without interrupting playback.
 ### Popup improvements
 - **Speed buttons** — `−` / `+` buttons in the popup for quick speed adjustment without opening settings
 
-### Auto-select voice
-When no specific voice is selected, a voice matching the **page language** is picked automatically. Priority order:
-
-1. **Favorited voice matching the page language** — whichever matching favorite you starred first wins
-2. Piper
-3. Google Translate
-4. Other voices
-
-The currently auto-selected voice is shown as `Auto: <voice name>` below the dropdown.
-
-To control which voice is picked for a language: star voices in your preferred order. The first favorited voice that supports the page language is used. To change priority, unfavorite and re-favorite in the desired order.
-
 ### Text extraction improvements
 - Better block detection for rich-text editors (Draft.js, X/Twitter): span-only paragraphs without block-level children are now recognized as text blocks
 - Short `<p>` and bold-styled elements treated as pseudo-headings for correct reading order
 
-### Supertonic TTS (offline, on-device)
-- Bundled Supertonic TTS engine running entirely in-browser via ONNX Runtime Web (WASM backend) in a Web Worker — no external service
-- Models (~250 MB) downloaded on demand from HuggingFace and cached in the browser Cache API (persistent, not subject to cache eviction)
-- **Install:** select "Supertonic Stimmen installieren…" in the voice dropdown; progress is shown inline; the 10 voices (F1–F5, M1–M5) appear only after download completes
-- Models are loaded from cache into the Worker on first use per session; subsequent sentences in the same session are instant
-- Supports en / ko / es / pt / fr
-- Dash-between-phrases is normalized to a comma before inference for more natural pausing
-
-### In-page highlighting
-
-New **In Page** option in the highlighting control (alongside Popup / Window / Off):
-- Highlights the currently-read block directly on the webpage with a semi-transparent blue outline
-- Uses element-level highlighting for pages with `<p>` tags; falls back to precise range-based highlighting for flat HTML (e.g. `<br><br>`-separated text)
-- Handles inline elements (footnotes, links, bold) within a highlighted range without wrapping the whole page
-- Highlighted block scrolls to 25% from the top of the viewport
-- **Click any block to seek** — while "In Page" mode is active, all readable blocks are clickable; clicking seeks TTS to that block (including click-position detection within single-container pages)
-- Highlighting is driven by the player (persists after popup is closed)
-
-![In-page highlighting](in_page_highlight.png)
+### Firefox compatibility
+- Background page uses `scripts` array instead of `service_worker` (MV3 Firefox requirement)
 
 ### Removed upstream features
 - `languages.html` per-language voice picker (replaced by the inline language filter + favorites)
