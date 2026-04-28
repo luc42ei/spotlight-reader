@@ -21,10 +21,10 @@
     "message": "Experimental AI Voices"
   },
   "options_voicegroup_standard": {
-    "message": "Standard Voices"
+    "message": "Online – Free"
   },
   "options_voicegroup_premium": {
-    "message": "Premium Voices"
+    "message": "Cloud Voices"
   },
   "options_voicegroup_additional": {
     "message": "Additional Voices"

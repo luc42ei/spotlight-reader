@@ -508,18 +508,17 @@
           || isOpenai(voice)
       });
 
-    //group by standard/premium
     var groups = Object.assign({
         experimental: [],
         offline: [],
-        premium: [],
         standard: [],
+        premium: [],
       },
       voices.groupBy(function(voice) {
-        if (isPiperVoice(voice) || isSupertonicVoice(voice)) return "experimental"
-        if (isOfflineVoice(voice)) return "offline"
-        if (isPremiumVoice(voice)) return "premium";
-        return "standard"
+        if (isPiperVoice(voice)) return "experimental"
+        if (isSupertonicVoice(voice) || isNativeVoice(voice)) return "offline"
+        if (isGoogleTranslate(voice)) return "standard"
+        return "premium"
       }))
     for (var name in groups) groups[name].sort(voiceSorter);
 
@@ -534,7 +533,9 @@
 
     addGroup(brapi.i18n.getMessage("options_voicegroup_experimental"), "experimental", groups.experimental, g => {
       $("<option>").val("@piper").text(brapi.i18n.getMessage("options_enable_piper_voices")).appendTo(g)
-      if (!groups.experimental.some(isSupertonicVoice))
+    })
+    addGroup(brapi.i18n.getMessage("options_voicegroup_offline"), "offline", groups.offline, g => {
+      if (!groups.offline.some(isSupertonicVoice))
         $("<option>").val("@supertonic").text(brapi.i18n.getMessage("options_enable_supertonic_voices")).appendTo(g)
     })
     addGroup(brapi.i18n.getMessage("options_voicegroup_standard"), null, groups.standard)
