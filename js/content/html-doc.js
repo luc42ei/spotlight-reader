@@ -71,6 +71,19 @@ var readAloudDoc = new function() {
     }
     $(toRead).addClass("read-aloud");   //for debugging only
 
+    // Block-level seek from hover-overlay click
+    var seekTarget = window.__raSeekTarget || null;
+    if (seekTarget) window.__raSeekTarget = null;
+    if (seekTarget && seekTarget.el) {
+      for (var si = 0; si < toRead.length; si++) {
+        var te = toRead[si];
+        if (te === seekTarget.el || te.contains(seekTarget.el) || seekTarget.el.contains(te)) {
+          if (si > 0) toRead = toRead.slice(si);
+          break;
+        }
+      }
+    }
+
     //extract texts and build element mapping for in-page highlighting
     var finalTexts = [];
     self._highlightEntries = [];
@@ -83,6 +96,26 @@ var readAloudDoc = new function() {
         finalTexts.push(pairs[j].text);
       }
     }
+
+    // Sentence-level seek within extracted texts
+    if (seekTarget && seekTarget.sentenceText) {
+      var needle = seekTarget.sentenceText;
+      var needlePrefix = needle.slice(0, 40);
+      for (var ti = 0; ti < finalTexts.length; ti++) {
+        var hay = finalTexts[ti];
+        var pos = hay.indexOf(needle);
+        if (pos < 0) pos = hay.toLowerCase().indexOf(needle.toLowerCase());
+        if (pos < 0) pos = hay.indexOf(needlePrefix);
+        if (pos < 0) pos = hay.toLowerCase().indexOf(needlePrefix.toLowerCase());
+        if (pos >= 0) {
+          self._highlightEntries = self._highlightEntries.slice(ti);
+          finalTexts = finalTexts.slice(ti);
+          if (pos > 0) finalTexts[0] = finalTexts[0].slice(pos);
+          break;
+        }
+      }
+    }
+
     return finalTexts;
   }
 

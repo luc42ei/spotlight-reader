@@ -33,7 +33,7 @@
       if (/^\/presentation\/d\//.test(location.pathname)) return ["js/content/google-slides.js"];
       else if (/\/document\/d\//.test(location.pathname)) return ["js/content/googleDocsUtil.js", "js/content/google-doc.js"];
       else if ($(".drive-viewer-paginated-scrollable").length) return ["js/content/google-drive-doc.js"];
-      else return ["js/content/html-doc.js"];
+      else return ["js/content/html-doc.js", "js/content/hover-overlay.js"];
     }
     else if (location.hostname == "drive.google.com") {
       if ($(".drive-viewer-paginated-scrollable").length) return ["js/content/google-drive-doc.js"];
@@ -42,9 +42,9 @@
     else if (location.hostname == "onedrive.live.com" && $(".OneUp-pdf--loaded").length) return ["js/content/onedrive-doc.js"];
     else if (/^read\.amazon\./.test(location.hostname)) return ["js/content/kindle-book.js"];
     else if (location.hostname.endsWith(".khanacademy.org")) return ["js/content/khan-academy.js"];
-    else if (location.hostname.endsWith("acrobatiq.com")) return ["js/content/html-doc.js", "js/content/acrobatiq.js"];
-    else if (location.hostname == "digital.wwnorton.com") return ["js/content/html-doc.js", "js/content/wwnorton.js"];
-    else if (location.hostname == "plus.pearson.com") return ["js/content/html-doc.js", "js/content/pearson.js"];
+    else if (location.hostname.endsWith("acrobatiq.com")) return ["js/content/html-doc.js", "js/content/acrobatiq.js", "js/content/hover-overlay.js"];
+    else if (location.hostname == "digital.wwnorton.com") return ["js/content/html-doc.js", "js/content/wwnorton.js", "js/content/hover-overlay.js"];
+    else if (location.hostname == "plus.pearson.com") return ["js/content/html-doc.js", "js/content/pearson.js", "js/content/hover-overlay.js"];
     else if (location.hostname == "www.ixl.com") return ["js/content/ixl.js"];
     else if (location.hostname == "www.webnovel.com" && location.pathname.startsWith("/book/")) return ["js/content/webnovel.js"];
     else if (location.hostname == "archiveofourown.org") return ["js/content/archiveofourown.js"];
@@ -57,7 +57,7 @@
         && location.port === "1122"
         && location.protocol === "http:"
         && location.pathname === "/bookshelf/index.html") return  ["js/content/yd-app-web.js"];
-    else return ["js/content/html-doc.js"];
+    else return ["js/content/html-doc.js", "js/content/hover-overlay.js"];
   }
 
   async function getCurrentIndex() {
@@ -77,7 +77,7 @@
             if (!quietly) console.log(texts.join("\n\n"));
             // Attach in-page click handlers if mode is active
             brapi.storage.local.get("showHighlighting").then(function(s) {
-              if (Number(s.showHighlighting) === 3 && readAloudDoc.attachInPageHandlers) {
+              if (Number(s.showHighlighting) === 3 && readAloudDoc.attachInPageHandlers && !window.__raHoverOverlayActive) {
                 readAloudDoc.attachInPageHandlers(function(origTextIndex) {
                   sendToPlayer({method: "seekToOrigText", args: [origTextIndex]}).catch(function(){});
                 });

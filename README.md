@@ -12,7 +12,7 @@ See the [upstream repo](https://github.com/ken107/read-aloud) for general docume
 
 ![Settings page](img/options_redesigned.png)
 
-**In-page highlighting** — blue outline follows the currently-read paragraph directly on the page:
+**In-page highlighting** — Speechify-style sentence overlay with hover preview and amber playback highlight:
 
 ![In-page highlighting](img/in_page_highlight.png)
 
@@ -41,11 +41,11 @@ See the [upstream repo](https://github.com/ken107/read-aloud) for general docume
 
 ### In-page highlighting
 New **In Page** option in the highlighting control (alongside Popup / Window / Off):
-- Highlights the currently-read block directly on the webpage with a semi-transparent blue outline
-- Uses element-level highlighting for pages with `<p>` tags; falls back to precise range-based highlighting for flat HTML (e.g. `<br><br>`-separated text)
-- Handles inline elements (footnotes, links, bold) within a highlighted range without wrapping the whole page
-- Highlighted block scrolls to 25% from the top of the viewport
-- **Click any block to seek** — while "In Page" mode is active, all readable blocks are clickable; clicking seeks TTS to that block (including click-position detection within single-container pages)
+- **Hover preview** — moving the mouse over the page shows a purple highlight around the sentence under the cursor
+- **Playback highlight** — the currently-spoken sentence is highlighted in amber directly on the page; updates every ~300 ms
+- Per-line SVG rects track the exact sentence geometry, including across line breaks; inline elements (links, bold) don't cause double-painting
+- **Click to seek** — click any sentence while TTS is playing or paused to jump to that exact sentence; does nothing when TTS is stopped
+- Highlighted sentence scrolls to 25% from the top of the viewport
 - Highlighting is driven by the player (persists after popup is closed)
 
 ### Supertonic TTS (offline, on-device)
