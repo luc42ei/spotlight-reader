@@ -8,13 +8,13 @@ See the [upstream repo](https://github.com/ken107/read-aloud) for general docume
 
 ## Screenshots
 
-**Redesigned settings page** — dark mode, voice filter chips, favorites, segmented highlighting control:
-
-![Settings page](img/options_redesigned.png)
-
 **In-page highlighting** — Speechify-style sentence overlay with hover preview and amber playback highlight:
 
 ![In-page highlighting](img/in_page_highlight.png)
+
+**Redesigned settings page** — dark mode, voice filter chips, favorites, segmented highlighting control:
+
+![Settings page](img/options_redesigned.png)
 
 ---
 
