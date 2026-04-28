@@ -1,8 +1,8 @@
-# Read Aloud — Personal Fork
+# Read Aloud
 
-Fork of [ken107/read-aloud](https://github.com/ken107/read-aloud), optimized for Firefox with a focus on a cleaner settings UI and better voice management.
+Firefox extension with a focus on a cleaner settings UI and better voice management.
 
-See the original repo for general documentation, architecture, and API key setup.
+See the [upstream repo](https://github.com/ken107/read-aloud) for general documentation, architecture, and API key setup.
 
 ---
 
@@ -28,6 +28,7 @@ See the original repo for general documentation, architecture, and API key setup
 - **Dark mode toggle** button in the options page header
 - **"About voice providers"** collapsible table — all providers with type (offline/free/paid), supported languages, notes, and links to docs and voice samples
 - **Auto-select hint** below the voice dropdown explains language-matching behavior and favorites priority
+- **Voice grouping** — dropdown split into Offline Voices / Online – Free / Cloud Voices / Experimental AI Voices
 
 ### Playback behavior
 - Changing settings (rate, voice, etc.) no longer stops playback — the player re-reads settings per sentence, so changes take effect at the next sentence boundary
@@ -68,6 +69,7 @@ To control which voice is picked for a language: star voices in your preferred o
 - Dash-between-phrases is normalized to a comma before inference for more natural pausing
 
 ### In-page highlighting
+
 New **In Page** option in the highlighting control (alongside Popup / Window / Off):
 - Highlights the currently-read block directly on the webpage with a semi-transparent blue outline
 - Uses element-level highlighting for pages with `<p>` tags; falls back to precise range-based highlighting for flat HTML (e.g. `<br><br>`-separated text)
@@ -75,6 +77,8 @@ New **In Page** option in the highlighting control (alongside Popup / Window / O
 - Highlighted block scrolls to 25% from the top of the viewport
 - **Click any block to seek** — while "In Page" mode is active, all readable blocks are clickable; clicking seeks TTS to that block (including click-position detection within single-container pages)
 - Highlighting is driven by the player (persists after popup is closed)
+
+![In-page highlighting](in_page_highlight.png)
 
 ### Removed upstream features
 - `languages.html` per-language voice picker (replaced by the inline language filter + favorites)
