@@ -23,6 +23,9 @@ function Speech(texts, options) {
     for (var i = 0; i < texts.length; i++) {
       var textChunks = getChunks(texts[i]);
       for (var j = 0; j < textChunks.length; j++) {
+        // Skip chunks with no readable content (e.g. lone "—" paragraph separators).
+        // Cloud TTS engines return empty audio for these, breaking media decode.
+        if (!/[\p{L}\p{N}]/u.test(textChunks[j])) continue;
         allChunks.push(textChunks[j]);
         chunkToOrigText.push(i);
       }
