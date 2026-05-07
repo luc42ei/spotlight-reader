@@ -11,10 +11,29 @@ const HF_BASE = "https://huggingface.co/Supertone/supertonic-3/resolve/main"
 let tts = null
 let voiceStyleCache = {}
 
-ort.env.wasm.numThreads = 1
+// Multi-thread WASM needs SharedArrayBuffer (cross-origin isolation is set in manifest).
+// Use up to 4 threads — more often regresses due to inference overhead vs cores.
+ort.env.wasm.numThreads = (typeof SharedArrayBuffer !== "undefined" && self.crossOriginIsolated)
+  ? Math.max(1, Math.min(4, (self.navigator && self.navigator.hardwareConcurrency || 2) - 1))
+  : 1
+ort.env.wasm.simd = true
 ort.env.wasm.wasmPaths = extRoot + "lib/onnxruntime/"
 
-onmessage = async function(e) {
+// Serialize synthesis: when several speak/loadModels arrive while one is running,
+// async/await in onmessage would let them interleave on a single WASM thread,
+// inflating each one's wall-clock time and delaying the first result. A FIFO queue
+// keeps the first chunk ready ASAP so playback can start while the rest pipeline.
+let workQueue = Promise.resolve()
+
+onmessage = function(e) {
+  if (e.data.method === "isReady") {
+    postMessage({id: e.data.id, result: tts != null})
+    return
+  }
+  workQueue = workQueue.then(() => handle(e), () => handle(e))
+}
+
+async function handle(e) {
   try {
     switch (e.data.method) {
       case "loadModels":
@@ -28,9 +47,6 @@ onmessage = async function(e) {
       case "speak":
         const wav = await speak(e.data)
         postMessage({id: e.data.id, result: wav}, [wav])
-        break
-      case "isReady":
-        postMessage({id: e.data.id, result: tts != null})
         break
     }
   } catch (err) {

@@ -96,6 +96,10 @@ function Speech(texts, options) {
     else {
       if (isGoogleTranslate(options.voice)) return new CharBreaker(200, punctuator).breakText(text);
       else if (isPiperVoice(options.voice)) return [text];
+      // Supertonic: per-inference overhead dominates over per-char cost, so
+      // larger chunks (closer to the worker's 300-char internal cap) give a
+      // much better synth-time/audio-time ratio.
+      else if (isSupertonicVoice(options.voice)) return new CharBreaker(280, punctuator, 280).breakText(text);
       else return new CharBreaker(200, punctuator).breakText(text);
     }
   }
@@ -203,6 +207,18 @@ function Speech(texts, options) {
     next(event) {
       isLoadingSubject.next(event.type == "load")
       switch (event.type) {
+        case "load":
+          // Queue next-chunk synthesis as early as possible so the single-threaded
+          // worker is busy while the current chunk's audio loads (saves ~50-200ms
+          // of worker idle time per transition).
+          if (engine.prefetch != null) {
+            const i = playlist.getIndex()
+            for (let k = 1; k <= 2; k++) {
+              const nextText = texts[i + k]
+              if (nextText) engine.prefetch(nextText, options)
+            }
+          }
+          break
         case "start":
           if (event.sentenceStartIndicies) {
             enginePlaybackState = {
@@ -210,9 +226,6 @@ function Speech(texts, options) {
               sentenceStartIndicies: event.sentenceStartIndicies,
               index: 0
             }
-          } else {
-            const nextText = texts[playlist.getIndex() + 1]
-            if (nextText && engine.prefetch != null) engine.prefetch(nextText, options)
           }
           break
         case "sentence":

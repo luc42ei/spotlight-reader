@@ -1226,7 +1226,8 @@ function SupertonicTtsEngine() {
 
   this.speak = function(utterance, options, playbackState$) {
     const key = cacheKey(utterance, options)
-    const urlPromise = prefetchCache.get(key) || synthesize(utterance, options)
+    const cached = prefetchCache.get(key)
+    const urlPromise = cached || synthesize(utterance, options)
     prefetchCache.delete(key)
     return playAudio(urlPromise, options, playbackState$)
   }
