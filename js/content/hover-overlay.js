@@ -36,11 +36,15 @@
 
   // Abbreviations whose period must NOT end a sentence
   const ABBREVS = new Set([
-    'mr','mrs','ms','dr','prof','sr','jr','vs','etc',
-    'e.g','i.e','fig','no','vol','dept','approx','est',
-    'govt','inc','ltd','corp','co','st','ave','blvd',
-    'jan','feb','mar','apr','jun','jul','aug','sep','oct','nov','dec',
+    'mr','mrs','ms','dr','drs','prof','sr','jr','vs','etc',
+    'e.g','i.e','fig','figs','no','nos','vol','vols','dept','approx','est',
+    'govt','inc','ltd','corp','co','st','ste','ave','blvd','rd','ln','ct','pl','mt',
+    'capt','col','gen','gov','hon','lt','maj','sgt','rev','sen','rep','adm','cmdr',
+    'jan','feb','mar','apr','jun','jul','aug','sep','sept','oct','nov','dec',
     'u.s','u.k','u.n','p.m','a.m',
+    'abb','abk','abs','allg','anh','anm','aufl','bd','bde','bzgl','bzw','ca',
+    'dt','ebd','evtl','ggf','hrsg','inkl','insb','jh','jhd','kap','max','min',
+    'mio','mrd','nr','pkt','rn','sog','std','str','usw','vgl',
   ]);
 
   // ── STATE ──────────────────────────────────────────────────────────────────
