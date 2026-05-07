@@ -6,7 +6,7 @@ const extRoot = workerDir.replace(/js\/$/, "")
 importScripts(workerDir + "supertonic-idb.js")
 importScripts(extRoot + "lib/onnxruntime/ort.wasm.min.js")
 
-const HF_BASE = "https://huggingface.co/Supertone/supertonic-2/resolve/main"
+const HF_BASE = "https://huggingface.co/Supertone/supertonic-3/resolve/main"
 
 let tts = null
 let voiceStyleCache = {}
@@ -38,7 +38,7 @@ onmessage = async function(e) {
   }
 }
 
-const MODEL_CACHE = "supertonic-models-v1"
+const MODEL_CACHE = "supertonic-models-v2"
 
 async function cacheModels() {
   const allFiles = [
@@ -155,7 +155,7 @@ async function getVoiceStyle(voiceName) {
 
 // --- Adapted from supertonic helper.js ---
 
-const AVAILABLE_LANGS = ["en", "ko", "es", "pt", "fr"]
+const AVAILABLE_LANGS = ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]
 
 class Style {
   constructor(ttl, dp) {

@@ -53,7 +53,7 @@ New **In Page** option in the highlighting control (alongside Popup / Window / O
 - Models (~250 MB) downloaded on demand from HuggingFace and cached in the browser Cache API (persistent, not subject to cache eviction)
 - **Install:** select "Supertonic Stimmen installieren…" in the voice dropdown; progress is shown inline; the 10 voices (F1–F5, M1–M5) appear only after download completes
 - Models are loaded from cache into the Worker on first use per session; subsequent sentences in the same session are instant
-- Supports en / ko / es / pt / fr
+- Supports all 31 Supertonic 3 languages: ar / bg / cs / da / de / el / en / es / et / fi / fr / hi / hr / hu / id / it / ja / ko / lt / lv / nl / pl / pt / ro / ru / sk / sl / sv / tr / uk / vi
 - Dash-between-phrases is normalized to a comma before inference for more natural pausing
 
 ### Auto-select voice

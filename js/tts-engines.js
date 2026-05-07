@@ -1243,16 +1243,16 @@ function SupertonicTtsEngine() {
 
   this.getVoices = function() {
     return [
-      {voiceName: "Supertonic F1", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic F2", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic F3", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic F4", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic F5", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic M1", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic M2", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic M3", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic M4", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
-      {voiceName: "Supertonic M5", lang: "en", langs: ["en", "ko", "es", "pt", "fr"]},
+      {voiceName: "Supertonic F1", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic F2", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic F3", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic F4", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic F5", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic M1", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic M2", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic M3", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic M4", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
+      {voiceName: "Supertonic M5", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
     ]
   }
 }
