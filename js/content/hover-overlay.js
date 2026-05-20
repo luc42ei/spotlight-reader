@@ -63,6 +63,7 @@
   let lastPlayKey = '';   // "index:text" — skip repaint when unchanged
   let pollActive = false;
   let clearDebounceTimer = null;
+  let readerActive = false;   // true while reader is PLAYING or PAUSED — gates hover & click
 
   // ── SENTENCE SPLITTING ─────────────────────────────────────────────────────
 
@@ -377,19 +378,30 @@
       } catch (_) { return; }
 
       if (!result || result.state !== 'PLAYING') {
+        // PAUSED keeps the reader "active" so hover/click still work; only
+        // the playback highlight fades after the debounce.
+        if (result && result.state === 'PAUSED') readerActive = true;
         // Debounce clears: brief STOPPED blips between sentences shouldn't blank
-        // the highlight. A real stop will persist past 800 ms.
+        // the highlight or deactivate hover. A real stop persists past 800 ms,
+        // so we re-check state when the timer fires.
         if (result && (result.state === 'PAUSED' || result.state === 'STOPPED')) {
           if (!clearDebounceTimer)
             clearDebounceTimer = setTimeout(function () {
               clearDebounceTimer = null;
               clearPlayback();
+              safeSend({ dest: 'serviceWorker', method: 'getPlaybackState' }).then(function (r) {
+                if (!r || r.state === 'STOPPED') {
+                  readerActive = false;
+                  clearHover();
+                }
+              }).catch(function () {});
             }, 800);
         }
         return;
       }
 
       if (clearDebounceTimer) { clearTimeout(clearDebounceTimer); clearDebounceTimer = null; }
+      readerActive = true;
 
       const info = result.speechInfo;
       if (!info || !info.texts || !info.texts.length) return;
@@ -522,6 +534,8 @@
     document.addEventListener('mousemove', function (e) {
       if (hovTimer) return;
       hovTimer = setTimeout(function () { hovTimer = 0; }, HOVER_MS);
+      // Reader inactive (never started or stopped) → no hover preview / no click affordance
+      if (!readerActive) { clearHover(); return; }
       if (e.target.closest && e.target.closest(INTERACTIVE)) { clearHover(); return; }
       ensureHovSvg();
       updateHover(e.clientX, e.clientY);
