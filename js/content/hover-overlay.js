@@ -452,7 +452,7 @@
       const idx = blockFromPoint(e.clientX, e.clientY);
       if (idx < 0) return;
       const el = blocks[idx];
-      if (!el) return;   // stale index — rescan pending
+      if (!el) return;
       const sents = getSentences(el);
       const off   = charOffsetInBlock(e.clientX, e.clientY, el);
       const sent  = sentenceAt(sents, off);
@@ -491,7 +491,10 @@
 
   const BLOCK_TAGS = new Set([
     'p','li','blockquote','td','th','pre','figcaption',
-    'h1','h2','h3','h4','h5','h6'
+    'h1','h2','h3','h4','h5','h6',
+    // Legacy HTML uses <ul>/<ol>/<dl> for indentation with bare text + <br>;
+    // treating them as blocks lets click-to-seek work on those passages.
+    'ul','ol','dl','dd','dt'
   ]);
 
   const IGNORE_SEL = (typeof readAloudDoc !== 'undefined' && readAloudDoc.ignoreTags)
@@ -500,15 +503,28 @@
 
   function scanBlocks() {
     const candidates = [];
+    function hasBlockDescendant(el) {
+      for (const child of el.children) {
+        if (BLOCK_TAGS.has(child.tagName.toLowerCase())) return true;
+        if (hasBlockDescendant(child)) return true;
+      }
+      return false;
+    }
     function walk(el) {
       if (!el || el.nodeType !== 1) return;
+      try { if (el.matches(IGNORE_SEL)) return; } catch (_) {}
       const tag = el.tagName.toLowerCase();
       if (BLOCK_TAGS.has(tag)) {
+        // If this "block" contains further block-level elements, descend
+        // (handles legacy table-as-layout where <td> wraps the entire page).
+        if (hasBlockDescendant(el)) {
+          for (let i = 0; i < el.children.length; i++) walk(el.children[i]);
+          return;
+        }
         if ((el.textContent || '').trim().length >= MIN_TEXT && isVisible(el))
           candidates.push(el);
         return;
       }
-      try { if (el.matches(IGNORE_SEL)) return; } catch (_) {}
       for (let i = 0; i < el.children.length; i++) walk(el.children[i]);
     }
     walk(document.body);

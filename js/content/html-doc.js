@@ -97,20 +97,27 @@ var readAloudDoc = new function() {
       }
     }
 
-    // Sentence-level seek within extracted texts
+    // Sentence-level seek within extracted texts. seekTarget.sentenceText comes
+    // from textContent (whitespace-collapsed, no added dots), while finalTexts
+    // retains original newlines and may have addMissingPunctuation dots. So
+    // normalize both sides (collapse whitespace + strip dots-before-whitespace).
     if (seekTarget && seekTarget.sentenceText) {
       var needle = seekTarget.sentenceText;
-      var needlePrefix = needle.slice(0, 40);
+      var normalizeHaystack = function(s) {
+        return s.replace(/\s+/g, ' ').replace(/\.(\s|$)/g, '$1').trim();
+      };
+      var needleN = normalizeHaystack(needle);
+      var needleNPrefix = needleN.slice(0, 40);
       for (var ti = 0; ti < finalTexts.length; ti++) {
-        var hay = finalTexts[ti];
-        var pos = hay.indexOf(needle);
-        if (pos < 0) pos = hay.toLowerCase().indexOf(needle.toLowerCase());
-        if (pos < 0) pos = hay.indexOf(needlePrefix);
-        if (pos < 0) pos = hay.toLowerCase().indexOf(needlePrefix.toLowerCase());
+        var hayN = normalizeHaystack(finalTexts[ti]);
+        var pos = hayN.indexOf(needleN);
+        if (pos < 0) pos = hayN.toLowerCase().indexOf(needleN.toLowerCase());
+        if (pos < 0) pos = hayN.indexOf(needleNPrefix);
+        if (pos < 0) pos = hayN.toLowerCase().indexOf(needleNPrefix.toLowerCase());
         if (pos >= 0) {
           self._highlightEntries = self._highlightEntries.slice(ti);
           finalTexts = finalTexts.slice(ti);
-          if (pos > 0) finalTexts[0] = finalTexts[0].slice(pos);
+          // Don't slice mid-paragraph — pos is in normalized buf, mapping back is unreliable
           break;
         }
       }
