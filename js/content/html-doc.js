@@ -320,6 +320,10 @@ var readAloudDoc = new function() {
       var mark = highlightTextInElement(entry.elem, entry.text);
       if (mark) { scrollToQuarter(mark); return; }
     }
+    // Painting a box around <body>/<html> would mark the whole page — happens on
+    // legacy HTML (no semantic <p>, all entries map to body). Skip the box and
+    // let the SVG playback overlay carry the highlight.
+    if (entry.elem === document.body || entry.elem === document.documentElement) return;
     $(entry.elem).addClass("read-aloud-highlight");
     scrollToQuarter(entry.elem);
   }
@@ -374,6 +378,9 @@ var readAloudDoc = new function() {
   }
 
   function scrollToQuarter(elem) {
+    // Don't scroll if the "block" is the entire page — would jump to top.
+    // SVG playback overlay does its own scrollIntoView on the actual sentence.
+    if (elem === document.body || elem === document.documentElement) return;
     var rect = elem.getBoundingClientRect();
     window.scrollTo({top: window.scrollY + rect.top - window.innerHeight * 0.25, behavior: "smooth"});
   }
@@ -391,6 +398,12 @@ var readAloudDoc = new function() {
     }
     var buf = "", map = [];
     for (var n = 0; n < textNodes.length; n++) {
+      // Insert a boundary space between adjacent text nodes — without it, sibling
+      // texts like "<h2>Title</h2>Body" become "TitleBody" and the search misses.
+      if (n > 0 && buf.length > 0 && buf[buf.length - 1] !== " ") {
+        buf += " ";
+        map.push({ni: n - 1, off: textNodes[n-1].nodeValue.length});
+      }
       var text = textNodes[n].nodeValue;
       for (var c = 0; c < text.length; c++) {
         if (/\s/.test(text[c])) {
@@ -399,6 +412,24 @@ var readAloudDoc = new function() {
       }
     }
     return {textNodes: textNodes, buf: buf, map: map};
+  }
+
+  // Normalize for search: skip "." inserted by addMissingPunctuation (period before
+  // whitespace) and collapse multi-whitespace. Returns { text, srcMap } where
+  // srcMap[normIdx] = source position in s, so matches can be mapped back.
+  function normalizeForSearch(s) {
+    var out = '', srcMap = [];
+    var lastWasSpace = false;
+    for (var i = 0; i < s.length; i++) {
+      var c = s[i];
+      if (c === '.' && i + 1 < s.length && /\s/.test(s[i+1])) continue;
+      if (/\s/.test(c)) {
+        if (!lastWasSpace && out.length > 0) { out += ' '; srcMap.push(i); lastWasSpace = true; }
+      } else {
+        out += c; srcMap.push(i); lastWasSpace = false;
+      }
+    }
+    return { text: out, srcMap: srcMap };
   }
 
   function findClickedEntryByTarget(target, entries) {
@@ -466,15 +497,29 @@ var readAloudDoc = new function() {
     if (!textNodes.length) return null;
     var needle = searchText.replace(/\s+/g, " ").trim();
 
-    var idx = buf.indexOf(needle);
-    if (idx === -1) {
-      // Try shorter prefix
-      needle = needle.substring(0, 60);
-      idx = buf.indexOf(needle);
-      if (idx === -1) return null;
+    // Tolerant search: normalize away dots inserted by addMissingPunctuation
+    // (period before whitespace) so needle matches buf even when buf lacks those dots.
+    var bufView = normalizeForSearch(buf);
+    var needleView = normalizeForSearch(needle);
+    var nText = needleView.text;
+    // Drop optional numbering prefix ("1. ", "1) ", or just "1 " after normalize)
+    // that addNumbering may have inserted and later removed.
+    var numMatch = nText.match(/^\d+[.)]?\s+/);
+    if (numMatch) nText = nText.substring(numMatch[0].length);
+
+    var nIdx = bufView.text.indexOf(nText);
+    if (nIdx === -1) {
+      // Sibling-text-node boundary spaces can cause end-of-string drift
+      // (e.g. "etc." vs "etc ."), so try a short prefix.
+      nText = nText.substring(0, 60);
+      nIdx = bufView.text.indexOf(nText);
+      if (nIdx === -1) return null;
     }
-    var endIdx = idx + needle.length - 1;
-    if (endIdx >= map.length) endIdx = map.length - 1;
+
+    // Map back from normalized indices to original buf positions
+    var idx = bufView.srcMap[nIdx];
+    var endIdx = bufView.srcMap[nIdx + nText.length - 1];
+    if (idx == null || endIdx == null || endIdx >= map.length) return null;
 
     var s = map[idx];
     var e = map[endIdx];
@@ -487,8 +532,9 @@ var readAloudDoc = new function() {
       range.surroundContents(mark);
       return mark;
     } catch(err) {
-      // surroundContents fails if range crosses element boundaries (e.g. footnotes)
-      // Wrap each text node in the range individually
+      // surroundContents fails if range crosses element boundaries (e.g. footnotes,
+      // <br>-separated lines in legacy <UL> markup). Wrap each text node individually
+      // and tolerate per-node failures so partial highlight beats no highlight.
       var firstMark = null;
       for (var i = s.ni; i <= e.ni; i++) {
         var node = textNodes[i];
@@ -497,8 +543,8 @@ var readAloudDoc = new function() {
         r.setStart(node, i === s.ni ? s.off : 0);
         r.setEnd(node, i === e.ni ? e.off + 1 : node.nodeValue.length);
         var m = document.createElement("read-aloud-hl");
-        r.surroundContents(m);
-        if (!firstMark) firstMark = m;
+        try { r.surroundContents(m); if (!firstMark) firstMark = m; }
+        catch(_) { /* skip this node, continue with others */ }
       }
       return firstMark;
     }
