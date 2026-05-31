@@ -61,9 +61,15 @@
   let actRange  = null;   // stored so scroll can repaint without waiting for poll
   let pollTimer = null;
   let lastPlayKey = '';   // "index:text" — skip repaint when unchanged
+  // Forward search cursor — lets a repeated sentence highlight the CURRENT
+  // occurrence instead of always the first one in the document.
+  let cursorBlock = null; // element of the last matched block (survives rescans)
+  let cursorChar  = 0;    // char offset just past the last match within cursorBlock
+  let lastTextIdx = -1;   // previous position.index — a drop signals seek-back/restart
   let pollActive = false;
   let clearDebounceTimer = null;
   let readerActive = false;   // true while reader is PLAYING or PAUSED — gates hover & click
+  let domObserver = null;     // lifted to module scope so scanBlocks can pause it while it mutates the DOM
 
   // ── SENTENCE SPLITTING ─────────────────────────────────────────────────────
 
@@ -325,6 +331,9 @@
     clearSvg(actSvg);
     actRange   = null;
     lastPlayKey = '';
+    cursorBlock = null;
+    cursorChar  = 0;
+    lastTextIdx = -1;
   }
 
   function repaintPlayback() {
@@ -332,19 +341,31 @@
     fillSvg(actSvg, getLineRects(actRange), PLAY_COLOR, PLAY_ALPHA);
   }
 
-  function findTextInBlocks(needle) {
+  // Search blocks for `needle`, resuming at (fromBlockEl, fromChar) so sequential
+  // playback keeps moving forward past earlier identical sentences. When fromBlockEl
+  // is null (or stale after a rescan) the whole document is searched from the top.
+  function findTextInBlocks(needle, fromBlockEl, fromChar) {
     if (!needle || !needle.trim()) return null;
     const prefix = needle.slice(0, 40);
-    for (const block of blocks) {
+    let startIdx = 0;
+    if (fromBlockEl) {
+      const bi = blockMap.get(fromBlockEl);
+      if (bi !== undefined) startIdx = bi;
+      else fromBlockEl = null;   // block dropped out on rescan — fall back to top
+    }
+    for (let bi = startIdx; bi < blocks.length; bi++) {
+      const block = blocks[bi];
       const tc = block.textContent;
-      let pos = tc.indexOf(needle);
-      if (pos < 0) pos = tc.toLowerCase().indexOf(needle.toLowerCase());
-      if (pos < 0) pos = tc.indexOf(prefix);
-      if (pos < 0) pos = tc.toLowerCase().indexOf(prefix.toLowerCase());
+      const from = (fromBlockEl && bi === startIdx) ? fromChar : 0;
+      const tcLower = tc.toLowerCase();
+      let pos = tc.indexOf(needle, from);
+      if (pos < 0) pos = tcLower.indexOf(needle.toLowerCase(), from);
+      if (pos < 0) pos = tc.indexOf(prefix, from);
+      if (pos < 0) pos = tcLower.indexOf(prefix.toLowerCase(), from);
       if (pos < 0) continue;
       const end   = Math.min(tc.length, pos + needle.length);
       const range = createRangeForChars(block, pos, end);
-      if (range) return { range, block };
+      if (range) return { range, block, endChar: end };
     }
     return null;
   }
@@ -353,9 +374,12 @@
     return rect.bottom < 0 || rect.top > window.innerHeight * 0.75;
   }
 
-  function applyPlaybackHighlight(needle) {
-    const found = findTextInBlocks(needle);
-    if (!found) return false;  // keep previous rects — text may be mid-transition
+  function applyPlaybackHighlight(needle, fromBlockEl, fromChar) {
+    let found = findTextInBlocks(needle, fromBlockEl, fromChar);
+    // Searching forward from the cursor missed — retry from the top (handles
+    // restart-from-beginning and the rare case where the cursor overran).
+    if (!found && fromBlockEl) found = findTextInBlocks(needle, null, 0);
+    if (!found) return null;   // keep previous rects — text may be mid-transition
 
     actRange = found.range;
     const rects = getLineRects(actRange);
@@ -365,7 +389,7 @@
     if (rects.length > 0 && isRectNearEdgeOrOffscreen(rects[0])) {
       found.block.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-    return true;
+    return found;
   }
 
   async function pollPlayback() {
@@ -413,7 +437,18 @@
       const key = idx + ':' + text;
       if (key === lastPlayKey) return;
 
-      if (applyPlaybackHighlight(text)) lastPlayKey = key;
+      // Resume the search at the cursor while playback advances; a non-increasing
+      // idx means a seek-back or restart, so search the document from the top.
+      const goneBackward = idx <= lastTextIdx;
+      const fromEl   = goneBackward ? null : cursorBlock;
+      const fromChar = goneBackward ? 0    : cursorChar;
+      const found = applyPlaybackHighlight(text, fromEl, fromChar);
+      if (found) {
+        cursorBlock = found.block;
+        cursorChar  = found.endChar;
+        lastTextIdx = idx;
+        lastPlayKey = key;
+      }
     } finally {
       pollActive = false;
     }
@@ -468,6 +503,11 @@
       clearHover();
       clearPlayback();
 
+      // Seed the search cursor at the clicked sentence so the first post-seek
+      // highlight lands here even if this sentence repeats earlier in the page.
+      cursorBlock = el;
+      cursorChar  = sent.start;
+
       safeSend({ dest: 'serviceWorker', method: 'stop' })
         .catch(function () {})
         .then(function () {
@@ -501,41 +541,117 @@
     ? readAloudDoc.ignoreTags
     : 'select,textarea,button,label,audio,video,dialog,embed,nav,noframes,noscript,object,script,style,svg,aside,footer';
 
-  function scanBlocks() {
-    const candidates = [];
-    function hasBlockDescendant(el) {
-      for (const child of el.children) {
-        if (BLOCK_TAGS.has(child.tagName.toLowerCase())) return true;
-        if (hasBlockDescendant(child)) return true;
-      }
-      return false;
+  function isBlockEl(node) {
+    return node.nodeType === 1 && BLOCK_TAGS.has(node.tagName.toLowerCase());
+  }
+
+  // A node belongs to a bare-text run only if it's text or an inline-level element
+  // (<a>, <font>, <b>, <span>, <br>…). Structural non-block containers (<div>,
+  // <section>) must be recursed into, not swallowed into one synthetic block.
+  function isInlineNode(node) {
+    if (node.nodeType === 3) return true;
+    if (node.nodeType !== 1) return false;
+    if (node.tagName === 'BR') return true;
+    let d = '';
+    try { d = getComputedStyle(node).display; } catch (_) {}
+    return d.indexOf('inline') === 0 || d === 'ruby' || d === 'contents';
+  }
+
+  function hasBlockDescendant(el) {
+    for (const child of el.children) {
+      if (BLOCK_TAGS.has(child.tagName.toLowerCase())) return true;
+      if (hasBlockDescendant(child)) return true;
     }
-    function walk(el) {
-      if (!el || el.nodeType !== 1) return;
-      try { if (el.matches(IGNORE_SEL)) return; } catch (_) {}
-      const tag = el.tagName.toLowerCase();
-      if (BLOCK_TAGS.has(tag)) {
-        // If this "block" contains further block-level elements, descend
-        // (handles legacy table-as-layout where <td> wraps the entire page).
-        if (hasBlockDescendant(el)) {
-          for (let i = 0; i < el.children.length; i++) walk(el.children[i]);
+    return false;
+  }
+
+  // Remove the synthetic <span data-ra-block> wrappers from a previous scan so
+  // re-scanning rebuilds them deterministically (no nesting).
+  function unwrapSyntheticBlocks() {
+    const spans = document.querySelectorAll('span[data-ra-block]');
+    for (const s of spans) {
+      const p = s.parentNode;
+      if (!p) continue;
+      while (s.firstChild) p.insertBefore(s.firstChild, s);
+      p.removeChild(s);
+    }
+  }
+
+  function scanBlocks() {
+    // Pause our own observer while we mutate the DOM (unwrap + re-wrap), then drop
+    // the resulting records so we don't trigger an endless rescan loop.
+    if (domObserver) domObserver.disconnect();
+    try {
+      unwrapSyntheticBlocks();
+
+      const candidates = [];
+
+      // Group consecutive non-block child nodes (bare text + inline elements,
+      // including <br>) into one synthetic block. Legacy pages drop whole
+      // paragraphs as loose text under <body>/<td> with <br> separators and
+      // <ul> used for indentation — those have no block element to highlight.
+      function flushRun(parent, run) {
+        if (!run.length) return;
+        let txt = '';
+        for (const n of run) txt += (n.textContent || '');
+        if (txt.trim().length < MIN_TEXT) return;
+        const span = document.createElement('span');
+        span.setAttribute('data-ra-block', '');
+        parent.insertBefore(span, run[0]);
+        for (const n of run) span.appendChild(n);
+        if (isVisible(span)) candidates.push(span);
+      }
+
+      function descend(el) {
+        let run = [];
+        // Snapshot childNodes — flushRun mutates the live list as it wraps.
+        const kids = Array.prototype.slice.call(el.childNodes);
+        for (const node of kids) {
+          if (node.nodeType === 1) {
+            let ignore = false;
+            try { ignore = node.matches(IGNORE_SEL); } catch (_) {}
+            if (ignore) { flushRun(el, run); run = []; continue; }
+            // Block-tag OR structural (display:block) element → boundary; recurse.
+            if (isBlockEl(node) || !isInlineNode(node)) {
+              flushRun(el, run); run = []; walk(node); continue;
+            }
+          } else if (node.nodeType !== 3) {
+            continue;   // comment / other — ignore
+          }
+          run.push(node);   // text node or inline element → accumulate
+        }
+        flushRun(el, run);
+      }
+
+      function walk(el) {
+        if (!el || el.nodeType !== 1) return;
+        try { if (el.matches(IGNORE_SEL)) return; } catch (_) {}
+        if (isBlockEl(el)) {
+          // A block that itself holds block-level children (e.g. legacy
+          // table-as-layout <td> wrapping the page) — descend and also pick up
+          // any loose text mixed between those child blocks.
+          if (hasBlockDescendant(el)) { descend(el); return; }
+          if ((el.textContent || '').trim().length >= MIN_TEXT && isVisible(el))
+            candidates.push(el);
           return;
         }
-        if ((el.textContent || '').trim().length >= MIN_TEXT && isVisible(el))
-          candidates.push(el);
-        return;
+        descend(el);
       }
-      for (let i = 0; i < el.children.length; i++) walk(el.children[i]);
-    }
-    walk(document.body);
+      walk(document.body);
 
-    const set = new Set(candidates);
-    blocks = candidates.filter(function (el) {
-      let p = el.parentElement;
-      while (p && p !== document.body) { if (set.has(p)) return false; p = p.parentElement; }
-      return true;
-    });
-    blockMap = new Map(blocks.map(function (el, i) { return [el, i]; }));
+      const set = new Set(candidates);
+      blocks = candidates.filter(function (el) {
+        let p = el.parentElement;
+        while (p && p !== document.body) { if (set.has(p)) return false; p = p.parentElement; }
+        return true;
+      });
+      blockMap = new Map(blocks.map(function (el, i) { return [el, i]; }));
+    } finally {
+      if (domObserver) {
+        domObserver.takeRecords();
+        domObserver.observe(document.body, { childList: true, subtree: true });
+      }
+    }
   }
 
   // ── INIT (only when in-page highlighting is active) ────────────────────────
@@ -567,7 +683,7 @@
     document.addEventListener('pointerup', handlePointerUp, { capture: true });
 
     let rescanTimer = null;
-    const domObserver = new MutationObserver(function (mutations) {
+    domObserver = new MutationObserver(function (mutations) {
       for (let i = 0; i < mutations.length; i++) {
         const m = mutations[i];
         if (m.type !== 'childList') continue;
