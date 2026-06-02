@@ -16,6 +16,11 @@
 
 7. Verify the auto-update chain end-to-end (see below) — **do this before pushing** so a broken release can still be fixed without users seeing it
 8. `git push origin master` so existing users auto-update
+9. Delete the old signed `.xpi` files from `~/Downloads` — keep only the current version:
+
+   ```bash
+   find ~/Downloads -name 'read_aloud_fork_le-*.xpi' ! -name "read_aloud_fork_le-$V.xpi" -delete
+   ```
 
 ## Verification (after step 6, before step 8)
 
