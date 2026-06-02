@@ -320,19 +320,30 @@ var readAloudDoc = new function() {
     }
     self.clearHighlight();
 
-    // Check if multiple texts share this element
-    var sameElem = self._highlightEntries.filter(function(e) { return e.elem === entry.elem; });
-    if (sameElem.length > 1) {
-      // Use range-based highlighting: find text within element
-      var mark = highlightTextInElement(entry.elem, entry.text);
-      if (mark) { scrollToQuarter(mark); return; }
-    }
     // Painting a box around <body>/<html> would mark the whole page — happens on
     // legacy HTML (no semantic <p>, all entries map to body). Skip the box and
     // let the SVG playback overlay carry the highlight.
     if (entry.elem === document.body || entry.elem === document.documentElement) return;
-    $(entry.elem).addClass("read-aloud-highlight");
-    scrollToQuarter(entry.elem);
+
+    // Prefer one box around the whole block: the blue box conveys paragraph-level
+    // scroll context, while the amber SVG overlay already marks the active sentence.
+    // Range-based sub-highlighting is reserved for non-semantic shared containers
+    // (legacy <div>/<td> holding many entries), where outlining the whole element
+    // would paint a huge box. A semantic paragraph tag, or an element holding just
+    // this one entry, is always outlined whole.
+    var sameElem = self._highlightEntries.filter(function(e) { return e.elem === entry.elem; });
+    var PARA_TAGS = { P:1, LI:1, BLOCKQUOTE:1, H1:1, H2:1, H3:1, H4:1, H5:1, H6:1, DD:1, DT:1, FIGCAPTION:1, PRE:1 };
+    if (sameElem.length === 1 || PARA_TAGS[entry.elem.tagName]) {
+      $(entry.elem).addClass("read-aloud-highlight");
+      scrollToQuarter(entry.elem);
+      return;
+    }
+
+    // Non-semantic shared container → scope to this entry's text.
+    var mark = highlightTextInElement(entry.elem, entry.text);
+    if (mark) { scrollToQuarter(mark); return; }
+    // Couldn't scope safely (range crosses element boundaries) → skip the box rather
+    // than fragment it; the SVG playback overlay carries the highlight.
   }
 
   this.attachInPageHandlers = function(seekCallback) {
@@ -523,37 +534,41 @@ var readAloudDoc = new function() {
       if (nIdx === -1) return null;
     }
 
-    // Map back from normalized indices to original buf positions
+    // Map the match start back to its source text node.
     var idx = bufView.srcMap[nIdx];
-    var endIdx = bufView.srcMap[nIdx + nText.length - 1];
-    if (idx == null || endIdx == null || endIdx >= map.length) return null;
-
+    if (idx == null) return null;
     var s = map[idx];
-    var e = map[endIdx];
-    var range = document.createRange();
-    range.setStart(textNodes[s.ni], s.off);
-    range.setEnd(textNodes[e.ni], e.off + 1);
 
+    // Outline the tightest block element enclosing the match (the actual paragraph),
+    // not the matched substring — gives one clean box around the whole paragraph even
+    // when entry.elem is a big shared container (e.g. the whole newsletter <table>) and
+    // the text node is split by inline <sup>/<a>/<br>. Walking up returns the tightest
+    // block, so neighbouring paragraphs aren't included.
+    var block = textNodes[s.ni].parentNode;
+    while (block && block !== document.body && block !== document.documentElement && !BLOCK_TAGS[block.tagName]) {
+      block = block.parentNode;
+    }
+    // A block that tightly bounds the paragraph → outline it as one box. The size guard
+    // rejects big containers (e.g. a <td>/<div> wrapping the whole article).
+    if (block && block !== document.body && block !== document.documentElement &&
+        (block.innerText || "").length <= searchText.length * 3) {
+      $(block).addClass("read-aloud-highlight");
+      return block;
+    }
+    // No bounding block — bare text directly under a huge container, e.g. legacy HTML
+    // where a paragraph sits between <p> separators with no wrapper of its own. Wrap the
+    // first text run in one inline box: enough to mark the spot for the scroll jump,
+    // without fragmenting into per-node boxes.
+    var node = textNodes[s.ni];
+    var r = document.createRange();
+    r.setStart(node, s.off);
+    r.setEnd(node, node.nodeValue.length);
     try {
       var mark = document.createElement("read-aloud-hl");
-      range.surroundContents(mark);
+      r.surroundContents(mark);
       return mark;
-    } catch(err) {
-      // surroundContents fails if range crosses element boundaries (e.g. footnotes,
-      // <br>-separated lines in legacy <UL> markup). Wrap each text node individually
-      // and tolerate per-node failures so partial highlight beats no highlight.
-      var firstMark = null;
-      for (var i = s.ni; i <= e.ni; i++) {
-        var node = textNodes[i];
-        if (!node.nodeValue.trim()) continue;
-        var r = document.createRange();
-        r.setStart(node, i === s.ni ? s.off : 0);
-        r.setEnd(node, i === e.ni ? e.off + 1 : node.nodeValue.length);
-        var m = document.createElement("read-aloud-hl");
-        try { r.surroundContents(m); if (!firstMark) firstMark = m; }
-        catch(_) { /* skip this node, continue with others */ }
-      }
-      return firstMark;
-    }
+    } catch(_) { return null; }
   }
+
+  var BLOCK_TAGS = { P:1, DIV:1, LI:1, BLOCKQUOTE:1, H1:1, H2:1, H3:1, H4:1, H5:1, H6:1, DD:1, DT:1, FIGCAPTION:1, PRE:1, TD:1, SECTION:1, ARTICLE:1, ASIDE:1, UL:1, OL:1 };
 }

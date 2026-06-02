@@ -92,11 +92,45 @@
     return results.length ? results : [{ text: text.trim(), start: 0, end: text.length }];
   }
 
+  // Concatenate the block's text (same offset space as createRangeForChars: text nodes
+  // in document order) and record offsets where a <br> sits. Legacy pages drop several
+  // paragraphs into one block separated only by <br>, which textContent omits — without
+  // these breaks splitSentences merges a sentence across the paragraph gap.
+  function blockTextWithBreaks(el) {
+    let text = '';
+    const breaks = [];
+    (function rec(node) {
+      for (let c = node.firstChild; c; c = c.nextSibling) {
+        if (c.nodeType === 3) text += c.textContent;
+        else if (c.nodeType === 1) {
+          if (c.tagName === 'BR') breaks.push(text.length);
+          else rec(c);
+        }
+      }
+    })(el);
+    return { text, breaks };
+  }
+
   function getSentences(el) {
     if (sentCache.has(el)) return sentCache.get(el);
-    const s = splitSentences(el.textContent);
-    sentCache.set(el, s);
-    return s;
+    const { text, breaks } = blockTextWithBreaks(el);
+    // Split into segments at <br> offsets, then sentence-split within each segment so no
+    // sentence spans a hard line break. Offsets stay in textContent space → ranges map.
+    let bounds = [0, text.length];
+    for (const b of breaks) if (b > 0 && b < text.length) bounds.push(b);
+    bounds = bounds.filter((v, i, a) => a.indexOf(v) === i).sort((a, b) => a - b);
+    const out = [];
+    for (let i = 0; i < bounds.length - 1; i++) {
+      const base = bounds[i];
+      const seg = text.slice(base, bounds[i + 1]);
+      if (!seg.trim()) continue;
+      for (const s of splitSentences(seg)) {
+        out.push({ text: s.text, start: base + s.start, end: base + s.end });
+      }
+    }
+    const result = out.length ? out : [{ text: text.trim(), start: 0, end: text.length }];
+    sentCache.set(el, result);
+    return result;
   }
 
   function sentenceAt(sents, offset) {
@@ -162,16 +196,24 @@
 
   function blockFromPoint(x, y) {
     try {
+      // caretRangeFromPoint is WebKit/Chrome; Firefox exposes caretPositionFromPoint.
+      // Without the Firefox branch this always fell through to the weak nearest-Y
+      // fallback, which mis-resolves pages with one huge block (e.g. a whole essay
+      // in a single <p>).
+      let node = null;
       if (document.caretRangeFromPoint) {
         const range = document.caretRangeFromPoint(x, y);
-        if (range) {
-          let node = range.startContainer;
-          if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
-          while (node && node !== document.body) {
-            const idx = blockMap.get(node);
-            if (idx !== undefined) return idx;
-            node = node.parentElement;
-          }
+        if (range) node = range.startContainer;
+      } else if (document.caretPositionFromPoint) {
+        const pos = document.caretPositionFromPoint(x, y);
+        if (pos) node = pos.offsetNode;
+      }
+      if (node) {
+        if (node.nodeType === Node.TEXT_NODE) node = node.parentElement;
+        while (node && node !== document.body) {
+          const idx = blockMap.get(node);
+          if (idx !== undefined) return idx;
+          node = node.parentElement;
         }
       }
     } catch (_) { /* cross-origin frame, ShadowRoot, or detached node */ }
