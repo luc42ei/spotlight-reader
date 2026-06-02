@@ -101,11 +101,20 @@
     const breaks = [];
     (function rec(node) {
       for (let c = node.firstChild; c; c = c.nextSibling) {
-        if (c.nodeType === 3) text += c.textContent;
-        else if (c.nodeType === 1) {
-          if (c.tagName === 'BR') breaks.push(text.length);
-          else rec(c);
-        }
+        if (c.nodeType === 3) { text += c.textContent; continue; }
+        if (c.nodeType !== 1) continue;
+        if (c.tagName === 'BR') { breaks.push(text.length); continue; }
+        // A nested block-level element is a paragraph boundary that textContent
+        // omits (e.g. real <p>s inside a display:contents wrapper that scanBlocks
+        // swallowed into one synthetic block). Record a break before and after its
+        // text so no sentence runs across it. display:contents has no box of its
+        // own — skip its break but still recurse so ITS block children count.
+        let disp = '';
+        try { disp = getComputedStyle(c).display; } catch (_) {}
+        const breaking = disp && disp.indexOf('inline') !== 0 && disp !== 'contents';
+        if (breaking) breaks.push(text.length);
+        rec(c);
+        if (breaking) breaks.push(text.length);
       }
     })(el);
     return { text, breaks };
