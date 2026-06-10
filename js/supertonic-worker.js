@@ -11,8 +11,9 @@ const HF_BASE = "https://huggingface.co/Supertone/supertonic-3/resolve/main"
 let tts = null
 let voiceStyleCache = {}
 
-// Multi-thread WASM needs SharedArrayBuffer (cross-origin isolation is set in manifest).
-// Use up to 4 threads — more often regresses due to inference overhead vs cores.
+// Multi-thread WASM needs SharedArrayBuffer, which needs cross-origin isolation.
+// Firefox extension workers are not crossOriginIsolated, so this resolves to 1 thread;
+// the check stays in case that ever changes. Cap at 4 — more regresses on inference overhead.
 ort.env.wasm.numThreads = (typeof SharedArrayBuffer !== "undefined" && self.crossOriginIsolated)
   ? Math.max(1, Math.min(4, (self.navigator && self.navigator.hardwareConcurrency || 2) - 1))
   : 1

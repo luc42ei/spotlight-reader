@@ -20,10 +20,8 @@ var handlers = {
   forward: forward,
   rewind: rewind,
   seek: seek,
-  reportIssue: reportIssue,
   authWavenet: authWavenet,
   managePiperVoices,
-  manageSupertonicVoices,
 }
 
 
@@ -294,20 +292,6 @@ function handleHeadlessError(err) {
   //TODO: let user knows somehow
 }
 
-function reportIssue(url, comment) {
-  var manifest = brapi.runtime.getManifest();
-  return getSettings()
-    .then(function(settings) {
-      if (url) settings.url = url;
-      settings.version = manifest.version;
-      settings.userAgent = navigator.userAgent;
-      return ajaxPost(config.serviceUrl + "/read-aloud/report-issue", {
-        url: JSON.stringify(settings),
-        comment: comment
-      })
-    })
-}
-
 function authWavenet() {
   createTab("https://cloud.google.com/text-to-speech/#put-text-to-speech-into-action", true)
     .then(function(tab) {
@@ -387,17 +371,6 @@ async function managePiperVoices() {
     await sendToPlayer({method: "managePiperVoices"})
   }
 }
-
-async function manageSupertonicVoices() {
-  const voices = ["F1","F2","F3","F4","F5","M1","M2","M3","M4","M5"].map(id => ({
-    voiceName: "Supertonic " + id,
-    lang: "en",
-    langs: ["en", "ko", "es", "pt", "fr"]
-  }))
-  await updateSettings({supertonicVoices: voices})
-}
-
-
 
 async function contentScriptAlreadyInjected(tab, frameId) {
   const items = await brapi.scripting.executeScript({

@@ -846,9 +846,8 @@ function playAudioHere(urlPromise, options, playbackState$) {
 }
 
 function canUseEmbeddedPlayer() {
-  return brapi.tts && brapi.offscreen ? true : false
-  //without chrome.tts, using WebSpeech inside tab requires initial page interaction
-  //without offscreen, playing audio inside tab requires initial page interaction
+  //Firefox: playing audio inside the tab requires initial page interaction
+  return false
 }
 
 function makeSilenceTrack() {
@@ -891,27 +890,6 @@ function makeSilenceTrack() {
       stateMachine.trigger("stop")
     }
   }
-}
-
-async function getRemoteConfig() {
-  let {remoteConfig} = await getSettings("remoteConfig")
-  if (remoteConfig && remoteConfig.expire > Date.now()) {
-    //still valid, return stored object
-    return remoteConfig
-  }
-  try {
-    //attempt to get latest from server
-    remoteConfig = await ajaxGet({url: config.serviceUrl + "/read-aloud/config", responseType: "json"})
-  }
-  catch (err) {
-    console.error(err)
-    //if fail, use the expired object or create a dummy
-    if (!remoteConfig) remoteConfig = {}
-  }
-  //dont check again for an hour
-  remoteConfig.expire = Date.now() + 3600*1000
-  await updateSettings({remoteConfig})
-  return remoteConfig
 }
 
 /**

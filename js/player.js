@@ -332,19 +332,11 @@ function reportError(err) {
     var details = err.stack;
     if (!details.startsWith(err.name)) details = err.name + ": " + err.message + "\n" + details;
     console.error(details)
-    lastUrlPromise
-      .then(url => bgPageInvoke("reportIssue", [url, details]))
-      .catch(console.error)
   }
 }
 
 function playAudio(urlPromise, options, playbackState$) {
-  if (brapi.offscreen) {
-    return playAudioOffscreen(urlPromise, options, playbackState$)
-  }
-  else {
-    return playAudioHere(requestAudioPlaybackPermission().then(() => urlPromise), options, playbackState$)
-  }
+  return playAudioHere(requestAudioPlaybackPermission().then(() => urlPromise), options, playbackState$)
 }
 
 var requestAudioPlaybackPermission = lazy(async function() {
@@ -356,81 +348,6 @@ var requestAudioPlaybackPermission = lazy(async function() {
   $("#dialog-backdrop, #audio-playback-permission-dialog").hide()
   await brapi.tabs.update(prevTab.id, {active: true})
 })
-
-async function createOffscreen() {
-  const readyPromise = new Promise(f => messageHandlers.offscreenCheckIn = f)
-  brapi.offscreen.createDocument({
-    reasons: ["AUDIO_PLAYBACK"],
-    justification: "Read Aloud would like to play audio in the background",
-    url: brapi.runtime.getURL("offscreen.html")
-  })
-  await readyPromise
-}
-
-function playAudioOffscreen(urlPromise, options, playbackState$) {
-  return rxjs.from(urlPromise).pipe(
-    rxjs.exhaustMap(url =>
-      playbackState$.pipe(
-        rxjs.distinctUntilChanged(),
-        rxjs.skipWhile(state => state != "resumed"),
-        rxjs.scan((playback$, state) => {
-          if (state == "resumed") {
-            return rxjs.defer(async () => {
-              if (!playback$) {
-                const result = await sendToOffscreen({method: "play", args: [url, options]})
-                if (result != true) throw "Offscreen doc not present"
-              } else {
-                const result = await sendToOffscreen({method: "resume"})
-                if (result != true) throw "Offscreen doc gone"
-              }
-            }).pipe(
-              rxjs.catchError(err => {
-                console.debug(err)
-                return rxjs.defer(createOffscreen).pipe(
-                  rxjs.exhaustMap(async () => {
-                    const result = await sendToOffscreen({method: "play", args: [url, options]})
-                    if (result != true) throw new Error("Offscreen doc inaccessible")
-                  })
-                )
-              }),
-              rxjs.exhaustMap(() =>
-                rxjs.NEVER.pipe(
-                  rxjs.finalize(() => {
-                    sendToOffscreen({method: "pause"})
-                      .catch(console.error)
-                  })
-                )
-              )
-            )
-          } else {
-            return rxjs.EMPTY
-          }
-        }, null),
-        rxjs.switchAll()
-      )
-    ),
-    rxjs.mergeWith(
-      new rxjs.Observable(observer => {
-        messageHandlers.offscreenPlaybackEvent = function(event) {
-          if (event.type == "error") observer.error(event.error)
-          else observer.next(event)
-        }
-      })
-    ),
-    rxjs.takeWhile(event => event.type != "end", true)
-  )
-}
-
-async function sendToOffscreen(message) {
-  message.dest = "offscreen"
-  const result = await brapi.runtime.sendMessage(message)
-    .catch(err => {
-      if (/^(A listener indicated|Could not establish)/.test(err.message)) throw new Error(err.message + " " + message.method)
-      throw err
-    })
-  if (result && result.error) throw result.error
-  else return result
-}
 
 async function shouldPlaySilence(providerId) {
   const should = await getPlaybackState().then(x => x.state == "PLAYING")

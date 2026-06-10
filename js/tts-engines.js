@@ -1243,17 +1243,18 @@ function SupertonicTtsEngine() {
   }
 
   this.getVoices = function() {
-    return [
-      {voiceName: "Supertonic F1", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic F2", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic F3", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic F4", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic F5", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic M1", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic M2", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic M3", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic M4", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-      {voiceName: "Supertonic M5", lang: "en", langs: ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]},
-    ]
+    const langs = ["en", "ko", "es", "pt", "fr", "de", "ja", "ar", "bg", "cs", "da", "el", "et", "fi", "hi", "hr", "hu", "id", "it", "lt", "lv", "nl", "pl", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi"]
+    return ["F1", "F2", "F3", "F4", "F5", "M1", "M2", "M3", "M4", "M5"]
+      .map(id => ({voiceName: "Supertonic " + id, lang: "en", langs}))
+  }
+
+  this.installModels = function(onProgress) {
+    const w = getWorker()
+    function progressHandler(e) {
+      if (e.data.type === "progress" && onProgress) onProgress(e.data.step, e.data.total)
+    }
+    w.addEventListener("message", progressHandler)
+    return postWorker("cacheModels", {})
+      .finally(() => w.removeEventListener("message", progressHandler))
   }
 }

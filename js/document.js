@@ -287,6 +287,7 @@ function Doc(source, onEnd) {
   }
 
   async function serverDetectLanguage(text) {
+    //no remote fallback: don't upload the text being read to a third-party server
     try {
       const service = await rxjs.firstValueFrom(fasttextObservable)
       if (!service) throw new Error("FastText service unavailable")
@@ -295,18 +296,7 @@ function Doc(source, onEnd) {
     }
     catch (err) {
       console.error(err)
-
-      return ajaxPost(config.serviceUrl + "/read-aloud/detect-language", {text: text}, "json")
-        .then(JSON.parse)
-        .then(function(res) {
-          var result = Array.isArray(res) ? res[0] : res
-          if (result && result.language && result.language != "und") return result.language
-          else return null
-        })
-        .catch(function(err) {
-          console.error(err)
-          return null
-        })
+      return null
     }
   }
 

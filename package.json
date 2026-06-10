@@ -1,26 +1,20 @@
 {
-  "name": "read-aloud",
-  "version": "1.0.1",
-  "description": "A Chrome extension that reads aloud the webpage's content with just one click. Support 40+ languages.",
-  "directories": {
-    "doc": "docs"
-  },
+  "name": "read-aloud-fork",
+  "version": "2.22.15",
+  "description": "Firefox extension that reads aloud webpage content, with in-page highlighting and offline TTS.",
   "scripts": {
-    "package": "zip -r build/package.zip _locales css img js sound *.html manifest.json background.js -x \\*.map || true",
-    "sync-page-scripts": "rsync -avz js/messaging.js page-scripts/ && aws s3 sync --delete --metadata-directive REPLACE --cache-control max-age=14400,public page-scripts s3://lsdsoftware-assets/read-aloud/page-scripts"
+    "package": "bash tools/build.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ken107/read-aloud.git"
+    "url": "git+https://github.com/luc42ei/read-aloud.git"
   },
   "keywords": [
     "text-to-speech",
-    "chrome-extension"
+    "firefox-extension"
   ],
-  "author": "Hai Phan <hai.phan@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ken107/read-aloud/issues"
-  },
-  "homepage": "https://readaloud.app"
+    "url": "https://github.com/luc42ei/read-aloud/issues"
+  }
 }

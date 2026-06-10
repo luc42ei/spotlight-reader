@@ -718,29 +718,9 @@
   }
 
   async function installSupertonicVoices() {
-    const HF_BASE = "https://huggingface.co/Supertone/supertonic-2/resolve/main"
-    const CACHE_NAME = "supertonic-models-v1"
-    const files = [
-      "onnx/duration_predictor.onnx",
-      "onnx/text_encoder.onnx",
-      "onnx/vector_estimator.onnx",
-      "onnx/vocoder.onnx"
-    ]
-    const cache = await caches.open(CACHE_NAME)
-    for (let i = 0; i < files.length; i++) {
-      showSupertonicProgress(i + 1, files.length)
-      const url = `${HF_BASE}/${files[i]}`
-      if (!await cache.match(url)) {
-        const resp = await fetch(url)
-        if (!resp.ok) throw new Error(`Failed to fetch ${files[i]}: ${resp.status}`)
-        await cache.put(url, resp)
-      }
-    }
-    const voices = ["F1","F2","F3","F4","F5","M1","M2","M3","M4","M5"].map(id => ({
-      voiceName: "Supertonic " + id,
-      lang: "en",
-      langs: ["en", "ko", "es", "pt", "fr"]
-    }))
-    await updateSettings({supertonicVoices: voices})
+    //stale supertonic-2 models from installs prior to the supertonic-3 worker
+    await caches.delete("supertonic-models-v1")
+    await supertonicTtsEngine.installModels(showSupertonicProgress)
+    await updateSettings({supertonicVoices: supertonicTtsEngine.getVoices()})
   }
 })();
