@@ -13,8 +13,10 @@
 //
 //   3. PLAYBACK HIGHLIGHT (amber, z:2147483644)
 //      setInterval 300 ms → getPlaybackState → texts[position.index] →
-//      findTextInBlocks (textContent indexOf) → createRangeForChars →
-//      per-line SVG <rect rx=3>   Stored Range repositions on scroll.
+//      anchored findTextInBlocks (scoped to the _highlightEntries element the
+//      chunk came from, falling back to a page-wide search) →
+//      createRangeForChars → per-line SVG <rect rx=3>
+//      Stored Range repositions on scroll.
 //      Auto-scrolls block into view when it leaves the viewport.
 
 (function () {
@@ -392,10 +394,44 @@
     fillSvg(actSvg, getLineRects(actRange), PLAY_COLOR, PLAY_ALPHA);
   }
 
+  // html-doc.js (same content-script world) records one entry per extracted
+  // paragraph in readAloudDoc._highlightEntries, and speechInfo.position
+  // .originalTextIndex points at the entry the current chunk came from. That
+  // element anchors the needle search, disambiguating sentences that repeat
+  // elsewhere on the page.
+  function getAnchorElem(position) {
+    try {
+      if (!position || position.originalTextIndex == null) return null;
+      const entries = (typeof readAloudDoc !== 'undefined') && readAloudDoc._highlightEntries;
+      if (!entries) return null;
+      const entry = entries[position.originalTextIndex];
+      return (entry && entry.elem && entry.elem.isConnected) ? entry.elem : null;
+    } catch (_) { return null; }
+  }
+
+  // Char offsets of scopeEl's text within block.textContent — used when the
+  // anchor element sits inside a larger scanned block, so matches outside the
+  // anchor (e.g. the same sentence in a sibling paragraph) are rejected.
+  function scopeBounds(block, scopeEl) {
+    const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+    let off = 0, start = -1;
+    for (let node; (node = walker.nextNode());) {
+      if (scopeEl.contains(node)) {
+        if (start < 0) start = off;
+      } else if (start >= 0) {
+        return { start, end: off };
+      }
+      off += node.textContent.length;
+    }
+    return start >= 0 ? { start, end: off } : null;
+  }
+
   // Search blocks for `needle`, resuming at (fromBlockEl, fromChar) so sequential
   // playback keeps moving forward past earlier identical sentences. When fromBlockEl
   // is null (or stale after a rescan) the whole document is searched from the top.
-  function findTextInBlocks(needle, fromBlockEl, fromChar) {
+  // With scopeEl, only blocks intersecting it are searched (clamped to its text
+  // when the block is larger).
+  function findTextInBlocks(needle, fromBlockEl, fromChar, scopeEl) {
     if (!needle || !needle.trim()) return null;
     const prefix = needle.slice(0, 40);
     let startIdx = 0;
@@ -406,14 +442,22 @@
     }
     for (let bi = startIdx; bi < blocks.length; bi++) {
       const block = blocks[bi];
+      let from = (fromBlockEl && bi === startIdx) ? fromChar : 0;
+      let limit = Infinity;
+      if (scopeEl && !scopeEl.contains(block)) {
+        if (!block.contains(scopeEl)) continue;
+        const b = scopeBounds(block, scopeEl);
+        if (!b) continue;
+        from  = Math.max(from, b.start);
+        limit = b.end;
+      }
       const tc = block.textContent;
-      const from = (fromBlockEl && bi === startIdx) ? fromChar : 0;
       const tcLower = tc.toLowerCase();
       let pos = tc.indexOf(needle, from);
       if (pos < 0) pos = tcLower.indexOf(needle.toLowerCase(), from);
       if (pos < 0) pos = tc.indexOf(prefix, from);
       if (pos < 0) pos = tcLower.indexOf(prefix.toLowerCase(), from);
-      if (pos < 0) continue;
+      if (pos < 0 || pos >= limit) continue;
       const end   = Math.min(tc.length, pos + needle.length);
       const range = createRangeForChars(block, pos, end);
       if (range) return { range, block, endChar: end };
@@ -425,10 +469,15 @@
     return rect.bottom < 0 || rect.top > window.innerHeight * 0.75;
   }
 
-  function applyPlaybackHighlight(needle, fromBlockEl, fromChar) {
-    let found = findTextInBlocks(needle, fromBlockEl, fromChar);
-    // Searching forward from the cursor missed — retry from the top (handles
+  function applyPlaybackHighlight(needle, fromBlockEl, fromChar, anchorEl) {
+    // Anchored search first (the element the chunk was extracted from), then
+    // page-wide from the cursor, then page-wide from the top (handles
     // restart-from-beginning and the rare case where the cursor overran).
+    // Each step only runs when the previous one missed, so anchoring can't
+    // regress pages where the anchor is stale or mismatched.
+    let found = anchorEl ? findTextInBlocks(needle, fromBlockEl, fromChar, anchorEl) : null;
+    if (!found && anchorEl) found = findTextInBlocks(needle, null, 0, anchorEl);
+    if (!found) found = findTextInBlocks(needle, fromBlockEl, fromChar);
     if (!found && fromBlockEl) found = findTextInBlocks(needle, null, 0);
     if (!found) return null;   // keep previous rects — text may be mid-transition
 
@@ -493,7 +542,7 @@
       const goneBackward = idx <= lastTextIdx;
       const fromEl   = goneBackward ? null : cursorBlock;
       const fromChar = goneBackward ? 0    : cursorChar;
-      const found = applyPlaybackHighlight(text, fromEl, fromChar);
+      const found = applyPlaybackHighlight(text, fromEl, fromChar, getAnchorElem(info.position));
       if (found) {
         cursorBlock = found.block;
         cursorChar  = found.endChar;
