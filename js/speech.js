@@ -458,9 +458,10 @@ function Speech(texts, options) {
     this.getParagraphs = function(text) {
       return recombine(text.split(/((?:\r?\n\s*){2,})/));
     }
-    var nonSentenceEndingAbbrev = /\b(?:[A-Za-z]|Adm|Assn|Ave|Blvd|Bldg|Brig|Capt|Cmdr|Col|Comdr|Corp|Cpl|Ct|Dept|Dr|Drs|Fig|Figs|Fr|Ft|Gen|Gov|Hon|Inc|Jr|Lieut|Ln|Lt|Ltd|Maj|Messrs|Mmes|Mr|Mrs|Ms|Mt|Mx|No|Nos|Pl|Pres|Prof|Rd|Rep|Reps|Rev|Sen|Sens|Sgt|Sr|St|Ste|Univ|Jan|Feb|Mar|Apr|Aug|Sep|Sept|Oct|Nov|Dec|dept|ed|eds|est|fig|figs|misc|pp|ref|refs|vol|vols|vs|Abb|Abk|Abs|allg|Anh|Anm|Aufl|Bd|Bde|bzgl|bzw|ca|d\.h|dt|ebd|etc|evtl|ggf|Hrsg|inkl|inn|insb|i\.d\.R|Jh|Jh\.s|Jhd|Kap|max|min|Mio|Mrd|n\.Chr|Nr|\u00f6sterr|Pkt|r\u00f6m|Rn|Rr|S|s\.o|s\.u|sog|Std|Str|u\.a|u\.\u00e4|u\.U|usw|v\.a|v\.Chr|vgl|z\.B|z\.T)\.\s+$/;
+    // Shared with the in-page overlay (js/sentence-splitter.js) so hover/seek
+    // sentence boundaries match the actual spoken chunks.
     this.getSentences = function(text) {
-      return recombine(text.split(/([.!?]+[\s\u200b]+)/), nonSentenceEndingAbbrev);
+      return raSentenceSplitter.split(text);
     }
     this.getPhrases = function(sentence) {
       return recombine(sentence.split(/([,;:]\s+|\s-+\s+|—\s*)/));

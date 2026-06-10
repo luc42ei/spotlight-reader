@@ -36,19 +36,6 @@
 
   const INTERACTIVE  = 'a,button,input,select,textarea,[contenteditable],[role="button"],[role="link"]';
 
-  // Abbreviations whose period must NOT end a sentence
-  const ABBREVS = new Set([
-    'mr','mrs','ms','dr','drs','prof','sr','jr','vs','etc',
-    'e.g','i.e','fig','figs','no','nos','vol','vols','dept','approx','est',
-    'govt','inc','ltd','corp','co','st','ste','ave','blvd','rd','ln','ct','pl','mt',
-    'capt','col','gen','gov','hon','lt','maj','sgt','rev','sen','rep','adm','cmdr',
-    'jan','feb','mar','apr','jun','jul','aug','sep','sept','oct','nov','dec',
-    'u.s','u.k','u.n','p.m','a.m',
-    'abb','abk','abs','allg','anh','anm','aufl','bd','bde','bzgl','bzw','ca',
-    'dt','ebd','evtl','ggf','hrsg','inkl','insb','jh','jhd','kap','max','min',
-    'mio','mrd','nr','pkt','rn','sog','std','str','usw','vgl',
-  ]);
-
   // ── STATE ──────────────────────────────────────────────────────────────────
 
   let blocks    = [];
@@ -75,23 +62,14 @@
 
   // ── SENTENCE SPLITTING ─────────────────────────────────────────────────────
 
+  // Delegates to the shared splitter (js/sentence-splitter.js, injected before
+  // this file) — the same boundaries the TTS chunker uses, so hover/seek
+  // sentences match the spoken chunks.
   function splitSentences(text) {
     if (!text) return [];
-    const results = [];
-    const re = /([.!?]['"»)\]]*)\s+(?=[A-Z"'«(\[])/g;
-    let last = 0, m;
-    while ((m = re.exec(text)) !== null) {
-      const prefix = text.slice(0, m.index + 1);
-      const abbr   = prefix.match(/\b([A-Za-z][a-z]*)\.$/);
-      if (abbr && ABBREVS.has(abbr[1].toLowerCase())) continue;
-      const end   = m.index + m[1].length;
-      const chunk = text.slice(last, end).trim();
-      if (chunk.length > 1) results.push({ text: chunk, start: last, end });
-      last = m.index + m[0].length;
-    }
-    const tail = text.slice(last).trim();
-    if (tail.length > 1) results.push({ text: tail, start: last, end: text.length });
-    return results.length ? results : [{ text: text.trim(), start: 0, end: text.length }];
+    if (typeof raSentenceSplitter !== 'undefined')
+      return raSentenceSplitter.splitWithOffsets(text);
+    return [{ text: text.trim(), start: 0, end: text.length }];
   }
 
   // Concatenate the block's text (same offset space as createRangeForChars: text nodes
@@ -145,10 +123,15 @@
   }
 
   function sentenceAt(sents, offset) {
+    // Offsets are trimmed, so whitespace between sentences belongs to neither —
+    // fall back to the nearest sentence instead of the block's last one.
+    let best = null, bestD = Infinity;
     for (const s of sents) {
       if (offset >= s.start && offset <= s.end) return s;
+      const d = offset < s.start ? s.start - offset : offset - s.end;
+      if (d < bestD) { bestD = d; best = s; }
     }
-    return sents[sents.length - 1] || null;
+    return best;
   }
 
   // ── CURSOR → CHAR OFFSET  (Speechify Xe() technique) ──────────────────────
