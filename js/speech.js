@@ -17,17 +17,27 @@ function Speech(texts, options) {
   // Joining all texts first (texts.join("\n\n")) caused short texts to merge into a single
   // chunk, making origTextToFirstChunk undefined for embedded texts and breaking seek/highlight.
   var chunkToOrigText = null;
+  var chunkCharStart = null;
   if (texts.length) {
     var allChunks = [];
     chunkToOrigText = [];
+    chunkCharStart = [];
     for (var i = 0; i < texts.length; i++) {
       var textChunks = getChunks(texts[i]);
+      // Breakers preserve the text (chunks concatenate back to texts[i]), so a
+      // running offset gives each chunk's start position within the original
+      // text — the in-page overlay uses it to pick the right occurrence of a
+      // repeated sentence.
+      var charOffset = 0;
       for (var j = 0; j < textChunks.length; j++) {
         // Skip chunks with no readable content (e.g. lone "—" paragraph separators).
         // Cloud TTS engines return empty audio for these, breaking media decode.
-        if (!/[\p{L}\p{N}]/u.test(textChunks[j])) continue;
-        allChunks.push(textChunks[j]);
-        chunkToOrigText.push(i);
+        if (/[\p{L}\p{N}]/u.test(textChunks[j])) {
+          allChunks.push(textChunks[j]);
+          chunkToOrigText.push(i);
+          chunkCharStart.push(charOffset);
+        }
+        charOffset += textChunks[j].length;
       }
     }
     texts = allChunks;
@@ -119,7 +129,10 @@ function Speech(texts, options) {
       texts: enginePlaybackState ? enginePlaybackState.texts : texts,
       position: {
         index: currentIndex,
-        originalTextIndex: chunkToOrigText ? chunkToOrigText[currentIndex] : currentIndex
+        originalTextIndex: chunkToOrigText ? chunkToOrigText[currentIndex] : currentIndex,
+        // char offset of the chunk within its original text — null when the
+        // engine reports its own sentence indexes (different text space)
+        chunkStart: (!enginePlaybackState && chunkCharStart) ? chunkCharStart[currentIndex] : null
       },
       isRTL: /^(ar|az|dv|he|iw|ku|fa|ur)\b/.test(options.lang),
       engine: immediate(() => {

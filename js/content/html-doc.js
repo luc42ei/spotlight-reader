@@ -96,6 +96,12 @@ var readAloudDoc = new function() {
         finalTexts.push(pairs[j].text);
       }
     }
+    // Unsliced view for the overlay's occurrence counting: when entries share
+    // one element (legacy shared containers), the overlay must count needle
+    // occurrences across ALL earlier same-element entries — including those a
+    // seek sliced away, since their text is still in the DOM.
+    self._highlightEntriesAll = self._highlightEntries;
+    self._highlightEntriesOffset = 0;
 
     // Sentence-level seek within extracted texts. seekTarget.sentenceText comes
     // from textContent (whitespace-collapsed, no added dots), while finalTexts
@@ -107,19 +113,36 @@ var readAloudDoc = new function() {
         return s.replace(/\s+/g, ' ').replace(/\.(\s|$)/g, '$1').trim();
       };
       var needleN = normalizeHaystack(needle);
-      var needleNPrefix = needleN.slice(0, 40);
-      for (var ti = 0; ti < finalTexts.length; ti++) {
-        var hayN = normalizeHaystack(finalTexts[ti]);
-        var pos = hayN.indexOf(needleN);
-        if (pos < 0) pos = hayN.toLowerCase().indexOf(needleN.toLowerCase());
-        if (pos < 0) pos = hayN.indexOf(needleNPrefix);
-        if (pos < 0) pos = hayN.toLowerCase().indexOf(needleNPrefix.toLowerCase());
-        if (pos >= 0) {
-          self._highlightEntries = self._highlightEntries.slice(ti);
-          finalTexts = finalTexts.slice(ti);
-          // Don't slice mid-paragraph — pos is in normalized buf, mapping back is unreliable
-          break;
+      var haysN = finalTexts.map(normalizeHaystack);
+      // One match tier at a time across ALL texts (exact → case-insensitive →
+      // 40-char prefix → prefix CI): a weaker tier must not match an earlier
+      // paragraph before a stronger tier gets to try a later one — nearly
+      // identical refrain sentences can differ only mid-sentence. Within a
+      // tier, prefer the entry whose element relates to the clicked block,
+      // which disambiguates even fully identical sentences.
+      var probes = [
+        {s: needleN, ci: false},
+        {s: needleN.toLowerCase(), ci: true},
+        {s: needleN.slice(0, 40), ci: false},
+        {s: needleN.slice(0, 40).toLowerCase(), ci: true},
+      ];
+      var ti = -1;
+      for (var p = 0; p < probes.length && ti < 0; p++) {
+        var first = -1;
+        for (var i = 0; i < haysN.length; i++) {
+          var hay = probes[p].ci ? haysN[i].toLowerCase() : haysN[i];
+          if (hay.indexOf(probes[p].s) < 0) continue;
+          if (first < 0) first = i;
+          var el = seekTarget.el, ee = self._highlightEntries[i].elem;
+          if (el && ee && (ee === el || ee.contains(el) || el.contains(ee))) { ti = i; break; }
         }
+        if (ti < 0) ti = first;
+      }
+      if (ti > 0) {
+        self._highlightEntriesOffset = ti;
+        self._highlightEntries = self._highlightEntries.slice(ti);
+        finalTexts = finalTexts.slice(ti);
+        // Don't slice mid-paragraph — offsets in normalized space are unreliable
       }
     }
 
@@ -334,8 +357,18 @@ var readAloudDoc = new function() {
     var sameElem = self._highlightEntries.filter(function(e) { return e.elem === entry.elem; });
     var PARA_TAGS = { P:1, LI:1, BLOCKQUOTE:1, H1:1, H2:1, H3:1, H4:1, H5:1, H6:1, DD:1, DT:1, FIGCAPTION:1, PRE:1 };
     if (sameElem.length === 1 || PARA_TAGS[entry.elem.tagName]) {
-      $(entry.elem).addClass("read-aloud-highlight");
-      scrollToQuarter(entry.elem);
+      var boxEl = entry.elem;
+      // Legacy font-soup: the entry's elem can be an inline element (<font>)
+      // covering only part of the visual paragraph (footnote links split it
+      // into several fonts). The overlay's synthetic block wrapper
+      // [data-ra-block] (present when in-page highlighting is active) spans
+      // the whole bare-text run — outline that instead.
+      if (!PARA_TAGS[boxEl.tagName] && boxEl.closest) {
+        var wrap = boxEl.closest("[data-ra-block]");
+        if (wrap) boxEl = wrap;
+      }
+      $(boxEl).addClass("read-aloud-highlight");
+      scrollToQuarter(boxEl);
       return;
     }
 
@@ -545,7 +578,9 @@ var readAloudDoc = new function() {
     // the text node is split by inline <sup>/<a>/<br>. Walking up returns the tightest
     // block, so neighbouring paragraphs aren't included.
     var block = textNodes[s.ni].parentNode;
-    while (block && block !== document.body && block !== document.documentElement && !BLOCK_TAGS[block.tagName]) {
+    while (block && block !== document.body && block !== document.documentElement
+        && !BLOCK_TAGS[block.tagName]
+        && !(block.hasAttribute && block.hasAttribute("data-ra-block"))) {
       block = block.parentNode;
     }
     // A block that tightly bounds the paragraph → outline it as one box. The size guard

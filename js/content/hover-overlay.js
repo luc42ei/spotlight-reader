@@ -13,8 +13,9 @@
 //
 //   3. PLAYBACK HIGHLIGHT (amber, z:2147483644)
 //      setInterval 300 ms → getPlaybackState → texts[position.index] →
-//      anchored findTextInBlocks (scoped to the _highlightEntries element the
-//      chunk came from, falling back to a page-wide search) →
+//      findTextInScope (anchored to the _highlightEntries element the chunk
+//      came from + the occurrence derived from position.chunkStart, falling
+//      back to the page-wide cursor search) →
 //      createRangeForChars → per-line SVG <rect rx=3>
 //      Stored Range repositions on scroll.
 //      Auto-scrolls block into view when it leaves the viewport.
@@ -381,14 +382,36 @@
   // paragraph in readAloudDoc._highlightEntries, and speechInfo.position
   // .originalTextIndex points at the entry the current chunk came from. That
   // element anchors the needle search, disambiguating sentences that repeat
-  // elsewhere on the page.
-  function getAnchorElem(position) {
+  // elsewhere on the page. position.chunkStart (the chunk's char offset within
+  // the entry text) additionally tells WHICH occurrence is meant when the
+  // sentence repeats inside the same entry.
+  function getPlaybackAnchor(position) {
     try {
       if (!position || position.originalTextIndex == null) return null;
       const entries = (typeof readAloudDoc !== 'undefined') && readAloudDoc._highlightEntries;
       if (!entries) return null;
       const entry = entries[position.originalTextIndex];
-      return (entry && entry.elem && entry.elem.isConnected) ? entry.elem : null;
+      if (!entry || !entry.elem || !entry.elem.isConnected) return null;
+      // A body-wide anchor scopes nothing and would override the forward
+      // cursor with a first-match pick — let the cursor search handle it.
+      if (entry.elem === document.body || entry.elem === document.documentElement) return null;
+      // On legacy shared containers many entries map to one element, so the
+      // occurrence count must include ALL earlier same-element entries —
+      // even ones a seek sliced away (their text is still in the DOM).
+      // html-doc keeps the unsliced list + slice offset for this. The actual
+      // counting happens per match tier in findTextInScope.
+      const all = readAloudDoc._highlightEntriesAll || entries;
+      const upto = (readAloudDoc._highlightEntriesOffset || 0) + position.originalTextIndex;
+      const priorTexts = [];
+      for (let i = 0; i < upto && i < all.length; i++) {
+        if (all[i].elem === entry.elem && all[i].text) priorTexts.push(all[i].text);
+      }
+      return {
+        elem: entry.elem,
+        priorTexts: priorTexts,
+        entryText: entry.text || '',
+        chunkStart: position.chunkStart,
+      };
     } catch (_) { return null; }
   }
 
@@ -409,12 +432,72 @@
     return start >= 0 ? { start, end: off } : null;
   }
 
+  function countIn(hay, probe, before) {
+    let n = 0, pos = hay.indexOf(probe);
+    while (pos >= 0 && (before == null || pos < before)) {
+      n++;
+      pos = hay.indexOf(probe, pos + 1);
+    }
+    return n;
+  }
+
+  // Anchored search: collect every occurrence of the probe inside the anchor
+  // scope and pick the one the chunk position points at (clamped, so a
+  // divergent count still lands on the nearest occurrence instead of missing).
+  // One match tier at a time — weaker tiers (case-insensitive, 40-char prefix)
+  // only apply when stronger ones found nothing anywhere in the scope. The
+  // occurrence is counted with the SAME probe in extraction-text space: the
+  // exact chunk often can't match the DOM (appended punctuation, numbering),
+  // so a prefix tier must use prefix-based counts too — identical refrain
+  // sentences share their first 40 chars, and mixing tiers picked the wrong one.
+  function findTextInScope(needle, anchor) {
+    if (!needle || !needle.trim()) return null;
+    const scopeEl = anchor.elem;
+    const probes = [
+      { s: needle, ci: false },
+      { s: needle.toLowerCase(), ci: true },
+      { s: needle.slice(0, 40), ci: false },
+      { s: needle.slice(0, 40).toLowerCase(), ci: true },
+    ];
+    for (const probe of probes) {
+      let occurrence = 0;
+      for (const t of anchor.priorTexts)
+        occurrence += countIn(probe.ci ? t.toLowerCase() : t, probe.s, null);
+      if (anchor.chunkStart != null)
+        occurrence += countIn(probe.ci ? anchor.entryText.toLowerCase() : anchor.entryText, probe.s, anchor.chunkStart);
+      const matches = [];
+      for (let bi = 0; bi < blocks.length; bi++) {
+        const block = blocks[bi];
+        let from = 0, limit = Infinity;
+        if (!scopeEl.contains(block)) {
+          if (!block.contains(scopeEl)) continue;
+          const b = scopeBounds(block, scopeEl);
+          if (!b) continue;
+          from  = b.start;
+          limit = b.end;
+        }
+        const tc = probe.ci ? block.textContent.toLowerCase() : block.textContent;
+        let pos = tc.indexOf(probe.s, from);
+        while (pos >= 0 && pos < limit) {
+          matches.push({ block: block, pos: pos });
+          pos = tc.indexOf(probe.s, pos + 1);
+        }
+      }
+      if (matches.length) {
+        const m = matches[Math.min(occurrence, matches.length - 1)];
+        const tc = m.block.textContent;
+        const end = Math.min(tc.length, m.pos + needle.length);
+        const range = createRangeForChars(m.block, m.pos, end);
+        if (range) return { range: range, block: m.block, endChar: end };
+      }
+    }
+    return null;
+  }
+
   // Search blocks for `needle`, resuming at (fromBlockEl, fromChar) so sequential
   // playback keeps moving forward past earlier identical sentences. When fromBlockEl
   // is null (or stale after a rescan) the whole document is searched from the top.
-  // With scopeEl, only blocks intersecting it are searched (clamped to its text
-  // when the block is larger).
-  function findTextInBlocks(needle, fromBlockEl, fromChar, scopeEl) {
+  function findTextInBlocks(needle, fromBlockEl, fromChar) {
     if (!needle || !needle.trim()) return null;
     const prefix = needle.slice(0, 40);
     let startIdx = 0;
@@ -425,22 +508,14 @@
     }
     for (let bi = startIdx; bi < blocks.length; bi++) {
       const block = blocks[bi];
-      let from = (fromBlockEl && bi === startIdx) ? fromChar : 0;
-      let limit = Infinity;
-      if (scopeEl && !scopeEl.contains(block)) {
-        if (!block.contains(scopeEl)) continue;
-        const b = scopeBounds(block, scopeEl);
-        if (!b) continue;
-        from  = Math.max(from, b.start);
-        limit = b.end;
-      }
       const tc = block.textContent;
+      const from = (fromBlockEl && bi === startIdx) ? fromChar : 0;
       const tcLower = tc.toLowerCase();
       let pos = tc.indexOf(needle, from);
       if (pos < 0) pos = tcLower.indexOf(needle.toLowerCase(), from);
       if (pos < 0) pos = tc.indexOf(prefix, from);
       if (pos < 0) pos = tcLower.indexOf(prefix.toLowerCase(), from);
-      if (pos < 0 || pos >= limit) continue;
+      if (pos < 0) continue;
       const end   = Math.min(tc.length, pos + needle.length);
       const range = createRangeForChars(block, pos, end);
       if (range) return { range, block, endChar: end };
@@ -452,14 +527,13 @@
     return rect.bottom < 0 || rect.top > window.innerHeight * 0.75;
   }
 
-  function applyPlaybackHighlight(needle, fromBlockEl, fromChar, anchorEl) {
-    // Anchored search first (the element the chunk was extracted from), then
-    // page-wide from the cursor, then page-wide from the top (handles
+  function applyPlaybackHighlight(needle, fromBlockEl, fromChar, anchor) {
+    // Anchored search first (exact element + occurrence the chunk came from),
+    // then page-wide from the cursor, then page-wide from the top (handles
     // restart-from-beginning and the rare case where the cursor overran).
     // Each step only runs when the previous one missed, so anchoring can't
     // regress pages where the anchor is stale or mismatched.
-    let found = anchorEl ? findTextInBlocks(needle, fromBlockEl, fromChar, anchorEl) : null;
-    if (!found && anchorEl) found = findTextInBlocks(needle, null, 0, anchorEl);
+    let found = anchor ? findTextInScope(needle, anchor) : null;
     if (!found) found = findTextInBlocks(needle, fromBlockEl, fromChar);
     if (!found && fromBlockEl) found = findTextInBlocks(needle, null, 0);
     if (!found) return null;   // keep previous rects — text may be mid-transition
@@ -525,7 +599,7 @@
       const goneBackward = idx <= lastTextIdx;
       const fromEl   = goneBackward ? null : cursorBlock;
       const fromChar = goneBackward ? 0    : cursorChar;
-      const found = applyPlaybackHighlight(text, fromEl, fromChar, getAnchorElem(info.position));
+      const found = applyPlaybackHighlight(text, fromEl, fromChar, getPlaybackAnchor(info.position));
       if (found) {
         cursorBlock = found.block;
         cursorChar  = found.endChar;
