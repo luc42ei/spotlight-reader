@@ -1,6 +1,6 @@
 {
   "name": "read-aloud-fork",
-  "version": "2.22.15",
+  "version": "2.23.0",
   "description": "Firefox extension that reads aloud webpage content, with in-page highlighting and offline TTS.",
   "scripts": {
     "package": "bash tools/build.sh"
