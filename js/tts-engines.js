@@ -137,10 +137,7 @@ function PremiumTtsEngine(serviceUrl) {
   this.getVoices = async function() {
     const premiumVoiceList = await getSetting("premiumVoiceList")
     if (!premiumVoiceList || premiumVoiceList.expire < Date.now()) refreshVoiceList()
-    return (premiumVoiceList ? premiumVoiceList.items : voices)
-      .concat(
-        {voiceName: "ReadAloud Generic Voice", autoSelect: true},
-      )
+    return premiumVoiceList ? premiumVoiceList.items : voices
   }
   async function refreshVoiceList() {
     try {

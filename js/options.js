@@ -547,8 +547,6 @@
       var weight = 0
       //native voices should appear before non-natives in Standard group
       if (!isNativeVoice(voice)) weight += 10
-      //ReadAloud Generic Voice should appear first among the non-natives
-      if (!isReadAloudCloud(voice)) weight += 1
       //UseMyPhone should appear last in Offline group
       if (isUseMyPhone(voice)) weight += 1
       return weight
