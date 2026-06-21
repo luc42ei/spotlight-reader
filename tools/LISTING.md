@@ -44,6 +44,9 @@ sentence to jump to it.
 Spotlight Reader is an independent fork of the open-source "Read Aloud" by
 ken107 (MIT-licensed), focused on offline TTS and in-page highlighting for
 Firefox. Source code: https://github.com/luc42ei/spotlight-reader
+
+If you find Spotlight Reader useful, consider supporting development:
+https://ko-fi.com/lucaseichhorn
 ```
 
 **Category:** Other (secondary: Language Support & Translation)

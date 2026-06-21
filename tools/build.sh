@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-OUT="../read-aloud-fork.zip"
+OUT="../spotlight-reader.zip"
 rm -f "$OUT"
 
 zip -r "$OUT" . \
