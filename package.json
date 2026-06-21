@@ -1,6 +1,6 @@
 {
   "name": "spotlight-reader",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Firefox extension that reads aloud webpage content, with in-page highlighting and offline TTS.",
   "scripts": {
     "package": "bash tools/build.sh"
