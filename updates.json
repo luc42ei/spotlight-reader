@@ -3,8 +3,8 @@
     "read-aloud-fork@lucaseichhorn": {
       "updates": [
         {
-          "version": "2.23.0",
-          "update_link": "https://github.com/luc42ei/spotlight-reader/releases/download/v2.23.0/read-aloud-fork.xpi"
+          "version": "3.0.0",
+          "update_link": "https://github.com/luc42ei/spotlight-reader/releases/download/v3.0.0/read-aloud-fork.xpi"
         }
       ]
     }

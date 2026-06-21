@@ -27,10 +27,10 @@
 ```bash
 V=2.22.7
 echo '== updates.json (what Firefox fetches) =='
-curl -s https://raw.githubusercontent.com/luc42ei/read-aloud/master/updates.json
+curl -s https://raw.githubusercontent.com/luc42ei/spotlight-reader/master/updates.json
 echo '== XPI download =='
 curl -s -L -o /tmp/check.xpi -w "status=%{http_code} size=%{size_download}\n" \
-  https://github.com/luc42ei/read-aloud/releases/download/v$V/read-aloud-fork.xpi
+  https://github.com/luc42ei/spotlight-reader/releases/download/v$V/read-aloud-fork.xpi
 unzip -p /tmp/check.xpi manifest.json | grep '"version"'
 rm /tmp/check.xpi
 ```
@@ -61,6 +61,6 @@ is for human orientation, not machine semantics.
 - AMO is unlisted — signed but not publicly searchable
 - `updates.json` is fetched by Firefox to detect new versions; the `update_link` must point to the signed XPI on GitHub Releases
 - `update_url` in `manifest.json` points to the raw GitHub URL of `updates.json`:
-  `https://raw.githubusercontent.com/luc42ei/read-aloud/master/updates.json`
+  `https://raw.githubusercontent.com/luc42ei/spotlight-reader/master/updates.json`
 - Do not include `updates.json` in the zip (already excluded in `build.sh`)
 - Manual update check: Firefox `about:addons` → gear icon → "Check for Updates"
