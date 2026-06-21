@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Tekstistä puheeksi -lukija"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Lue nykyinen verkkosivu ääneen yhdellä napsautuksella käyttäen tekstistä puheeksi -tekniikkaa. Tukee yli 40 kieltä."

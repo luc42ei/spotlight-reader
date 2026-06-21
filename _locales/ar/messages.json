@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: قارئ النصوص الصوتي"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "اقرأ مقالة صفحة الويب الحالية بصوت عالٍ بنقرة واحدة، باستخدام تحويل النص إلى كلام. يدعم أكثر من 40 لغة."

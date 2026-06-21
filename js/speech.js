@@ -92,8 +92,8 @@ function Speech(texts, options) {
       premiumTtsEngine.prepare(options)
       return premiumTtsEngine;
     }
-    if (isGoogleNative(options.voice)) return new TimeoutTtsEngine(browserTtsEngine, 3*1000, 16*1000);
-    return browserTtsEngine;
+    //browser/native voices removed — fall back to Google Translate for any unrecognized voice
+    return googleTranslateTtsEngine;
   }
 
   function getChunks(text) {

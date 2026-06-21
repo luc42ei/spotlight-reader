@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Tekst naar spraak voorlezer"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Lees het huidige webpagina-artikel hardop voor met één klik, met tekst naar spraak. Ondersteunt meer dan 40 talen."

@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Leitor de texto para fala"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Leia em voz alta o artigo da página web atual com um clique, usando texto para fala. Suporta mais de 40 idiomas."

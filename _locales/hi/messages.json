@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: टेक्स्ट टू स्पीच वॉइस रीडर"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "एक क्लिक में वर्तमान वेब-पेज लेख को टेक्स्ट टू स्पीच का उपयोग करके जोर से पढ़ें। 40+ भाषाओं का समर्थन करता है।"

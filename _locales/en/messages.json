@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: A Text to Speech Voice Reader"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Read aloud the current web-page article with one click, using text to speech (TTS). Supports 40+ languages."

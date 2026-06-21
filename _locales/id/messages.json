@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Pembaca Suara Teks ke Ucapan"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Baca keras artikel halaman web saat ini dengan satu klik, menggunakan teks ke ucapan. Mendukung 40+ bahasa."

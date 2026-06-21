@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Text-zu-Sprache Vorleser"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Lesen Sie den aktuellen Webseiten-Artikel mit einem Klick laut vor, mit Text-zu-Sprache. Unterstützt über 40 Sprachen."

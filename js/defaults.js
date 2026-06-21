@@ -160,7 +160,7 @@ const voices$ = rxjs.combineLatest({
   supertonicVoices: observeSetting("supertonicVoices"),
 }).pipe(
   rxjs.exhaustMap(settings => Promise.all([
-    browserTtsEngine.getVoices(),
+    //browser/Web-Speech voices intentionally not listed (low quality, OS-dependent)
     googleTranslateTtsEngine.getVoices(),
     phoneTtsEngine.getVoices(),
     settings.supertonicVoices || [],

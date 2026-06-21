@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Hlasová čtečka textu"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Přečtěte nahlas aktuální článek na webové stránce jedním kliknutím pomocí převodu textu na řeč. Podporuje více než 40 jazyků."

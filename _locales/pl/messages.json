@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Czytnik tekstu na mowę"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Czytaj na głos bieżący artykuł na stronie internetowej jednym kliknięciem, używając zamiany tekstu na mowę. Obsługuje ponad 40 języków."

@@ -33,8 +33,17 @@
     var batchNumber = 0;
 
 
-    async function batchExecute(rpcId, payload) {
-        const wiz = await rxjs.firstValueFrom(wiz$)
+    async function getWiz(forceRefresh) {
+        if (!forceRefresh) return await rxjs.firstValueFrom(wiz$)
+        //force a fresh token straight from translate.google.com (bypasses the cached wiz$)
+        const wiz = await fetchWizGlobalData(url)
+        wiz.expire = Date.now() + 3600*1000
+        await updateSetting("gtWiz", wiz)
+        return wiz
+    }
+
+    async function batchExecute(rpcId, payload, forceRefresh) {
+        const wiz = await getWiz(forceRefresh)
         const {query, body} = getBatchExecuteParams(wiz, rpcId, payload)
         if (!body.at) delete body.at
         const res = {body: await ajaxPost(url + "/_/TranslateWebserverUi/data/batchexecute?" + urlEncode(query), body)}
@@ -100,7 +109,19 @@
     }
 
     window.googleTranslateSynthesizeSpeech = async function(text, lang) {
-        const payload = await batchExecute("jQ1olc", [text, lang, null])
+        let payload
+        try {
+            payload = await batchExecute("jQ1olc", [text, lang, null])
+        } catch (err) {
+            //Google often rotates the session token or briefly rate-limits;
+            //refresh the token and retry once before giving up.
+            console.warn("Google Translate request failed, retrying with a fresh token", err)
+            try {
+                payload = await batchExecute("jQ1olc", [text, lang, null], true)
+            } catch (err2) {
+                throw new Error("Google Translate is temporarily unavailable. Please try again in a moment, or pick another voice — Supertonic and the other offline voices work without an internet connection.")
+            }
+        }
         if (!payload) throw new Error("Failed to synthesize text '" + text.slice(0,25) + "…' in language " + lang)
         return "data:audio/mpeg;base64," + payload[0];
     }

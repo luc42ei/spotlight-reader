@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Texto A Voz"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Lea en voz alta el artículo actual con un solo clic."

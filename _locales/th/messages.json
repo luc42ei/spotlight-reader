@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: โปรแกรมอ่านออกเสียงข้อความ"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "อ่านออกเสียงบทความบนหน้าเว็บปัจจุบันด้วยคลิกเดียว โดยใช้การแปลงข้อความเป็นเสียง รองรับกว่า 40 ภาษา"

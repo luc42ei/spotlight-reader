@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Преобразование текста в речь"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Прочитайте вслух текущую статью на веб-странице одним щелчком мыши, используя преобразование текста в речь (TTS). Поддерживает более 40 языков."

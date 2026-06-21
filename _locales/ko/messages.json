@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: 텍스트 음성 변환 리더"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "텍스트 음성 변환을 사용하여 클릭 한 번으로 현재 웹페이지 기사를 소리 내어 읽어줍니다. 40개 이상의 언어를 지원합니다."

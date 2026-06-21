@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: テキスト読み上げ音声リーダー"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "読み上げる"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "ワンクリックで現在のウェブページの記事を読み上げます。 40以上の言語をサポートします。"

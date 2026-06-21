@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: 文字語音朗讀助理"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "輕輕點選，即可為您朗讀頁面上的文字。（目前支援超過 40 種以上的語言）"

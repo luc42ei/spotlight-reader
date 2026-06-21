@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Голосовий читач тексту"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Читайте вголос статтю поточної веб-сторінки одним кліком, використовуючи синтез мовлення. Підтримує понад 40 мов."

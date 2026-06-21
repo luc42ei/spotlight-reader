@@ -1,9 +1,9 @@
 {
   "extension_name": {
-    "message": "Read Aloud: Tekst til tale-oppleser"
+    "message": "Spotlight Reader: Text-to-Speech & Highlighting"
   },
   "extension_short_name": {
-    "message": "Read Aloud"
+    "message": "Spotlight Reader"
   },
   "extension_description": {
     "message": "Les den gjeldende nettsideartikkelen høyt med ett klikk, ved hjelp av tekst til tale. Støtter over 40 språk."
