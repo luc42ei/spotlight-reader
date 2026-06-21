@@ -96,7 +96,7 @@
     "message": "Keluar"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud menggunakan tab ini untuk pemutaran audio. Tab ini akan ditutup secara otomatis setelah 5 menit tidak ada aktivitas."
+    "message": "Spotlight Reader menggunakan tab ini untuk pemutaran audio. Tab ini akan ditutup secara otomatis setelah 5 menit tidak ada aktivitas."
   },
   "player_hidethistab_link": {
     "message": "Sembunyikan tab ini"
@@ -105,7 +105,7 @@
     "message": "Sembunyikan tab ini?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Jika Anda menyembunyikan tab ini, Read Aloud akan memutar audio di dalam halaman web saat ini. Ini berarti meninggalkan halaman akan menyebabkan ucapan berhenti.\n\n(Pengaturan ini dapat dikembalikan dari halaman Opsi ekstensi)"
+    "message": "Jika Anda menyembunyikan tab ini, Spotlight Reader akan memutar audio di dalam halaman web saat ini. Ini berarti meninggalkan halaman akan menyebabkan ucapan berhenti.\n\n(Pengaturan ini dapat dikembalikan dari halaman Opsi ekstensi)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Sembunyikan"
@@ -117,7 +117,7 @@
     "message": "Izin Diminta"
   },
   "player_permission_dialog_body": {
-    "message": "Izinkan Read Aloud memutar audio?"
+    "message": "Izinkan Spotlight Reader memutar audio?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Izinkan"
@@ -141,10 +141,10 @@
     "message": "Tidak dapat membaca keras situs web ini"
   },
   "error_file_access": {
-    "message": "Anda perlu memberikan akses Read Aloud ke URL file di [pengaturan](open-extension-settings) ekstensi"
+    "message": "Anda perlu memberikan akses Spotlight Reader ke URL file di [pengaturan](open-extension-settings) ekstensi"
   },
   "error_add_permissions": {
-    "message": "Anda perlu memberikan Read Aloud [izin](request-permissions) tambahan untuk situs web ini"
+    "message": "Anda perlu memberikan Spotlight Reader [izin](request-permissions) tambahan untuk situs web ini"
   },
   "error_login_required": {
     "message": "Silakan [masuk](sign-in) untuk menggunakan Suara Premium"
@@ -174,12 +174,12 @@
     "message": "Kembali ke Opsi"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud ingin menggunakan Google Terjemahan untuk teks ke ucapan."
+    "message": "Spotlight Reader ingin menggunakan Google Terjemahan untuk teks ke ucapan."
   },
   "google_translate_allow_button": {
     "message": "Izinkan"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud menggunakan Google Terjemahan untuk teks ke ucapan. Harap biarkan tab ini tetap terbuka."
+    "message": "Spotlight Reader menggunakan Google Terjemahan untuk teks ke ucapan. Harap biarkan tab ini tetap terbuka."
   }
 }

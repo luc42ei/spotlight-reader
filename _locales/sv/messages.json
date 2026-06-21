@@ -96,7 +96,7 @@
     "message": "Logga ut"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud använder denna flik för ljuduppspelning. Denna flik stängs automatiskt efter 5 minuters inaktivitet."
+    "message": "Spotlight Reader använder denna flik för ljuduppspelning. Denna flik stängs automatiskt efter 5 minuters inaktivitet."
   },
   "player_hidethistab_link": {
     "message": "Dölj denna flik"
@@ -105,7 +105,7 @@
     "message": "Dölj denna flik?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Om du döljer denna flik kommer Read Aloud att spela upp ljud inne på den aktuella webbsidan. Det betyder att navigering bort från sidan kommer att stoppa talet.\n\n(Denna inställning kan återställas från tilläggets alternativsida)"
+    "message": "Om du döljer denna flik kommer Spotlight Reader att spela upp ljud inne på den aktuella webbsidan. Det betyder att navigering bort från sidan kommer att stoppa talet.\n\n(Denna inställning kan återställas från tilläggets alternativsida)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Dölj"
@@ -117,7 +117,7 @@
     "message": "Behörighet begärd"
   },
   "player_permission_dialog_body": {
-    "message": "Tillåt Read Aloud att spela upp ljud?"
+    "message": "Tillåt Spotlight Reader att spela upp ljud?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Tillåt"
@@ -141,10 +141,10 @@
     "message": "Kan inte läsa denna webbplats högt"
   },
   "error_file_access": {
-    "message": "Du måste ge Read Aloud åtkomst till fil-URL:er i tilläggets [inställningar](open-extension-settings)"
+    "message": "Du måste ge Spotlight Reader åtkomst till fil-URL:er i tilläggets [inställningar](open-extension-settings)"
   },
   "error_add_permissions": {
-    "message": "Du måste ge Read Aloud ytterligare [behörigheter](request-permissions) för denna webbplats"
+    "message": "Du måste ge Spotlight Reader ytterligare [behörigheter](request-permissions) för denna webbplats"
   },
   "error_login_required": {
     "message": "Vänligen [logga in](sign-in) för att använda Premiumröster"
@@ -174,12 +174,12 @@
     "message": "Tillbaka till alternativ"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud vill använda Google Översätt för text till tal."
+    "message": "Spotlight Reader vill använda Google Översätt för text till tal."
   },
   "google_translate_allow_button": {
     "message": "Tillåt"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud använder Google Översätt för text till tal. Vänligen håll denna flik öppen."
+    "message": "Spotlight Reader använder Google Översätt för text till tal. Vänligen håll denna flik öppen."
   }
 }

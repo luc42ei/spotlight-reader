@@ -96,7 +96,7 @@
     "message": "تسجيل الخروج"
   },
   "player_tab_explanation": {
-    "message": "يستخدم Read Aloud علامة التبويب هذه لتشغيل الصوت. ستُغلق علامة التبويب هذه تلقائياً بعد 5 دقائق من عدم النشاط."
+    "message": "يستخدم Spotlight Reader علامة التبويب هذه لتشغيل الصوت. ستُغلق علامة التبويب هذه تلقائياً بعد 5 دقائق من عدم النشاط."
   },
   "player_hidethistab_link": {
     "message": "إخفاء علامة التبويب هذه"
@@ -105,7 +105,7 @@
     "message": "إخفاء علامة التبويب هذه؟"
   },
   "player_hidethistab_dialog_body": {
-    "message": "إذا أخفيت علامة التبويب هذه، سيقوم Read Aloud بتشغيل الصوت داخل صفحة الويب الحالية. هذا يعني أن الانتقال بعيداً عن الصفحة سيؤدي إلى توقف الكلام.\n\n(يمكن التراجع عن هذا الإعداد من صفحة خيارات الإضافة)"
+    "message": "إذا أخفيت علامة التبويب هذه، سيقوم Spotlight Reader بتشغيل الصوت داخل صفحة الويب الحالية. هذا يعني أن الانتقال بعيداً عن الصفحة سيؤدي إلى توقف الكلام.\n\n(يمكن التراجع عن هذا الإعداد من صفحة خيارات الإضافة)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "إخفاء"
@@ -117,7 +117,7 @@
     "message": "طلب إذن"
   },
   "player_permission_dialog_body": {
-    "message": "السماح لـ Read Aloud بتشغيل الصوت؟"
+    "message": "السماح لـ Spotlight Reader بتشغيل الصوت؟"
   },
   "player_permission_dialog_ok_button": {
     "message": "السماح"
@@ -141,10 +141,10 @@
     "message": "لا يمكن قراءة هذا الموقع بصوت عالٍ"
   },
   "error_file_access": {
-    "message": "تحتاج إلى منح Read Aloud إذن الوصول إلى عناوين URL للملفات في [الإعدادات](open-extension-settings)"
+    "message": "تحتاج إلى منح Spotlight Reader إذن الوصول إلى عناوين URL للملفات في [الإعدادات](open-extension-settings)"
   },
   "error_add_permissions": {
-    "message": "تحتاج إلى منح Read Aloud [أذونات](request-permissions) إضافية لهذا الموقع"
+    "message": "تحتاج إلى منح Spotlight Reader [أذونات](request-permissions) إضافية لهذا الموقع"
   },
   "error_login_required": {
     "message": "يرجى [تسجيل الدخول](sign-in) لاستخدام الأصوات المميزة"
@@ -174,12 +174,12 @@
     "message": "العودة إلى الخيارات"
   },
   "google_translate_request_permission": {
-    "message": "يرغب Read Aloud في استخدام ترجمة Google لتحويل النص إلى كلام."
+    "message": "يرغب Spotlight Reader في استخدام ترجمة Google لتحويل النص إلى كلام."
   },
   "google_translate_allow_button": {
     "message": "السماح"
   },
   "google_translate_keep_page_open": {
-    "message": "يستخدم Read Aloud ترجمة Google لتحويل النص إلى كلام. يرجى إبقاء علامة التبويب هذه مفتوحة."
+    "message": "يستخدم Spotlight Reader ترجمة Google لتحويل النص إلى كلام. يرجى إبقاء علامة التبويب هذه مفتوحة."
   }
 }

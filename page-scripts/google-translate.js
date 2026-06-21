@@ -108,7 +108,7 @@
           }
           jQuery("<div><p>" + messages[0] + "</p></div>")
             .dialog({
-              title: "Read Aloud",
+              title: "Spotlight Reader",
               width: 400,
               modal: true,
               buttons: buttons,
@@ -126,7 +126,7 @@
       .then(function(messages) {
         jQuery("<div><p>" + messages[0] + "</p><p id='read-aloud-speaking'></p></div>")
           .dialog({
-            title: "Read Aloud",
+            title: "Spotlight Reader",
             width: 400,
             modal: true,
             closeOnEscape: false,

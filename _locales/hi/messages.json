@@ -96,7 +96,7 @@
     "message": "लॉग आउट"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud इस टैब का उपयोग ऑडियो प्लेबैक के लिए करता है। यह टैब 5 मिनट की निष्क्रियता के बाद स्वचालित रूप से बंद हो जाएगा।"
+    "message": "Spotlight Reader इस टैब का उपयोग ऑडियो प्लेबैक के लिए करता है। यह टैब 5 मिनट की निष्क्रियता के बाद स्वचालित रूप से बंद हो जाएगा।"
   },
   "player_hidethistab_link": {
     "message": "इस टैब को छुपाएं"
@@ -105,7 +105,7 @@
     "message": "इस टैब को छुपाएं?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "यदि आप इस टैब को छुपाते हैं, तो Read Aloud वर्तमान वेबपेज के अंदर ऑडियो चलाएगा। इसका मतलब है कि पेज से दूर जाने पर स्पीच रुक जाएगी।\n\n(इस सेटिंग को एक्सटेंशन विकल्प पेज से वापस किया जा सकता है)"
+    "message": "यदि आप इस टैब को छुपाते हैं, तो Spotlight Reader वर्तमान वेबपेज के अंदर ऑडियो चलाएगा। इसका मतलब है कि पेज से दूर जाने पर स्पीच रुक जाएगी।\n\n(इस सेटिंग को एक्सटेंशन विकल्प पेज से वापस किया जा सकता है)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "छुपाएं"
@@ -117,7 +117,7 @@
     "message": "अनुमति का अनुरोध"
   },
   "player_permission_dialog_body": {
-    "message": "Read Aloud को ऑडियो चलाने की अनुमति दें?"
+    "message": "Spotlight Reader को ऑडियो चलाने की अनुमति दें?"
   },
   "player_permission_dialog_ok_button": {
     "message": "अनुमति दें"
@@ -141,10 +141,10 @@
     "message": "इस वेबसाइट को जोर से नहीं पढ़ सकते"
   },
   "error_file_access": {
-    "message": "आपको एक्सटेंशन [सेटिंग्स](open-extension-settings) में फ़ाइल URL तक Read Aloud की पहुंच प्रदान करनी होगी"
+    "message": "आपको एक्सटेंशन [सेटिंग्स](open-extension-settings) में फ़ाइल URL तक Spotlight Reader की पहुंच प्रदान करनी होगी"
   },
   "error_add_permissions": {
-    "message": "आपको इस वेबसाइट के लिए Read Aloud को अतिरिक्त [अनुमतियां](request-permissions) प्रदान करनी होंगी"
+    "message": "आपको इस वेबसाइट के लिए Spotlight Reader को अतिरिक्त [अनुमतियां](request-permissions) प्रदान करनी होंगी"
   },
   "error_login_required": {
     "message": "प्रीमियम आवाज़ों का उपयोग करने के लिए कृपया [साइन इन](sign-in) करें"
@@ -174,12 +174,12 @@
     "message": "विकल्पों पर वापस जाएं"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud टेक्स्ट-टू-स्पीच के लिए Google Translate का उपयोग करना चाहता है।"
+    "message": "Spotlight Reader टेक्स्ट-टू-स्पीच के लिए Google Translate का उपयोग करना चाहता है।"
   },
   "google_translate_allow_button": {
     "message": "अनुमति दें"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud टेक्स्ट-टू-स्पीच के लिए Google Translate का उपयोग कर रहा है। कृपया इस टैब को खुला रखें।"
+    "message": "Spotlight Reader टेक्स्ट-टू-स्पीच के लिए Google Translate का उपयोग कर रहा है। कृपया इस टैब को खुला रखें।"
   }
 }

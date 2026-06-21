@@ -96,7 +96,7 @@
     "message": "Sair"
   },
   "player_tab_explanation": {
-    "message": "O Read Aloud usa esta aba para reprodução de áudio. Esta aba será fechada automaticamente após 5 minutos de inatividade."
+    "message": "O Spotlight Reader usa esta aba para reprodução de áudio. Esta aba será fechada automaticamente após 5 minutos de inatividade."
   },
   "player_hidethistab_link": {
     "message": "Ocultar esta aba"
@@ -105,7 +105,7 @@
     "message": "Ocultar esta aba?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Se você ocultar esta aba, o Read Aloud reproduzirá o áudio dentro da página web atual. Isso significa que sair da página fará a fala parar.\n\n(Esta configuração pode ser revertida na página de Opções da extensão)"
+    "message": "Se você ocultar esta aba, o Spotlight Reader reproduzirá o áudio dentro da página web atual. Isso significa que sair da página fará a fala parar.\n\n(Esta configuração pode ser revertida na página de Opções da extensão)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Ocultar"
@@ -117,7 +117,7 @@
     "message": "Permissão solicitada"
   },
   "player_permission_dialog_body": {
-    "message": "Permitir que o Read Aloud reproduza áudio?"
+    "message": "Permitir que o Spotlight Reader reproduza áudio?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Permitir"
@@ -141,10 +141,10 @@
     "message": "Não é possível ler este site em voz alta"
   },
   "error_file_access": {
-    "message": "Você precisa conceder ao Read Aloud acesso a URLs de arquivos nas [configurações](open-extension-settings) da extensão"
+    "message": "Você precisa conceder ao Spotlight Reader acesso a URLs de arquivos nas [configurações](open-extension-settings) da extensão"
   },
   "error_add_permissions": {
-    "message": "Você precisa conceder ao Read Aloud [permissões](request-permissions) adicionais para este site"
+    "message": "Você precisa conceder ao Spotlight Reader [permissões](request-permissions) adicionais para este site"
   },
   "error_login_required": {
     "message": "Por favor, [faça login](sign-in) para usar as vozes Premium"
@@ -174,12 +174,12 @@
     "message": "Voltar às opções"
   },
   "google_translate_request_permission": {
-    "message": "O Read Aloud gostaria de usar o Google Tradutor para texto para fala."
+    "message": "O Spotlight Reader gostaria de usar o Google Tradutor para texto para fala."
   },
   "google_translate_allow_button": {
     "message": "Permitir"
   },
   "google_translate_keep_page_open": {
-    "message": "O Read Aloud está usando o Google Tradutor para texto para fala. Por favor, mantenha esta aba aberta."
+    "message": "O Spotlight Reader está usando o Google Tradutor para texto para fala. Por favor, mantenha esta aba aberta."
   }
 }

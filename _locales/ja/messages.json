@@ -174,12 +174,12 @@
     "message": "オプションに戻る"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloudは、テキスト読み上げにGoogle翻訳を使用しようとしています。"
+    "message": "Spotlight Readerは、テキスト読み上げにGoogle翻訳を使用しようとしています。"
   },
   "google_translate_allow_button": {
     "message": "許可する"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloudは、テキスト読み上げにGoogle翻訳を使用しています。このタブは開いたままにしてください。"
+    "message": "Spotlight Readerは、テキスト読み上げにGoogle翻訳を使用しています。このタブは開いたままにしてください。"
   }
 }

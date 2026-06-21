@@ -96,7 +96,7 @@
     "message": "Wyloguj"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud używa tej karty do odtwarzania dźwięku. Ta karta zostanie automatycznie zamknięta po 5 minutach braku aktywności."
+    "message": "Spotlight Reader używa tej karty do odtwarzania dźwięku. Ta karta zostanie automatycznie zamknięta po 5 minutach braku aktywności."
   },
   "player_hidethistab_link": {
     "message": "Ukryj tę kartę"
@@ -105,7 +105,7 @@
     "message": "Ukryć tę kartę?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Jeśli ukryjesz tę kartę, Read Aloud będzie odtwarzać dźwięk wewnątrz bieżącej strony internetowej. Oznacza to, że opuszczenie strony spowoduje zatrzymanie mowy.\n\n(To ustawienie można cofnąć na stronie opcji rozszerzenia)"
+    "message": "Jeśli ukryjesz tę kartę, Spotlight Reader będzie odtwarzać dźwięk wewnątrz bieżącej strony internetowej. Oznacza to, że opuszczenie strony spowoduje zatrzymanie mowy.\n\n(To ustawienie można cofnąć na stronie opcji rozszerzenia)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Ukryj"
@@ -117,7 +117,7 @@
     "message": "Wymagane uprawnienie"
   },
   "player_permission_dialog_body": {
-    "message": "Zezwolić Read Aloud na odtwarzanie dźwięku?"
+    "message": "Zezwolić Spotlight Reader na odtwarzanie dźwięku?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Zezwól"
@@ -141,10 +141,10 @@
     "message": "Nie można przeczytać na głos tej strony internetowej"
   },
   "error_file_access": {
-    "message": "Musisz przyznać Read Aloud dostęp do adresów URL plików w [ustawieniach](open-extension-settings) rozszerzenia"
+    "message": "Musisz przyznać Spotlight Reader dostęp do adresów URL plików w [ustawieniach](open-extension-settings) rozszerzenia"
   },
   "error_add_permissions": {
-    "message": "Musisz przyznać Read Aloud dodatkowe [uprawnienia](request-permissions) dla tej strony internetowej"
+    "message": "Musisz przyznać Spotlight Reader dodatkowe [uprawnienia](request-permissions) dla tej strony internetowej"
   },
   "error_login_required": {
     "message": "Proszę [zaloguj się](sign-in), aby korzystać z głosów Premium"
@@ -174,12 +174,12 @@
     "message": "Powrót do opcji"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud chce użyć Tłumacza Google do zamiany tekstu na mowę."
+    "message": "Spotlight Reader chce użyć Tłumacza Google do zamiany tekstu na mowę."
   },
   "google_translate_allow_button": {
     "message": "Zezwól"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud używa Tłumacza Google do zamiany tekstu na mowę. Proszę nie zamykać tej karty."
+    "message": "Spotlight Reader używa Tłumacza Google do zamiany tekstu na mowę. Proszę nie zamykać tej karty."
   }
 }

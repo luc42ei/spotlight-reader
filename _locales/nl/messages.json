@@ -96,7 +96,7 @@
     "message": "Uitloggen"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud gebruikt dit tabblad voor audio afspelen. Dit tabblad wordt automatisch gesloten na 5 minuten inactiviteit."
+    "message": "Spotlight Reader gebruikt dit tabblad voor audio afspelen. Dit tabblad wordt automatisch gesloten na 5 minuten inactiviteit."
   },
   "player_hidethistab_link": {
     "message": "Dit tabblad verbergen"
@@ -105,7 +105,7 @@
     "message": "Dit tabblad verbergen?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Als u dit tabblad verbergt, speelt Read Aloud audio af binnen de huidige webpagina. Dit betekent dat het verlaten van de pagina de spraak stopt.\n\n(Deze instelling kan worden teruggedraaid via de Opties-pagina van de extensie)"
+    "message": "Als u dit tabblad verbergt, speelt Spotlight Reader audio af binnen de huidige webpagina. Dit betekent dat het verlaten van de pagina de spraak stopt.\n\n(Deze instelling kan worden teruggedraaid via de Opties-pagina van de extensie)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Verbergen"
@@ -117,7 +117,7 @@
     "message": "Toestemming gevraagd"
   },
   "player_permission_dialog_body": {
-    "message": "Read Aloud toestaan audio af te spelen?"
+    "message": "Spotlight Reader toestaan audio af te spelen?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Toestaan"
@@ -141,10 +141,10 @@
     "message": "Kan deze website niet hardop voorlezen"
   },
   "error_file_access": {
-    "message": "U moet Read Aloud toegang geven tot bestands-URL's in de extensie [instellingen](open-extension-settings)"
+    "message": "U moet Spotlight Reader toegang geven tot bestands-URL's in de extensie [instellingen](open-extension-settings)"
   },
   "error_add_permissions": {
-    "message": "U moet Read Aloud extra [machtigingen](request-permissions) geven voor deze website"
+    "message": "U moet Spotlight Reader extra [machtigingen](request-permissions) geven voor deze website"
   },
   "error_login_required": {
     "message": "[Log in](sign-in) om de Premium stemmen te gebruiken"
@@ -174,12 +174,12 @@
     "message": "Terug naar opties"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud wil Google Translate gebruiken voor tekst naar spraak."
+    "message": "Spotlight Reader wil Google Translate gebruiken voor tekst naar spraak."
   },
   "google_translate_allow_button": {
     "message": "Toestaan"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud gebruikt Google Translate voor tekst naar spraak. Houd dit tabblad open."
+    "message": "Spotlight Reader gebruikt Google Translate voor tekst naar spraak. Houd dit tabblad open."
   }
 }

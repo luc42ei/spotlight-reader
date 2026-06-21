@@ -174,12 +174,12 @@
     "message": "返回选项"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud希望使用Google Translate进行语音合成。"
+    "message": "Spotlight Reader希望使用Google Translate进行语音合成。"
   },
   "google_translate_allow_button": {
     "message": "允许"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud正在使用Google Translate进行语音合成。 请保持此标签打开。"
+    "message": "Spotlight Reader正在使用Google Translate进行语音合成。 请保持此标签打开。"
   }
 }

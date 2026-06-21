@@ -96,7 +96,7 @@
     "message": "로그아웃"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud는 이 탭을 오디오 재생에 사용합니다. 이 탭은 5분간 활동이 없으면 자동으로 닫힙니다."
+    "message": "Spotlight Reader는 이 탭을 오디오 재생에 사용합니다. 이 탭은 5분간 활동이 없으면 자동으로 닫힙니다."
   },
   "player_hidethistab_link": {
     "message": "이 탭 숨기기"
@@ -105,7 +105,7 @@
     "message": "이 탭을 숨기시겠습니까?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "이 탭을 숨기면 Read Aloud가 현재 웹페이지 내에서 오디오를 재생합니다. 이는 페이지를 벗어나면 음성이 중지됨을 의미합니다.\n\n(이 설정은 확장 프로그램 옵션 페이지에서 되돌릴 수 있습니다)"
+    "message": "이 탭을 숨기면 Spotlight Reader가 현재 웹페이지 내에서 오디오를 재생합니다. 이는 페이지를 벗어나면 음성이 중지됨을 의미합니다.\n\n(이 설정은 확장 프로그램 옵션 페이지에서 되돌릴 수 있습니다)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "숨기기"
@@ -117,7 +117,7 @@
     "message": "권한 요청"
   },
   "player_permission_dialog_body": {
-    "message": "Read Aloud가 오디오를 재생하도록 허용하시겠습니까?"
+    "message": "Spotlight Reader가 오디오를 재생하도록 허용하시겠습니까?"
   },
   "player_permission_dialog_ok_button": {
     "message": "허용"
@@ -141,10 +141,10 @@
     "message": "이 웹사이트를 소리 내어 읽을 수 없습니다"
   },
   "error_file_access": {
-    "message": "확장 프로그램 [설정](open-extension-settings)에서 Read Aloud에 파일 URL 액세스 권한을 부여해야 합니다"
+    "message": "확장 프로그램 [설정](open-extension-settings)에서 Spotlight Reader에 파일 URL 액세스 권한을 부여해야 합니다"
   },
   "error_add_permissions": {
-    "message": "이 웹사이트에 대해 Read Aloud에 추가 [권한](request-permissions)을 부여해야 합니다"
+    "message": "이 웹사이트에 대해 Spotlight Reader에 추가 [권한](request-permissions)을 부여해야 합니다"
   },
   "error_login_required": {
     "message": "프리미엄 음성을 사용하려면 [로그인](sign-in)하세요"
@@ -174,12 +174,12 @@
     "message": "옵션으로 돌아가기"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud가 텍스트 음성 변환에 Google 번역을 사용하려고 합니다."
+    "message": "Spotlight Reader가 텍스트 음성 변환에 Google 번역을 사용하려고 합니다."
   },
   "google_translate_allow_button": {
     "message": "허용"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud가 텍스트 음성 변환에 Google 번역을 사용하고 있습니다. 이 탭을 열어 두세요."
+    "message": "Spotlight Reader가 텍스트 음성 변환에 Google 번역을 사용하고 있습니다. 이 탭을 열어 두세요."
   }
 }

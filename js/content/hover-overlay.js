@@ -1,4 +1,4 @@
-// Read Aloud — Speechify-style hover + click overlay + playback highlight
+// Spotlight Reader — sentence hover + click overlay + playback highlight
 //
 // Three layers:
 //

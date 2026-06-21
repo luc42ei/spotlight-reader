@@ -96,7 +96,7 @@
     "message": "Logg ut"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud bruker denne fanen for lydavspilling. Denne fanen lukkes automatisk etter 5 minutters inaktivitet."
+    "message": "Spotlight Reader bruker denne fanen for lydavspilling. Denne fanen lukkes automatisk etter 5 minutters inaktivitet."
   },
   "player_hidethistab_link": {
     "message": "Skjul denne fanen"
@@ -105,7 +105,7 @@
     "message": "Skjul denne fanen?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Hvis du skjuler denne fanen, vil Read Aloud spille av lyd inne på gjeldende nettside. Dette betyr at å navigere bort fra siden vil stoppe talen.\n\n(Denne innstillingen kan tilbakestilles fra utvidelsens innstillingsside)"
+    "message": "Hvis du skjuler denne fanen, vil Spotlight Reader spille av lyd inne på gjeldende nettside. Dette betyr at å navigere bort fra siden vil stoppe talen.\n\n(Denne innstillingen kan tilbakestilles fra utvidelsens innstillingsside)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Skjul"
@@ -117,7 +117,7 @@
     "message": "Tillatelse forespurt"
   },
   "player_permission_dialog_body": {
-    "message": "Tillat Read Aloud å spille av lyd?"
+    "message": "Tillat Spotlight Reader å spille av lyd?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Tillat"
@@ -141,10 +141,10 @@
     "message": "Kan ikke lese denne nettsiden høyt"
   },
   "error_file_access": {
-    "message": "Du må gi Read Aloud tilgang til fil-URL-er i utvidelsens [innstillinger](open-extension-settings)"
+    "message": "Du må gi Spotlight Reader tilgang til fil-URL-er i utvidelsens [innstillinger](open-extension-settings)"
   },
   "error_add_permissions": {
-    "message": "Du må gi Read Aloud ekstra [tillatelser](request-permissions) for denne nettsiden"
+    "message": "Du må gi Spotlight Reader ekstra [tillatelser](request-permissions) for denne nettsiden"
   },
   "error_login_required": {
     "message": "Vennligst [logg inn](sign-in) for å bruke Premium-stemmer"
@@ -174,12 +174,12 @@
     "message": "Tilbake til innstillinger"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud vil bruke Google Oversetter for tekst til tale."
+    "message": "Spotlight Reader vil bruke Google Oversetter for tekst til tale."
   },
   "google_translate_allow_button": {
     "message": "Tillat"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud bruker Google Oversetter for tekst til tale. Vennligst hold denne fanen åpen."
+    "message": "Spotlight Reader bruker Google Oversetter for tekst til tale. Vennligst hold denne fanen åpen."
   }
 }

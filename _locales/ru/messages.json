@@ -141,10 +141,10 @@
     "message": "Невозможно прочитать вслух этот сайт"
   },
   "error_file_access": {
-    "message": "Вам необходимо предоставить доступ для Read Aloud к URL-адресам файлов в расширении [настройки](open-extension-settings)"
+    "message": "Вам необходимо предоставить доступ для Spotlight Reader к URL-адресам файлов в расширении [настройки](open-extension-settings)"
   },
   "error_add_permissions": {
-    "message": "Вам необходимо предоставить Read Aloud дополнительные [разрешения](request-permissions) для этого веб-сайта."
+    "message": "Вам необходимо предоставить Spotlight Reader дополнительные [разрешения](request-permissions) для этого веб-сайта."
   },
   "error_login_required": {
     "message": "Пожалуйста, [войдите](sign-in), чтобы использовать Премиум-голоса"
@@ -174,12 +174,12 @@
     "message": "Вернуться к параметрам"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud хотел бы использовать Google Translate для преобразования текста в речь."
+    "message": "Spotlight Reader хотел бы использовать Google Translate для преобразования текста в речь."
   },
   "google_translate_allow_button": {
     "message": "Разрешить"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud использует Google Translate для преобразования текста в речь.  Пожалуйста, держите эту вкладку открытой."
+    "message": "Spotlight Reader использует Google Translate для преобразования текста в речь.  Пожалуйста, держите эту вкладку открытой."
   }
 }

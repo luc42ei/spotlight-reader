@@ -96,7 +96,7 @@
     "message": "Вийти"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud використовує цю вкладку для відтворення аудіо. Ця вкладка автоматично закриється через 5 хвилин бездіяльності."
+    "message": "Spotlight Reader використовує цю вкладку для відтворення аудіо. Ця вкладка автоматично закриється через 5 хвилин бездіяльності."
   },
   "player_hidethistab_link": {
     "message": "Сховати цю вкладку"
@@ -105,7 +105,7 @@
     "message": "Сховати цю вкладку?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Якщо ви сховаєте цю вкладку, Read Aloud відтворюватиме аудіо на поточній веб-сторінці. Це означає, що перехід зі сторінки зупинить мовлення.\n\n(Цей параметр можна скасувати на сторінці параметрів розширення)"
+    "message": "Якщо ви сховаєте цю вкладку, Spotlight Reader відтворюватиме аудіо на поточній веб-сторінці. Це означає, що перехід зі сторінки зупинить мовлення.\n\n(Цей параметр можна скасувати на сторінці параметрів розширення)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Сховати"
@@ -117,7 +117,7 @@
     "message": "Запит дозволу"
   },
   "player_permission_dialog_body": {
-    "message": "Дозволити Read Aloud відтворювати аудіо?"
+    "message": "Дозволити Spotlight Reader відтворювати аудіо?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Дозволити"
@@ -141,10 +141,10 @@
     "message": "Неможливо прочитати вголос цей веб-сайт"
   },
   "error_file_access": {
-    "message": "Вам потрібно надати Read Aloud доступ до URL-адрес файлів у [налаштуваннях](open-extension-settings) розширення"
+    "message": "Вам потрібно надати Spotlight Reader доступ до URL-адрес файлів у [налаштуваннях](open-extension-settings) розширення"
   },
   "error_add_permissions": {
-    "message": "Вам потрібно надати Read Aloud додаткові [дозволи](request-permissions) для цього веб-сайту"
+    "message": "Вам потрібно надати Spotlight Reader додаткові [дозволи](request-permissions) для цього веб-сайту"
   },
   "error_login_required": {
     "message": "Будь ласка, [увійдіть](sign-in), щоб використовувати Преміум-голоси"
@@ -174,12 +174,12 @@
     "message": "Назад до параметрів"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud хоче використовувати Google Перекладач для синтезу мовлення."
+    "message": "Spotlight Reader хоче використовувати Google Перекладач для синтезу мовлення."
   },
   "google_translate_allow_button": {
     "message": "Дозволити"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud використовує Google Перекладач для синтезу мовлення. Будь ласка, тримайте цю вкладку відкритою."
+    "message": "Spotlight Reader використовує Google Перекладач для синтезу мовлення. Будь ласка, тримайте цю вкладку відкритою."
   }
 }

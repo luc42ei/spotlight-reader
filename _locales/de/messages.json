@@ -99,7 +99,7 @@
     "message": "Abmelden"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud verwendet diesen Tab für die Audio-Wiedergabe. Dieser Tab wird nach 5 Minuten Inaktivität automatisch geschlossen."
+    "message": "Spotlight Reader verwendet diesen Tab für die Audio-Wiedergabe. Dieser Tab wird nach 5 Minuten Inaktivität automatisch geschlossen."
   },
   "player_hidethistab_link": {
     "message": "Diesen Tab ausblenden"
@@ -108,7 +108,7 @@
     "message": "Diesen Tab ausblenden?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Wenn Sie diesen Tab ausblenden, wird Read Aloud Audio innerhalb der aktuellen Webseite abspielen. Das bedeutet, dass das Verlassen der Seite die Sprachwiedergabe stoppt.\n\n(Diese Einstellung kann auf der Optionen-Seite der Erweiterung rückgängig gemacht werden)"
+    "message": "Wenn Sie diesen Tab ausblenden, wird Spotlight Reader Audio innerhalb der aktuellen Webseite abspielen. Das bedeutet, dass das Verlassen der Seite die Sprachwiedergabe stoppt.\n\n(Diese Einstellung kann auf der Optionen-Seite der Erweiterung rückgängig gemacht werden)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Ausblenden"
@@ -120,7 +120,7 @@
     "message": "Berechtigung angefordert"
   },
   "player_permission_dialog_body": {
-    "message": "Read Aloud erlauben, Audio abzuspielen?"
+    "message": "Spotlight Reader erlauben, Audio abzuspielen?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Erlauben"
@@ -144,10 +144,10 @@
     "message": "Diese Webseite kann nicht vorgelesen werden"
   },
   "error_file_access": {
-    "message": "Sie müssen Read Aloud Zugriff auf Datei-URLs in den [Einstellungen](open-extension-settings) der Erweiterung gewähren"
+    "message": "Sie müssen Spotlight Reader Zugriff auf Datei-URLs in den [Einstellungen](open-extension-settings) der Erweiterung gewähren"
   },
   "error_add_permissions": {
-    "message": "Sie müssen Read Aloud zusätzliche [Berechtigungen](request-permissions) für diese Webseite gewähren"
+    "message": "Sie müssen Spotlight Reader zusätzliche [Berechtigungen](request-permissions) für diese Webseite gewähren"
   },
   "error_login_required": {
     "message": "Bitte [anmelden](sign-in), um die Premium-Stimmen zu nutzen"
@@ -177,12 +177,12 @@
     "message": "Zurück zu den Optionen"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud möchte Google Übersetzer für Text-zu-Sprache verwenden."
+    "message": "Spotlight Reader möchte Google Übersetzer für Text-zu-Sprache verwenden."
   },
   "google_translate_allow_button": {
     "message": "Erlauben"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud verwendet Google Übersetzer für Text-zu-Sprache. Bitte lassen Sie diesen Tab geöffnet."
+    "message": "Spotlight Reader verwendet Google Übersetzer für Text-zu-Sprache. Bitte lassen Sie diesen Tab geöffnet."
   }
 }

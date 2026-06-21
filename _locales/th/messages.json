@@ -96,7 +96,7 @@
     "message": "ออกจากระบบ"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud ใช้แท็บนี้สำหรับการเล่นเสียง แท็บนี้จะปิดอัตโนมัติหลังจากไม่มีกิจกรรม 5 นาที"
+    "message": "Spotlight Reader ใช้แท็บนี้สำหรับการเล่นเสียง แท็บนี้จะปิดอัตโนมัติหลังจากไม่มีกิจกรรม 5 นาที"
   },
   "player_hidethistab_link": {
     "message": "ซ่อนแท็บนี้"
@@ -105,7 +105,7 @@
     "message": "ซ่อนแท็บนี้?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "หากคุณซ่อนแท็บนี้ Read Aloud จะเล่นเสียงภายในหน้าเว็บปัจจุบัน ซึ่งหมายความว่าการนำทางออกจากหน้าจะทำให้การพูดหยุด\n\n(การตั้งค่านี้สามารถย้อนกลับได้จากหน้าตัวเลือกส่วนขยาย)"
+    "message": "หากคุณซ่อนแท็บนี้ Spotlight Reader จะเล่นเสียงภายในหน้าเว็บปัจจุบัน ซึ่งหมายความว่าการนำทางออกจากหน้าจะทำให้การพูดหยุด\n\n(การตั้งค่านี้สามารถย้อนกลับได้จากหน้าตัวเลือกส่วนขยาย)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "ซ่อน"
@@ -117,7 +117,7 @@
     "message": "ขอสิทธิ์"
   },
   "player_permission_dialog_body": {
-    "message": "อนุญาตให้ Read Aloud เล่นเสียง?"
+    "message": "อนุญาตให้ Spotlight Reader เล่นเสียง?"
   },
   "player_permission_dialog_ok_button": {
     "message": "อนุญาต"
@@ -141,10 +141,10 @@
     "message": "ไม่สามารถอ่านออกเสียงเว็บไซต์นี้"
   },
   "error_file_access": {
-    "message": "คุณต้องให้สิทธิ์ Read Aloud เข้าถึง URL ไฟล์ใน[การตั้งค่า](open-extension-settings)ส่วนขยาย"
+    "message": "คุณต้องให้สิทธิ์ Spotlight Reader เข้าถึง URL ไฟล์ใน[การตั้งค่า](open-extension-settings)ส่วนขยาย"
   },
   "error_add_permissions": {
-    "message": "คุณต้องให้[สิทธิ์](request-permissions)เพิ่มเติมแก่ Read Aloud สำหรับเว็บไซต์นี้"
+    "message": "คุณต้องให้[สิทธิ์](request-permissions)เพิ่มเติมแก่ Spotlight Reader สำหรับเว็บไซต์นี้"
   },
   "error_login_required": {
     "message": "กรุณา[เข้าสู่ระบบ](sign-in)เพื่อใช้เสียงพรีเมียม"
@@ -174,12 +174,12 @@
     "message": "กลับไปที่ตัวเลือก"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud ต้องการใช้ Google แปลภาษาสำหรับการแปลงข้อความเป็นเสียง"
+    "message": "Spotlight Reader ต้องการใช้ Google แปลภาษาสำหรับการแปลงข้อความเป็นเสียง"
   },
   "google_translate_allow_button": {
     "message": "อนุญาต"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud กำลังใช้ Google แปลภาษาสำหรับการแปลงข้อความเป็นเสียง กรุณาเปิดแท็บนี้ไว้"
+    "message": "Spotlight Reader กำลังใช้ Google แปลภาษาสำหรับการแปลงข้อความเป็นเสียง กรุณาเปิดแท็บนี้ไว้"
   }
 }

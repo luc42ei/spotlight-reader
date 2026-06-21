@@ -96,7 +96,7 @@
     "message": "Déconnexion"
   },
   "player_tab_explanation": {
-    "message": "Read Aloud utilise cet onglet pour la lecture audio. Cet onglet se fermera automatiquement après 5 minutes d'inactivité."
+    "message": "Spotlight Reader utilise cet onglet pour la lecture audio. Cet onglet se fermera automatiquement après 5 minutes d'inactivité."
   },
   "player_hidethistab_link": {
     "message": "Masquer cet onglet"
@@ -105,7 +105,7 @@
     "message": "Masquer cet onglet ?"
   },
   "player_hidethistab_dialog_body": {
-    "message": "Si vous masquez cet onglet, Read Aloud lira l'audio dans la page web actuelle. Cela signifie que quitter la page arrêtera la lecture.\n\n(Ce paramètre peut être annulé depuis la page Options de l'extension)"
+    "message": "Si vous masquez cet onglet, Spotlight Reader lira l'audio dans la page web actuelle. Cela signifie que quitter la page arrêtera la lecture.\n\n(Ce paramètre peut être annulé depuis la page Options de l'extension)"
   },
   "player_hidethistab_dialog_ok_button": {
     "message": "Masquer"
@@ -117,7 +117,7 @@
     "message": "Permission demandée"
   },
   "player_permission_dialog_body": {
-    "message": "Autoriser Read Aloud à lire l'audio ?"
+    "message": "Autoriser Spotlight Reader à lire l'audio ?"
   },
   "player_permission_dialog_ok_button": {
     "message": "Autoriser"
@@ -141,10 +141,10 @@
     "message": "Impossible de lire ce site web à haute voix"
   },
   "error_file_access": {
-    "message": "Vous devez accorder à Read Aloud l'accès aux URL de fichiers dans les [paramètres](open-extension-settings) de l'extension"
+    "message": "Vous devez accorder à Spotlight Reader l'accès aux URL de fichiers dans les [paramètres](open-extension-settings) de l'extension"
   },
   "error_add_permissions": {
-    "message": "Vous devez accorder à Read Aloud des [permissions](request-permissions) supplémentaires pour ce site web"
+    "message": "Vous devez accorder à Spotlight Reader des [permissions](request-permissions) supplémentaires pour ce site web"
   },
   "error_login_required": {
     "message": "Veuillez [vous connecter](sign-in) pour utiliser les voix Premium"
@@ -174,12 +174,12 @@
     "message": "Retour aux options"
   },
   "google_translate_request_permission": {
-    "message": "Read Aloud souhaite utiliser Google Traduction pour la synthèse vocale."
+    "message": "Spotlight Reader souhaite utiliser Google Traduction pour la synthèse vocale."
   },
   "google_translate_allow_button": {
     "message": "Autoriser"
   },
   "google_translate_keep_page_open": {
-    "message": "Read Aloud utilise Google Traduction pour la synthèse vocale. Veuillez garder cet onglet ouvert."
+    "message": "Spotlight Reader utilise Google Traduction pour la synthèse vocale. Veuillez garder cet onglet ouvert."
   }
 }
