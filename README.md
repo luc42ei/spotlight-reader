@@ -1,8 +1,8 @@
-# Read Aloud
+# Spotlight Reader
 
-Firefox extension with a redesigned settings UI, in-page highlighting, favorites, and an offline TTS engine.
+Firefox extension that reads web pages aloud with sentence-level in-page highlighting, a redesigned settings UI, voice favorites, and a fully offline TTS engine.
 
-See the [upstream repo](https://github.com/ken107/read-aloud) for general documentation, architecture, and API key setup.
+A fork of [Read Aloud](https://github.com/ken107/read-aloud) by ken107 (MIT-licensed) — see the upstream repo for general architecture and background.
 
 ---
 
@@ -23,12 +23,13 @@ See the [upstream repo](https://github.com/ken107/read-aloud) for general docume
 ### Settings UI overhaul
 - **Voice filter chips** — clickable chips per provider/model family (Google Neural2, Google Chirp3-HD, etc.) instead of typing; one chip per family, not per language accent
 - **Favorites** — star button next to the voice dropdown; starred voices appear in a gold "★ Favorites" chip that filters the dropdown to just your picks
-- **Language picker** (`Sprache`) — inline checkbox dropdown above the voice selector, no separate tab
+- **Language picker** — inline checkbox dropdown above the voice selector, no separate tab
 - **Highlighting** — three-button segmented control (Popup / Window / Off / In Page) instead of a dropdown
 - **Speed slider** shows live value while dragging; edit button switches to a manual number input
-- **Voice grouping** — dropdown split into Offline Voices / Online – Free / Cloud Voices / Experimental AI Voices
+- **Voice grouping** — dropdown split into Offline Voices (Supertonic + Piper) / Online – Free / Cloud Voices
 - **Removed** pitch and volume controls (volume is set at OS level; pitch is rarely useful)
-- **Removed** native browser voices (espeak etc.) from the dropdown — poor quality
+- **Removed** browser / Web Speech voices entirely (poor, OS-dependent quality); unrecognized voices fall back to Google Translate
+- **Removed** the low-quality "ReadAloud Generic Voice" online fallback — auto-select uses offline voices, then Google Translate
 - **Removed** empty optgroup separators from the voice dropdown
 - **Removed** static shortcut keys section (doesn't reflect user-customized shortcuts)
 - Custom voices (Amazon Polly, Google Wavenet, IBM Watson, Azure, OpenAI) embedded as collapsible sections inline — no separate tab
@@ -36,8 +37,9 @@ See the [upstream repo](https://github.com/ken107/read-aloud) for general docume
 - Right-click extension icon → **Open settings** context menu
 - Increased row spacing in the settings grid
 - **Dark mode toggle** button in the options page header
-- **"About voice providers"** collapsible table — all providers with type (offline/free/paid), supported languages, notes, and links to docs and voice samples
+- **"About voice providers"** collapsible table — all providers with type (offline/free/paid), supported languages, notes, and per-provider "Get API key" links
 - **Auto-select hint** below the voice dropdown explains language-matching behavior and favorites priority
+- **"Report a bug or request a feature"** link to the GitHub issues page
 
 ### In-page highlighting
 New **In Page** option in the highlighting control (alongside Popup / Window / Off):
@@ -51,16 +53,19 @@ New **In Page** option in the highlighting control (alongside Popup / Window / O
 ### Supertonic TTS (offline, on-device)
 - Bundled Supertonic TTS engine running entirely in-browser via ONNX Runtime Web (WASM backend) in a Web Worker — no external service
 - Models (~250 MB) downloaded on demand from HuggingFace and cached in the browser Cache API (persistent, not subject to cache eviction)
-- **Install:** select "Supertonic Stimmen installieren…" in the voice dropdown; progress is shown inline; the 10 voices (F1–F5, M1–M5) appear only after download completes
+- **Install:** select "Install Supertonic voices…" in the voice dropdown (Offline group); progress is shown inline; the 10 voices (F1–F5, M1–M5) appear only after download completes
 - Models are loaded from cache into the Worker on first use per session; subsequent sentences in the same session are instant
 - Supports all 31 Supertonic 3 languages: ar / bg / cs / da / de / el / en / es / et / fi / fr / hi / hr / hu / id / it / ja / ko / lt / lv / nl / pl / pt / ro / ru / sk / sl / sv / tr / uk / vi
 - Dash-between-phrases is normalized to a comma before inference for more natural pausing
+
+### Online voice reliability
+- **Google Translate** voices now refresh the session token and retry once on failure, instead of failing on the first network hiccup; on a genuine outage the popup shows a clear message ("…pick another voice — Supertonic and the offline voices work without a connection") instead of a raw `NetworkError`
 
 ### Auto-select voice
 When no specific voice is selected, a voice matching the **page language** is picked automatically. Priority order:
 
 1. **Favorited voice matching the page language** — whichever matching favorite you starred first wins
-2. Piper
+2. Offline voices (Supertonic / Piper)
 3. Google Translate
 4. Other voices
 
@@ -92,7 +97,9 @@ Rate changes apply at the next sentence boundary without interrupting playback.
 ### Removed upstream features
 - `languages.html` per-language voice picker (replaced by the inline language filter + favorites)
 - `preferredVoices` storage key (superseded by `favoriteVoices`)
-- Remote announcements banner in popup
+- Browser / Web Speech voice engine
+- Remote announcements banner, error-reporting upload, and detect-language text upload (no unsolicited network calls)
+- Chrome-only code paths (offscreen document, `chrome.tts`) — this fork targets Firefox only
 
 ---
 

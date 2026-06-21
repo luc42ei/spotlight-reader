@@ -14,6 +14,9 @@
   "options_voice_label": {
     "message": "Stimme"
   },
+  "options_language_label": {
+    "message": "Sprache"
+  },
   "options_voicegroup_offline": {
     "message": "Offline-Stimmen"
   },
