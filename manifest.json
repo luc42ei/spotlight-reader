@@ -9,7 +9,7 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "read-aloud-fork@lucaseichhorn",
-      "update_url": "https://raw.githubusercontent.com/luc42ei/read-aloud/master/updates.json",
+      "update_url": "https://raw.githubusercontent.com/luc42ei/spotlight-reader/master/updates.json",
       "strict_min_version": "121.0",
       "data_collection_permissions": {
         "required": ["none"],

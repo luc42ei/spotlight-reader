@@ -1,5 +1,5 @@
 {
-  "name": "read-aloud-fork",
+  "name": "spotlight-reader",
   "version": "2.23.0",
   "description": "Firefox extension that reads aloud webpage content, with in-page highlighting and offline TTS.",
   "scripts": {
@@ -7,7 +7,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/luc42ei/read-aloud.git"
+    "url": "git+https://github.com/luc42ei/spotlight-reader.git"
   },
   "keywords": [
     "text-to-speech",
@@ -15,6 +15,6 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/luc42ei/read-aloud/issues"
+    "url": "https://github.com/luc42ei/spotlight-reader/issues"
   }
 }

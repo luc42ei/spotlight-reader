@@ -424,7 +424,7 @@
   function buildVoiceChips(favorites) {
     currentFavorites = favorites
     const groups = {}
-    $("#voices optgroup").not("[data-type='offline'],[data-type='experimental']").find("option").each(function() {
+    $("#voices optgroup").not("[data-type='offline']").find("option").each(function() {
       const text = $(this).text().trim()
       if (!text || text.startsWith("@") || text === "Auto select") return
       const firstWord = text.split(" ")[0]
@@ -509,14 +509,12 @@
       });
 
     var groups = Object.assign({
-        experimental: [],
         offline: [],
         standard: [],
         premium: [],
       },
       voices.groupBy(function(voice) {
-        if (isPiperVoice(voice)) return "experimental"
-        if (isSupertonicVoice(voice) || isNativeVoice(voice)) return "offline"
+        if (isSupertonicVoice(voice) || isPiperVoice(voice) || isNativeVoice(voice)) return "offline"
         if (isGoogleTranslate(voice)) return "standard"
         return "premium"
       }))
@@ -531,12 +529,10 @@
       g.appendTo($("#voices"))
     }
 
-    addGroup(brapi.i18n.getMessage("options_voicegroup_experimental"), "experimental", groups.experimental, g => {
-      $("<option>").val("@piper").text(brapi.i18n.getMessage("options_enable_piper_voices")).appendTo(g)
-    })
     addGroup(brapi.i18n.getMessage("options_voicegroup_offline"), "offline", groups.offline, g => {
       if (!groups.offline.some(isSupertonicVoice))
         $("<option>").val("@supertonic").text(brapi.i18n.getMessage("options_enable_supertonic_voices")).appendTo(g)
+      $("<option>").val("@piper").text(brapi.i18n.getMessage("options_enable_piper_voices")).appendTo(g)
     })
     addGroup(brapi.i18n.getMessage("options_voicegroup_standard"), null, groups.standard)
     addGroup(brapi.i18n.getMessage("options_voicegroup_premium"), null, groups.premium)
