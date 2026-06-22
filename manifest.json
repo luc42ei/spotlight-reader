@@ -4,7 +4,7 @@
   "name": "__MSG_extension_name__",
   "short_name": "__MSG_extension_short_name__",
   "description": "__MSG_extension_description__",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "default_locale": "en",
   "browser_specific_settings": {
     "gecko": {
@@ -21,8 +21,6 @@
     "default_popup": "popup.html?isPopup=1"
   },
   "icons": {
-    "16": "img/icon-16.png",
-    "48": "img/icon-48.png",
     "128": "img/icon.png"
   },
   "permissions": [

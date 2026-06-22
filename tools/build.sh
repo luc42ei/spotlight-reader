@@ -13,6 +13,8 @@ zip -r "$OUT" . \
   --exclude "introduction.md" \
   --exclude "README.md" \
   --exclude "updates.json" \
+  --exclude "*.xcf" \
+  --exclude "img/Bildschirmfoto*" \
   -q
 
 echo "Built: $OUT ($(du -sh "$OUT" | cut -f1))"
