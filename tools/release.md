@@ -1,66 +1,78 @@
-# Release checklist
+# Release checklist (AMO listed)
 
-1. Make changes, commit
-2. Bump version in `manifest.json` and `updates.json` (must match)
-3. `bash tools/build.sh` → produces `../read-aloud-fork.zip`
-4. Submit zip to https://addons.mozilla.org/de/developers/addon/read-aloud-fork-le/versions/submit/
-5. Download the signed `.xpi` from the AMO developer page → lands in `~/Downloads/read_aloud_fork_le-<version>.xpi`
-6. Create GitHub Release tagged `v<version>` and upload the signed XPI **renamed** to `read-aloud-fork.xpi`:
+Spotlight Reader is a **listed** add-on: addons.mozilla.org hosts it, signs each
+version, and delivers auto-updates. There is **no** self-hosted XPI / GitHub
+release / `updates.json` step anymore (that was the old unlisted flow — see
+"Legacy" at the bottom).
 
-   ```bash
-   V=2.22.7
-   cp ~/Downloads/read_aloud_fork_le-$V.xpi /tmp/read-aloud-fork.xpi
-   gh release create v$V /tmp/read-aloud-fork.xpi --title "v$V" --notes "..."
-   rm /tmp/read-aloud-fork.xpi
-   ```
+## Steps
 
-7. Verify the auto-update chain end-to-end (see below) — **do this before pushing** so a broken release can still be fixed without users seeing it
-8. `git push origin master` so existing users auto-update
-9. Delete the old signed `.xpi` files from `~/Downloads` — keep only the current version:
+1. Make changes, commit.
+2. Bump version in `manifest.json` and `package.json` (must match). AMO version
+   numbers are unique per add-on — pick a higher one each time. (A version
+   rejected at validation was never created, so its number can be reused; an
+   accepted/in-review version's number cannot.)
+3. `bash tools/build.sh` → `../spotlight-reader.zip`
+4. `bash tools/source-package.sh` → `../spotlight-reader-source.zip`
+5. AMO → the add-on (`read-aloud-fork-le`) → **Upload New Version** → channel
+   **On this site (listed)** → upload `../spotlight-reader.zip`.
+6. When asked *"Do you use minified, concatenated or machine-generated code?"* →
+   **Yes** → upload `../spotlight-reader-source.zip`.
+7. Fill the two text fields on the "Version beschreiben" page:
+   - **Versionshinweise** (public changelog) — see template below.
+   - **Anmerkungen für Kontrolleure** — paste the reviewer-notes block from
+     `tools/LISTING.md` §2 (build steps + third-party provenance). Required every
+     version because of the bundled minified libs + ONNX WASM.
+8. Submit → wait for human review. On approval AMO signs and publishes; existing
+   users auto-update from AMO.
+9. Tag git for history and push: `git tag v<version> && git push origin master --tags`.
 
-   ```bash
-   find ~/Downloads -name 'read_aloud_fork_le-*.xpi' ! -name "read_aloud_fork_le-$V.xpi" -delete
-   ```
+## Version notes template (public — "Versionshinweise")
 
-## Verification (after step 6, before step 8)
+Short and user-facing. Examples:
 
-```bash
-V=2.22.7
-echo '== updates.json (what Firefox fetches) =='
-curl -s https://raw.githubusercontent.com/luc42ei/spotlight-reader/master/updates.json
-echo '== XPI download =='
-curl -s -L -o /tmp/check.xpi -w "status=%{http_code} size=%{size_download}\n" \
-  https://github.com/luc42ei/spotlight-reader/releases/download/v$V/read-aloud-fork.xpi
-unzip -p /tmp/check.xpi manifest.json | grep '"version"'
-rm /tmp/check.xpi
 ```
-
-All three must agree on `<version>`. Status must be `200` and size > 1 MB.
+New app and toolbar icon; popup accent color refreshed.
+```
+```
+Fix in-page highlighting on legacy pages; faster Supertonic startup.
+```
 
 ## Pitfalls
 
-- **Asset filename must be exactly `read-aloud-fork.xpi`** — `updates.json` hard-codes that path. `gh release create file#label` only sets the *label*, **not** the filename. Always rename the file on disk first (see step 6 snippet). If the asset ends up wrong: `gh release delete-asset v<version> <wrong-name> --yes && gh release upload v<version> /tmp/read-aloud-fork.xpi`.
-- **`curl -I` (HEAD) on the release download returns 404** even when the file is fine — GitHub serves release assets through a signed Azure redirect that handles HEAD differently. Always verify with `curl -L` (GET + follow). Firefox uses GET, so this is cosmetic only.
-- **Don't push before the release exists.** `updates.json` points at the GitHub release URL; if pushed first, Firefox will see the new version but fail to download.
+- **Icons must be square.** AMO rejects non-square icons. Every declared icon
+  (`img/icon.png` and `img/icon_spot.png`) must be N×N. Quick check:
+  ```bash
+  python3 -c "from PIL import Image; [print(f, Image.open(f).size) for f in ['img/icon.png','img/icon_spot.png']]"
+  ```
+- **Source code is required every version** — the package bundles minified
+  jQuery / RxJS / PeerJS and the ONNX Runtime WASM. Always upload
+  `../spotlight-reader-source.zip` and the reviewer notes (LISTING.md §2).
+- Keep the gecko id `read-aloud-fork@lucaseichhorn` unchanged — it is the add-on
+  identity.
+- `tools/` (incl. `LISTING.md`, build scripts), `docs/`, `*.xcf` and screenshots
+  are excluded from the extension package by `build.sh` — keep it that way.
 
 ## Versioning
 
-Follows semantic versioning loosely — upstream was forked at `2.22.x`:
+Loose semver (forked from upstream `2.22.x`; now on `3.x`):
 
 | Change type | Which number | Example |
 |---|---|---|
-| Bug fix, performance, small tweak | patch (`2.22.x`) | `2.22.10` → `2.22.11` |
-| New user-visible feature | minor (`2.y.0`) | `2.22.x` → `2.23.0` |
-| Breaking change in storage/API | major (`x.0.0`) | rarely needed |
+| Bug fix, performance, small tweak | patch | `3.0.2` → `3.0.3` |
+| New user-visible feature | minor | `3.0.x` → `3.1.0` |
+| Breaking change in storage/API | major | `3.x` → `4.0.0` |
 
-Firefox only uses the version as an ordinal (higher = newer), so the scheme
-is for human orientation, not machine semantics.
+Firefox/AMO only use the version as an ordinal (higher = newer).
 
-## Notes
+## Legacy (retired unlisted self-hosting)
 
-- AMO is unlisted — signed but not publicly searchable
-- `updates.json` is fetched by Firefox to detect new versions; the `update_link` must point to the signed XPI on GitHub Releases
-- `update_url` in `manifest.json` points to the raw GitHub URL of `updates.json`:
-  `https://raw.githubusercontent.com/luc42ei/spotlight-reader/master/updates.json`
-- Do not include `updates.json` in the zip (already excluded in `build.sh`)
-- Manual update check: Firefox `about:addons` → gear icon → "Check for Updates"
+Before listing, releases were self-hosted: a Mozilla-signed `.xpi` on GitHub
+Releases, discovered via `updates.json` + `gecko.update_url`. Retired when the
+add-on went listed (`update_url` removed from the manifest).
+
+- `updates.json` stays pinned at **3.0.0** for any remaining self-hosted installs
+  but is no longer updated; the `v3.0.0` GitHub release is the last self-hosted
+  build.
+- Do not re-add `update_url` to the listed build — AMO disallows it for listed
+  add-ons.
