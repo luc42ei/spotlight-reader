@@ -4,7 +4,7 @@
   "name": "__MSG_extension_name__",
   "short_name": "__MSG_extension_short_name__",
   "description": "__MSG_extension_description__",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "default_locale": "en",
   "browser_specific_settings": {
     "gecko": {
@@ -20,9 +20,9 @@
   "action": {
     "default_popup": "popup.html?isPopup=1",
     "default_icon": {
-      "16": "img/icon_spot.png",
-      "32": "img/icon_spot.png",
-      "48": "img/icon_spot.png"
+      "16": "img/icon_toolbar.png",
+      "32": "img/icon_toolbar.png",
+      "48": "img/icon_toolbar.png"
     }
   },
   "icons": {
