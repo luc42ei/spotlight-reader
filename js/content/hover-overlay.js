@@ -541,8 +541,8 @@
     return null;
   }
 
-  function isRectNearEdgeOrOffscreen(rect) {
-    return rect.bottom < 0 || rect.top > window.innerHeight * 0.75;
+  function isRectNearEdgeOrOffscreen(rect, view) {
+    return rect.bottom < view.top || rect.top > view.top + view.height * 0.75;
   }
 
   function applyPlaybackHighlight(needle, fromBlockEl, fromChar, anchor) {
@@ -569,14 +569,12 @@
     // ("…of the incident.") — so paint it but never yank the view across the page.
     const trusted = anchored || !anchor
       || anchor.elem.contains(found.block) || found.block.contains(anchor.elem);
-    if (trusted && isRectNearEdgeOrOffscreen(rects[0])) {
+    const view = window.raScrollView(found.block);
+    if (trusted && isRectNearEdgeOrOffscreen(rects[0], view)) {
       // Scroll to the sentence, not to its block: a block can be a synthetic run
       // spanning most of the page (wrappers with display:contents collapse into
       // one), and its top is then nowhere near the sentence being read.
-      window.scrollTo({
-        top: window.scrollY + rects[0].top - window.innerHeight * 0.3,
-        behavior: 'smooth',
-      });
+      window.raScrollTo(view, rects[0].top, 0.3);
     }
     return found;
   }

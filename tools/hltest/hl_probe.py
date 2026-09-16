@@ -94,17 +94,22 @@ window.__raReport = function() {
       });
     }
   });
+  // Pages that lock <html> at overflow:hidden scroll an inner container instead,
+  // so window.scrollY stays 0 there — measure whatever actually scrolls the box.
+  var view = window.raScrollView ? window.raScrollView(box) : {scroller: window};
+  var scTop = Math.round(view.scroller === window ? window.scrollY : view.scroller.scrollTop);
   return {
+    scroller: view.scroller === window ? 'window' : view.scroller.tagName,
     boxTag: box ? box.tagName : null,
     boxClass: box ? (box.className && box.className.toString ? box.className.toString().slice(0,60) : '') : null,
     boxes: document.querySelectorAll('.read-aloud-highlight, read-aloud-hl').length,
-    boxTop: r ? Math.round(r.top + window.scrollY) : null,
+    boxTop: r ? Math.round(r.top + scTop) : null,
     boxH: r ? Math.round(r.height) : null,
     boxText: box ? (box.innerText || '').replace(/\\s+/g,' ').trim().slice(0,80) : null,
     boxTextLen: box ? (box.innerText || '').trim().length : 0,
     amber: rects.length,
     amberTop: rects.length ? Math.round(rects[0].y) : null,
-    scrollY: Math.round(window.scrollY)
+    scrollY: scTop
   };
 };
 """

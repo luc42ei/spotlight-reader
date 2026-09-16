@@ -614,15 +614,15 @@ var readAloudDoc = new function() {
     // Don't scroll if the "block" is the entire page — would jump to top.
     // SVG playback overlay does its own scrollIntoView on the actual sentence.
     if (elem === document.body || elem === document.documentElement) return;
+    var view = window.raScrollView(elem);
     var rect = elem.getBoundingClientRect();
     // Already in a comfortable reading position → leave the view alone. Several
     // chunks and several entries can map to one block (a <p> split at <br><br>, a
     // blockquote read paragraph by paragraph, a block taller than the viewport);
     // re-scrolling it to the same offset would yank the view back up while the
     // reader has moved on. The amber sentence overlay does the fine scrolling.
-    var targetTop = window.innerHeight * 0.15;
-    if (rect.bottom > targetTop && rect.top < window.innerHeight * 0.6) return;
-    window.scrollTo({top: window.scrollY + rect.top - targetTop, behavior: "smooth"});
+    if (rect.bottom > view.top + view.height * 0.15 && rect.top < view.top + view.height * 0.6) return;
+    window.raScrollTo(view, rect.top, 0.15);
   }
 
   function buildTextNodeBuffer(container) {
@@ -798,4 +798,29 @@ var readAloudDoc = new function() {
   }
 
   var BLOCK_TAGS = { P:1, DIV:1, LI:1, BLOCKQUOTE:1, H1:1, H2:1, H3:1, H4:1, H5:1, H6:1, DD:1, DT:1, FIGCAPTION:1, PRE:1, TD:1, SECTION:1, ARTICLE:1, ASIDE:1, UL:1, OL:1 };
+}
+
+// Which element actually scrolls `elem` into view, and the visible window inside
+// it (client coordinates). Pages can lock <html>/<body> at overflow:hidden and
+// scroll an inner container instead (career portals like jobs.exxeta.com put the
+// whole article in a scrollable <main>) — there window.scrollTo() is a no-op, so
+// the highlight would never be scrolled into view. Shared with hover-overlay.js,
+// which is always loaded after this file.
+window.raScrollView = function(elem) {
+  for (var p = elem && elem.parentElement; p; p = p.parentElement) {
+    if (p === document.body || p === document.documentElement) break;
+    var oy = getComputedStyle(p).overflowY;
+    if (oy != "auto" && oy != "scroll" && oy != "overlay") continue;
+    if (p.scrollHeight <= p.clientHeight + 1) continue;
+    return {scroller: p, top: p.getBoundingClientRect().top, height: p.clientHeight};
+  }
+  return {scroller: window, top: 0, height: window.innerHeight};
+}
+
+// Scroll `view` so that the client-coordinate `rectTop` lands `ratio` down its
+// visible window.
+window.raScrollTo = function(view, rectTop, ratio) {
+  var isWindow = view.scroller === window;
+  var cur = isWindow ? window.scrollY : view.scroller.scrollTop;
+  view.scroller.scrollTo({top: cur + rectTop - view.top - view.height * ratio, behavior: "smooth"});
 }
