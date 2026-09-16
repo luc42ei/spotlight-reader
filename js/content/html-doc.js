@@ -277,9 +277,9 @@ var readAloudDoc = new function() {
       return (this.innerText||"").trim().length < beforeLen * 0.5;
     }).hide();
     $(elem).find("ol").addBack("ol").each(addNumbering);
-    var blockChildren = $(elem).data("read-aloud-multi-block")
+    var blockChildren = expandLists($(elem).data("read-aloud-multi-block")
       ? $(elem).children(":visible").get()
-      : $(elem).children("p, blockquote, li, h1, h2, h3, h4, h5, h6").filter(":visible").get();
+      : $(elem).children("p, blockquote, li, h1, h2, h3, h4, h5, h6, ul, ol, dl").filter(":visible").get());
     var pairs;
     if (blockChildren.length) {
       pairs = [];
@@ -298,6 +298,22 @@ var readAloudDoc = new function() {
     $(elem).find(".read-aloud-numbering").remove();
     toHide.show();
     return pairs;
+  }
+
+  // A list is one child element but many paragraphs: innerText separates its items
+  // by a single \n, which paragraphSplitter (blank line) doesn't cut. The whole list
+  // then became ONE entry — every chunk of it mapped to the same originalTextIndex,
+  // so the blue box stayed parked on the first bullet while the reading ran on, and
+  // the amber overlay stopped scrolling because its anchor no longer matched the
+  // sentence (common on job ads and feature lists). Read the items as siblings.
+  function expandLists(children) {
+    var out = [];
+    children.forEach(function(child) {
+      var items = $(child).is("ul, ol, dl") ? $(child).children("li, dd, dt").filter(":visible").get() : [];
+      if (items.length) out = out.concat(expandLists(items));
+      else out.push(child);
+    });
+    return out;
   }
 
   var PARA_SELECTOR = "p, li, blockquote, h1, h2, h3, h4, h5, h6, dd, dt, figcaption, pre, td";
