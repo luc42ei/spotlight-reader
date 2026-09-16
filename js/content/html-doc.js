@@ -280,6 +280,14 @@ var readAloudDoc = new function() {
     var blockChildren = expandLists($(elem).data("read-aloud-multi-block")
       ? $(elem).children(":visible").get()
       : $(elem).children("p, blockquote, li, h1, h2, h3, h4, h5, h6, ul, ol, dl").filter(":visible").get());
+    // Wrapper-only containers (job portals, CMS output): the article's real <p>/<li>
+    // sit one or more <div>/<span> deep, so children() finds no block at all and the
+    // whole container went through the innerText fallback below — where a list is a
+    // single entry (its items are separated by one \n, not a blank line). Every chunk
+    // of the list then mapped to the same originalTextIndex and the blue box stayed
+    // parked on the first bullet. Read the block descendants instead, as the
+    // block-children path does.
+    if (!blockChildren.length) blockChildren = expandLists(wrappedBlocks(elem));
     var pairs;
     if (blockChildren.length) {
       pairs = [];
@@ -318,6 +326,33 @@ var readAloudDoc = new function() {
 
   var PARA_SELECTOR = "p, li, blockquote, h1, h2, h3, h4, h5, h6, dd, dt, figcaption, pre, td";
 
+  // Leaf = a paragraph-ish element with no paragraph-ish descendant (so a
+  // <blockquote> wrapping <p>s yields the <p>s). Derived by marking ancestors
+  // instead of a nested find() per candidate, which keeps this one pass.
+  function findLeafBlocks(container) {
+    var cand = $(container).find(PARA_SELECTOR).filter(":visible").get();
+    var candSet = new Set(cand), inner = new Set();
+    for (var k = 0; k < cand.length; k++) {
+      for (var p = cand[k].parentElement; p && p !== container; p = p.parentElement) {
+        if (candSet.has(p)) { inner.add(p); break }
+      }
+    }
+    return cand.filter(function(el) { return !inner.has(el) });
+  }
+
+  // The leaf blocks of a wrapper-only container, but only when they hold virtually
+  // all of its text — otherwise reading them instead of the container would drop the
+  // loose text between them (a "Standort:" label next to a <p>, a link list whose
+  // timestamps sit in bare <span>s). The margin is deliberately thin: anything more
+  // generous silently swallows content.
+  function wrappedBlocks(container) {
+    var leaves = findLeafBlocks(container);
+    if (!leaves.length) return [];
+    var len = function(s) { return (s || "").replace(/\s+/g, " ").trim().length };
+    var covered = leaves.reduce(function(sum, el) { return sum + len(el.innerText) }, 0);
+    return covered >= len(container.innerText) * 0.98 ? leaves : [];
+  }
+
   // Modern pages nest the article in wrapper <div>s, so getText() runs on one big
   // container and every extracted paragraph maps to that same element. The blue box
   // then has to locate the paragraph by searching the whole article's text, which
@@ -328,17 +363,7 @@ var readAloudDoc = new function() {
   // Texts themselves are untouched — only entry.elem gets sharper.
   function refineEntryElems(container, pairs) {
     if (!pairs.length) return;
-    // Leaf = a paragraph-ish element with no paragraph-ish descendant (so a
-    // <blockquote> wrapping <p>s yields the <p>s). Derived by marking ancestors
-    // instead of a nested find() per candidate, which keeps this one pass.
-    var cand = $(container).find(PARA_SELECTOR).filter(":visible").get();
-    var candSet = new Set(cand), inner = new Set();
-    for (var k = 0; k < cand.length; k++) {
-      for (var p = cand[k].parentElement; p && p !== container; p = p.parentElement) {
-        if (candSet.has(p)) { inner.add(p); break }
-      }
-    }
-    var leaves = cand.filter(function(el) { return !inner.has(el) });
+    var leaves = findLeafBlocks(container);
     if (!leaves.length) return;
     var norm = function(s) { return (s || "").replace(/\s+/g, " ").replace(/\.(\s|$)/g, "$1").trim() };
     var leafTexts = leaves.map(function(el) { return norm(el.innerText) });
