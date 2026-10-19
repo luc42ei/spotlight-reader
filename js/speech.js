@@ -199,7 +199,9 @@ function Speech(texts, options) {
       engine: immediate(() => {
         switch (engine) {
           case piperTtsEngine: return 'Piper'
-          case supertonicTtsEngine: return 'Supertonic'
+          // Only while the models load — later LOADING phases are just
+          // synthesis of the next chunk, not engine initialization.
+          case supertonicTtsEngine: return supertonicTtsEngine.isReady() ? undefined : 'Supertonic'
         }
       })
     }
@@ -287,7 +289,7 @@ function Speech(texts, options) {
           // of worker idle time per transition).
           if (engine.prefetch != null) {
             const i = playlist.getIndex()
-            for (let k = 1; k <= 2; k++) {
+            for (let k = 1; k <= (engine.prefetchDepth || 2); k++) {
               const nextIndex = i + k
               if (texts[nextIndex]) {
                 const spoken = spokenChunk(texts[nextIndex], chunkItalics && chunkItalics[nextIndex])

@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Выделять курсив голосом (только голоса Google Cloud)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: использовать несколько ядер ЦП"
+  },
+  "options_supertonic_quality": {
+    "message": "Качество Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Высокое (медленнее)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Стандартное"
+  },
   "options_highlighting_inpage": {
     "message": "На странице"
   },

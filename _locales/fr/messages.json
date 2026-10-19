@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Accentuer le texte en italique (voix Google Cloud uniquement)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic : utiliser plusieurs cœurs de processeur"
+  },
+  "options_supertonic_quality": {
+    "message": "Qualité Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Élevée (plus lente)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Standard"
+  },
   "options_highlighting_inpage": {
     "message": "Dans la page"
   },

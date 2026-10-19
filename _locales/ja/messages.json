@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "斜体のテキストを強調する（Google Cloud の音声のみ）"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: 複数のCPUコアを使用する"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonicの品質"
+  },
+  "options_supertonic_quality_high": {
+    "message": "高（低速）"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "標準"
+  },
   "options_highlighting_inpage": {
     "message": "ページ内"
   },

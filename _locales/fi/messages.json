@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Korosta kursivoitu teksti (vain Google Cloud -äänet)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: käytä useita suoritinytimiä"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonicin laatu"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Korkea (hitaampi)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Vakio"
+  },
   "options_highlighting_inpage": {
     "message": "Sivulla"
   },

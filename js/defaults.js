@@ -38,7 +38,13 @@ var defaults = {
   highlightFontSize: 3,
   highlightWindowSize: 2,
   emphasizeItalics: true,
+  supertonicSteps: 5,
 };
+
+// A second Supertonic worker only pays off with cores to spare.
+function defaultSupertonicParallel() {
+  return (typeof navigator != "undefined" && navigator.hardwareConcurrency || 2) >= 4
+}
 
 var getSingletonAudio = lazy(() => {
   const audio = new Audio()
@@ -110,7 +116,7 @@ const settingsChange$ = rxjs.fromEventPattern(
 
 function getSettings(names) {
   return new Promise(function(fulfill) {
-    brapi.storage.local.get(names || ["voiceName", "rate", "showHighlighting", "languages", "highlightFontSize", "highlightWindowSize", "useEmbeddedPlayer", "fixBtSilenceGap", "darkMode", "emphasizeItalics"], fulfill);
+    brapi.storage.local.get(names || ["voiceName", "rate", "showHighlighting", "languages", "highlightFontSize", "highlightWindowSize", "useEmbeddedPlayer", "fixBtSilenceGap", "darkMode", "emphasizeItalics", "supertonicSteps", "supertonicParallel"], fulfill);
   });
 }
 
@@ -122,7 +128,7 @@ function updateSettings(items) {
 
 function clearSettings(names) {
   return new Promise(function(fulfill) {
-    brapi.storage.local.remove(names || ["voiceName", "rate", "showHighlighting", "languages", "highlightFontSize", "highlightWindowSize", "useEmbeddedPlayer", "fixBtSilenceGap", "darkMode", "emphasizeItalics"], fulfill);
+    brapi.storage.local.remove(names || ["voiceName", "rate", "showHighlighting", "languages", "highlightFontSize", "highlightWindowSize", "useEmbeddedPlayer", "fixBtSilenceGap", "darkMode", "emphasizeItalics", "supertonicSteps", "supertonicParallel"], fulfill);
   });
 }
 

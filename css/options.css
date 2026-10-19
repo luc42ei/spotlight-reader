@@ -591,3 +591,19 @@ input[type=checkbox] + label {
   grid-template-columns: min-content auto;
   align-items: start;
 }
+
+#extra-options .extra-option-row {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .25rem;
+}
+
+#extra-options .extra-option-row label {
+  margin: 0;
+}
+
+#extra-options .extra-option-row select {
+  width: auto;
+}

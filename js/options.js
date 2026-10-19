@@ -46,6 +46,20 @@
           updateSettings({emphasizeItalics: this.checked})
             .catch(console.error)
         })
+
+      $("#supertonic-parallel")
+        .prop("checked", settings.supertonicParallel != null ? settings.supertonicParallel : defaultSupertonicParallel())
+        .change(function() {
+          updateSettings({supertonicParallel: this.checked})
+            .catch(console.error)
+        })
+
+      $("#supertonic-steps")
+        .val(String([5, 6].includes(settings.supertonicSteps) ? settings.supertonicSteps : defaults.supertonicSteps))
+        .change(function() {
+          updateSettings({supertonicSteps: Number(this.value)})
+            .catch(console.error)
+        })
     })
 
 

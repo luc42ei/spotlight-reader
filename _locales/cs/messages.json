@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Zvýraznit kurzívu (pouze hlasy Google Cloud)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: využít více jader CPU"
+  },
+  "options_supertonic_quality": {
+    "message": "Kvalita Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Vysoká (pomalejší)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Standardní"
+  },
   "options_highlighting_inpage": {
     "message": "Na stránce"
   },

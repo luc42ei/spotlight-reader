@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "強調斜體文字（僅限 Google Cloud 語音）"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic：使用多個 CPU 核心"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonic 音質"
+  },
+  "options_supertonic_quality_high": {
+    "message": "高（較慢）"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "標準"
+  },
   "options_highlighting_inpage": {
     "message": "頁面內"
   },

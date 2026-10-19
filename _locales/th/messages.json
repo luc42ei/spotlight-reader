@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "เน้นเสียงข้อความตัวเอียง (เฉพาะเสียง Google Cloud)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: ใช้ CPU หลายคอร์"
+  },
+  "options_supertonic_quality": {
+    "message": "คุณภาพ Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "สูง (ช้ากว่า)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "มาตรฐาน"
+  },
   "options_highlighting_inpage": {
     "message": "ในหน้าเว็บ"
   },

@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "기울임꼴 텍스트 강조 (Google Cloud 음성만)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: 여러 CPU 코어 사용"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonic 품질"
+  },
+  "options_supertonic_quality_high": {
+    "message": "높음(느림)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "표준"
+  },
   "options_highlighting_inpage": {
     "message": "페이지 내"
   },

@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Betona kursiv text (endast Google Cloud-röster)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: använd flera CPU-kärnor"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonic-kvalitet"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Hög (långsammare)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Standard"
+  },
   "options_highlighting_inpage": {
     "message": "På sidan"
   },

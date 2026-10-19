@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Tekankan teks miring (hanya suara Google Cloud)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: gunakan beberapa inti CPU"
+  },
+  "options_supertonic_quality": {
+    "message": "Kualitas Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Tinggi (lebih lambat)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Standar"
+  },
   "options_highlighting_inpage": {
     "message": "Di halaman"
   },

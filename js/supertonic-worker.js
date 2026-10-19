@@ -116,14 +116,19 @@ async function loadModels(opts) {
   tts = new TextToSpeech(cfgs, textProcessor, ...sessions)
 }
 
-async function speak({text, lang, voiceName, speed}) {
+async function speak({text, lang, voiceName, speed, steps}) {
   if (!tts) throw new Error("Models not loaded")
 
   lang = lang || "en"
   speed = speed || 1.05
 
   const style = await getVoiceStyle(voiceName)
-  const {wav} = await tts.call(text, lang, style, 6, speed)
+  // Denoising steps: each costs ~2.8 s per 250 chars of text on one core; 5 is
+  // indistinguishable from 6 by ear, 4 audibly worse, 2-3 clearly degraded.
+  const {wav} = await tts.call(text, lang, style, steps || 5, speed)
+  // Trailing silence: at playbackRate > 1 the last word got clipped in Firefox
+  // even though the synthesized audio contained it in full.
+  for (let i = Math.floor(0.25 * tts.sampleRate); i > 0; i--) wav.push(0)
   return writeWavFile(wav, tts.sampleRate)
 }
 

@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Fremhæv kursiv tekst (kun Google Cloud-stemmer)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: brug flere CPU-kerner"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonic-kvalitet"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Høj (langsommere)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Standard"
+  },
   "options_highlighting_inpage": {
     "message": "På siden"
   },

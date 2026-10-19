@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Nhấn mạnh chữ in nghiêng (chỉ giọng Google Cloud)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: dùng nhiều nhân CPU"
+  },
+  "options_supertonic_quality": {
+    "message": "Chất lượng Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Cao (chậm hơn)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Tiêu chuẩn"
+  },
   "options_highlighting_inpage": {
     "message": "Trong trang"
   },

@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "İtalik metni vurgula (yalnızca Google Cloud sesleri)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: birden fazla CPU çekirdeği kullan"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonic kalitesi"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Yüksek (daha yavaş)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Standart"
+  },
   "options_highlighting_inpage": {
     "message": "Sayfa içinde"
   },

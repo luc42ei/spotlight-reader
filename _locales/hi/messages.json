@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "इटैलिक टेक्स्ट पर ज़ोर दें (केवल Google Cloud आवाज़ें)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: कई CPU कोर का उपयोग करें"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonic गुणवत्ता"
+  },
+  "options_supertonic_quality_high": {
+    "message": "उच्च (धीमी)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "मानक"
+  },
   "options_highlighting_inpage": {
     "message": "पेज पर"
   },

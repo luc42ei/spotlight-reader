@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "تأكيد النص المائل (أصوات Google Cloud فقط)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: استخدام عدة أنوية للمعالج"
+  },
+  "options_supertonic_quality": {
+    "message": "جودة Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "عالية (أبطأ)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "قياسية"
+  },
   "options_highlighting_inpage": {
     "message": "داخل الصفحة"
   },

@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Enfatizza il testo in corsivo (solo voci Google Cloud)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: usa più core della CPU"
+  },
+  "options_supertonic_quality": {
+    "message": "Qualità Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Alta (più lenta)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Standard"
+  },
   "options_highlighting_inpage": {
     "message": "Nella pagina"
   },

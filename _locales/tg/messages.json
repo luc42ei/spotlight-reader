@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Матни курсивро таъкид кардан (танҳо овозҳои Google Cloud)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: истифодаи якчанд ядрои CPU"
+  },
+  "options_supertonic_quality": {
+    "message": "Сифати Supertonic"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Баланд (сусттар)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Стандартӣ"
+  },
   "options_highlighting_inpage": {
     "message": "Дар саҳифа"
   },

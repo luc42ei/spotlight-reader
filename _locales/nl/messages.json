@@ -26,6 +26,18 @@
   "options_emphasize_italics": {
     "message": "Cursieve tekst benadrukken (alleen Google Cloud-stemmen)"
   },
+  "options_supertonic_parallel": {
+    "message": "Supertonic: meerdere CPU-kernen gebruiken"
+  },
+  "options_supertonic_quality": {
+    "message": "Supertonic-kwaliteit"
+  },
+  "options_supertonic_quality_high": {
+    "message": "Hoog (trager)"
+  },
+  "options_supertonic_quality_standard": {
+    "message": "Standaard"
+  },
   "options_highlighting_inpage": {
     "message": "Op de pagina"
   },

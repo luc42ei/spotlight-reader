@@ -1142,50 +1142,111 @@ function PiperTtsEngine() {
 
 
 function SupertonicTtsEngine() {
-  let worker = null
+  // Firefox extension workers aren't cross-origin isolated, so ONNX Runtime can't
+  // use threads inside one worker. Instead we run extra workers, each with its own
+  // copy of the models (~0.5-0.6 GB RAM), and spread prefetched chunks across
+  // them — measured 1.6x throughput with 2 workers, 2x with 3.
+  const workers = []
   let nextId = 0
-  let modelsLoaded = false
   const prefetchCache = new Map()
 
-  function getWorker() {
-    if (!worker) {
-      worker = new Worker(brapi.runtime.getURL("js/supertonic-worker.js"))
-    }
-    return worker
+  function createWorker() {
+    const w = {worker: new Worker(brapi.runtime.getURL("js/supertonic-worker.js")), pending: 0, ready: null}
+    workers.push(w)
+    return w
   }
 
-  function postWorker(method, data) {
+  function primary() {
+    return workers[0] || createWorker()
+  }
+
+  function postWorker(w, method, data) {
     return new Promise((resolve, reject) => {
       const id = nextId++
-      const w = getWorker()
       function handler(e) {
         if (e.data.id === id) {
-          w.removeEventListener("message", handler)
+          w.worker.removeEventListener("message", handler)
+          w.pending--
           if (e.data.error) reject(new Error(e.data.error))
           else resolve(e.data.result)
         }
       }
-      w.addEventListener("message", handler)
-      w.postMessage({id, method, ...data})
+      w.pending++
+      w.worker.addEventListener("message", handler)
+      w.worker.postMessage({id, method, ...data})
     })
   }
 
-  async function ensureModels() {
-    if (modelsLoaded) return
-    await postWorker("loadModels", {})
-    modelsLoaded = true
+  function loadModels(w) {
+    if (!w.ready) {
+      w.ready = postWorker(w, "loadModels", {})
+        .then(() => w.loaded = true)
+        .catch(err => {
+          w.ready = null
+          throw err
+        })
+    }
+    return w.ready
   }
 
-  function synthesize(utterance, options) {
+  async function getConfig() {
+    const settings = await getSettings(["supertonicSteps", "supertonicParallel"])
+    return {
+      steps: [5, 6].includes(settings.supertonicSteps) ? settings.supertonicSteps : defaults.supertonicSteps,
+      parallel: settings.supertonicParallel != null ? settings.supertonicParallel : defaultSupertonicParallel()
+    }
+  }
+
+  // 3 workers only where they leave cores for the browser and the page.
+  function parallelWorkerCount() {
+    return (navigator.hardwareConcurrency || 2) >= 6 ? 3 : 2
+  }
+
+  // Synchronous on purpose: the caller posts to the chosen worker right away,
+  // so `pending` is up to date before the next prefetch picks.
+  function pickWorker(parallel) {
+    if (parallel) {
+      // Load the extra copies in the background; until they're ready, everything
+      // goes to the primary so the first chunk isn't held up.
+      while (workers.length < parallelWorkerCount()) loadModels(createWorker()).catch(console.error)
+    } else {
+      for (const w of workers.splice(1)) {
+        if (w.pending) workers.push(w)
+        else w.worker.terminate()
+      }
+    }
+    const usable = parallel ? workers.filter(w => w.loaded) : workers.slice(0, 1)
+    return usable.reduce((a, b) => b.pending < a.pending ? b : a)
+  }
+
+  // The model renders the rate itself up to 1.3x (shorter audio, proportionally
+  // less compute); the player time-stretches the rest. Above ~1.3x the model
+  // swallows words: ASR word error rate on a real article was 5-9 % at <=1.3x,
+  // 12-13 % at 1.5x and 37-48 % at 1.8x, vs. 10-11 % for 1.3x model + stretch
+  // to 1.8x.
+  function modelSpeed(rate) {
+    return Math.min(1.3, Math.max(0.8, rate || 1))
+  }
+
+  async function synthesize(utterance, options) {
     const lang = parseLang(options.lang || "en").lang
     const voiceName = (options.voice.voiceName || "").replace("Supertonic ", "")
-    return ensureModels()
-      .then(() => postWorker("speak", {text: utterance, lang, voiceName, speed: options.rate || 1}))
-      .then(wavBuf => URL.createObjectURL(new Blob([wavBuf], {type: "audio/wav"})))
+    const {steps, parallel} = await getConfig()
+    await loadModels(primary())
+    const wavBuf = await postWorker(pickWorker(parallel), "speak", {text: utterance, lang, voiceName, speed: modelSpeed(options.rate), steps})
+    return URL.createObjectURL(new Blob([wavBuf], {type: "audio/wav"}))
   }
 
   function cacheKey(utterance, options) {
     return utterance + "\x00" + options.voice.voiceName + "\x00" + (options.rate || 1)
+  }
+
+  // Parallel workers only stay busy if there's more than one chunk queued per
+  // worker; short chunks (headings) cost more compute than their audio lasts.
+  this.prefetchDepth = 4
+
+  this.isReady = function() {
+    return workers.length > 0 && !!workers[0].loaded
   }
 
   this.speak = function(utterance, options, playbackState$) {
@@ -1193,7 +1254,8 @@ function SupertonicTtsEngine() {
     const cached = prefetchCache.get(key)
     const urlPromise = cached || synthesize(utterance, options)
     prefetchCache.delete(key)
-    return playAudio(urlPromise, options, playbackState$)
+    const rate = options.rate || 1
+    return playAudio(urlPromise, {...options, rate: rate / modelSpeed(rate)}, playbackState$)
   }
 
   this.prefetch = function(utterance, options) {
@@ -1213,12 +1275,12 @@ function SupertonicTtsEngine() {
   }
 
   this.installModels = function(onProgress) {
-    const w = getWorker()
+    const w = primary()
     function progressHandler(e) {
       if (e.data.type === "progress" && onProgress) onProgress(e.data.step, e.data.total)
     }
-    w.addEventListener("message", progressHandler)
-    return postWorker("cacheModels", {})
-      .finally(() => w.removeEventListener("message", progressHandler))
+    w.worker.addEventListener("message", progressHandler)
+    return postWorker(w, "cacheModels", {})
+      .finally(() => w.worker.removeEventListener("message", progressHandler))
   }
 }
