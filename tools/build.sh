@@ -15,6 +15,10 @@ zip -r "$OUT" . \
   --exclude "updates.json" \
   --exclude "*.xcf" \
   --exclude "img/Bildschirmfoto*" \
+  --exclude "img/in_page_highlight.png" \
+  --exclude "img/options_redesigned.png" \
+  --exclude "*.map" \
+  --exclude ".claude/*" \
   -q
 
 echo "Built: $OUT ($(du -sh "$OUT" | cut -f1))"

@@ -9,6 +9,7 @@ rm -f "$OUT"
 zip -r "$OUT" . \
   --exclude "*.git*" \
   --exclude "node_modules/*" \
+  --exclude ".claude/*" \
   -q
 
 echo "Built source package: $OUT ($(du -sh "$OUT" | cut -f1))"

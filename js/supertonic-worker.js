@@ -14,6 +14,7 @@ let voiceStyleCache = {}
 // Multi-thread WASM needs SharedArrayBuffer, which needs cross-origin isolation.
 // Firefox extension workers are not crossOriginIsolated, so this resolves to 1 thread;
 // the check stays in case that ever changes. Cap at 4 — more regresses on inference overhead.
+// Since onnxruntime-web 1.19 the threaded build is the only one and also runs single-threaded.
 ort.env.wasm.numThreads = (typeof SharedArrayBuffer !== "undefined" && self.crossOriginIsolated)
   ? Math.max(1, Math.min(4, (self.navigator && self.navigator.hardwareConcurrency || 2) - 1))
   : 1

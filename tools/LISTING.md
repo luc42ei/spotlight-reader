@@ -89,7 +89,7 @@ Paste into the "Notes to reviewer" field, and upload the source package
 | `js/jquery-3.7.1.min.js` | jQuery | 3.7.1 | https://code.jquery.com/jquery-3.7.1.min.js |
 | `js/rxjs.umd.min.js` | RxJS (UMD bundle) | 7.x | https://unpkg.com/rxjs/dist/bundles/rxjs.umd.min.js |
 | `js/peerjs.min.js` | PeerJS | 1.5.2 | https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js |
-| `lib/onnxruntime/ort.wasm.min.js`, `lib/onnxruntime/ort-wasm-simd*.wasm` | ONNX Runtime Web | 1.17.0 | https://www.npmjs.com/package/onnxruntime-web/v/1.17.0 |
+| `lib/onnxruntime/ort.wasm.min.js`, `lib/onnxruntime/ort-wasm-simd-threaded.mjs`, `lib/onnxruntime/ort-wasm-simd-threaded.wasm` | ONNX Runtime Web | 1.30.0 | https://www.npmjs.com/package/onnxruntime-web/v/1.30.0 (files from `dist/`) |
 
 **Runtime-downloaded models (NOT in the package):**
 - **Supertonic** voice models — downloaded only when the user clicks "Install
