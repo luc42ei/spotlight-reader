@@ -12,7 +12,7 @@ function Speech(texts, options) {
   }
   brapi.storage.local.onChanged.addListener(onRateChange)
 
-  for (var i=0; i<texts.length; i++) if (/[\w)]$/.test(texts[i])) texts[i] += '.';
+  for (var i=0; i<texts.length; i++) if (/[\p{L}\p{N})]$/u.test(texts[i])) texts[i] += '.';
 
   // Some cloud engines (e.g. Google's) read a thousands-grouped number like
   // "1,200" as two separate numbers ("one, two hundred") instead of "one

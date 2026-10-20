@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zeilenumbruch-Pausen Testseite</title>
+<style>
+  body { font: 17px/1.55 system-ui, sans-serif; max-width: 46rem; margin: 2rem auto; padding: 0 16px; color: #222; background: #fff; }
+  .case { border-left: 4px solid #ccc; padding: .2rem 1rem; margin: 2rem 0; }
+  .bad  { border-color: #d9534f; }
+  .good { border-color: #2e8b57; }
+  .note { font-size: 13px; color: #666; font-family: monospace; }
+  pre { white-space: pre-wrap; background: #f5f5f5; padding: .6rem; }
+  .blk { display: block; }
+  table { border-collapse: collapse; } td { border: 1px solid #ccc; padding: .3rem .6rem; }
+</style>
+</head>
+<body>
+
+<h1>Testseite Zeilenumbruch-Pausen</h1>
+
+<p>Rot markierte Fälle: Hier fügt die aktuelle Version mitten im Satz einen Punkt ein, man hört eine falsche Pause und eine Satzende-Betonung. Grün markierte Fälle: Hier ist die Pause gewollt, ohne sie würde die DedZago-Änderung schlechter klingen.</p>
+
+<!-- ===================== A: aktuelle Version stört ===================== -->
+
+<div class="case bad">
+<p class="note">A1 · br mitten im Satz (Forum, E-Mail, CMS)</p>
+<p>Wir haben uns gestern lange über die neue Regelung unterhalten<br>
+und sind am Ende zu dem Schluss gekommen, dass wir den Antrag<br>
+erst nach den Herbstferien einreichen sollten.</p>
+</div>
+
+<div class="case bad">
+<p class="note">A2 · hart umbrochener Text in pre (Mailingliste, README)</p>
+<pre>Der Server wird am Donnerstag zwischen zwei und vier Uhr morgens
+neu gestartet, weil die Festplatten im Rechenzentrum ausgetauscht
+werden müssen und dafür alle laufenden Dienste kurz angehalten
+werden. Bitte speichert eure Arbeit vorher ab.</pre>
+</div>
+
+<div class="case bad">
+<p class="note">A3 · Inline-Element mit display:block mitten im Absatz</p>
+<p>Der Preis für das Jahresabo beträgt <span class="blk">49 Euro</span> und kann jederzeit zum Monatsende gekündigt werden.</p>
+</div>
+
+<div class="case bad">
+<p class="note">A4 · Zahl oder Klammer am Zeilenende (deutsch: „12.“ wird ggf. „zwölfte“)</p>
+<p>Die Lieferung umfasst insgesamt 12<br>
+Kartons mit Ersatzteilen (siehe Anhang)<br>
+sowie eine gedruckte Montageanleitung.</p>
+</div>
+
+<div class="case bad">
+<p class="note">A5 · Überschrift mit br zur Zeilensteuerung</p>
+<h2>Warum wir unsere Server<br>nach Island verlegen</h2>
+</div>
+
+<div class="case bad">
+<p class="note">A6 · Zitat mit weichen Umbrüchen</p>
+<blockquote>Man muss das Unmögliche versuchen<br>um das Mögliche zu erreichen.</blockquote>
+</div>
+
+<!-- ============ B: Pause gewollt, DedZago-Änderung würde stören ============ -->
+
+<div class="case good">
+<p class="note">B1 · Überschrift ohne Satzzeichen, danach Fließtext</p>
+<h2>Einleitung</h2>
+<p>In diesem Kapitel geht es um die Grundlagen der Datenhaltung.</p>
+</div>
+
+<div class="case good">
+<p class="note">B2 · Gedicht, Zeilen ohne Satzzeichen</p>
+<p>Der Mond ist aufgegangen<br>
+Die goldnen Sternlein prangen<br>
+Am Himmel hell und klar</p>
+</div>
+
+<div class="case good">
+<p class="note">B3 · Adresse</p>
+<p>Musterfirma GmbH<br>
+Hauptstraße 12<br>
+10115 Berlin<br>
+Deutschland</p>
+</div>
+
+<div class="case good">
+<p class="note">B4 · Liste ohne Satzzeichen</p>
+<ul>
+  <li>Zwei Eier</li>
+  <li>Hundert Gramm Mehl</li>
+  <li>Ein Viertelliter Milch</li>
+  <li>Eine Prise Salz</li>
+</ul>
+</div>
+
+<div class="case good">
+<p class="note">B5 · Stichpunkte per br in einem Absatz</p>
+<p>Voraussetzungen<br>
+Abgeschlossenes Studium der Informatik<br>
+Mindestens drei Jahre Berufserfahrung<br>
+Gute Englischkenntnisse</p>
+</div>
+
+<div class="case good">
+<p class="note">B6 · Tabellenzellen</p>
+<table>
+  <tr><td>Montag</td><td>Ruhetag</td></tr>
+  <tr><td>Dienstag bis Freitag</td><td>Zehn bis achtzehn Uhr</td></tr>
+  <tr><td>Samstag</td><td>Zehn bis vierzehn Uhr</td></tr>
+</table>
+</div>
+
+<div class="case good">
+<p class="note">B7 · Bildunterschrift, dann Absatz</p>
+<figure>
+  <figcaption>Blick vom Gipfel auf den Gletscher</figcaption>
+</figure>
+<p>Der Aufstieg dauerte etwa sechs Stunden.</p>
+</div>
+
+<div class="case good">
+<p class="note">B8 · Überschrift endet auf Zahl (auch aktuell heikel: „Version 3.“ → „dritte“?)</p>
+<h3>Version 3</h3>
+<p>Die dritte Version bringt vor allem Fehlerbehebungen.</p>
+</div>
+
+<div class="case good">
+<p class="note">B9 · br-Stichpunkte, Zeilenende auf Umlaut/ß/é</p>
+<p>Ablauf<br>
+Treffen im Café<br>
+Wanderung bis zum Fuß<br>
+Abendessen mit Menü<br>
+Rückfahrt mit dem Bus</p>
+</div>
+
+<p>Ende der Testseite.</p>
+
+</body>
+</html>

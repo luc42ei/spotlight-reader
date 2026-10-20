@@ -459,8 +459,12 @@ var readAloudDoc = new function() {
     return addMissingPunctuation(elem.innerText).trim();
   }
 
+  // A line ending in a letter/digit gets a "." so the engine pauses there
+  // (headings, <br>-separated bullet points, addresses). Not when the next
+  // line starts lowercase: that's a sentence wrapped by <br>, a hard-wrapped
+  // <pre> or a display:block span, and the dot made the voice stop mid-sentence.
   function addMissingPunctuation(text) {
-    return text.replace(/(\w)(\s*?\r?\n)/g, "$1.$2");
+    return text.replace(/([\p{L}\p{N}])([ \t]*\r?\n)(?![ \t]*\p{Ll})/gu, "$1.$2");
   }
 
   function findHeadingsFor(block, prevBlock) {
