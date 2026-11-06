@@ -227,7 +227,7 @@ class UnicodeProcessor {
     while (text.includes('""')) text = text.replace('""', '"')
     while (text.includes("''")) text = text.replace("''", "'")
     text = text.replace(/\s+/g, " ").trim()
-    if (!/[.!?;:,'"')\]}…。」』】〉》›»]$/.test(text)) text += "."
+    if (!/[.!?;:,'"')\]}…。」』】〉》›»\u061f\u06d4\u0964\u0965]$/.test(text)) text += "."
 
     if (!AVAILABLE_LANGS.includes(lang)) lang = "en"
     return `<${lang}>${text}</${lang}>`
@@ -373,7 +373,7 @@ function chunkText(text, maxLen) {
   const paragraphs = text.trim().split(/\n\s*\n+/).filter(p => p.trim())
   const chunks = []
   for (const paragraph of paragraphs) {
-    const sentences = paragraph.trim().split(/(?<=[.!?])\s+/)
+    const sentences = paragraph.trim().split(/(?<=[.!?\u061f\u06d4\u0964\u0965])\s+/)
     let current = ""
     for (const sentence of sentences) {
       if (current.length + sentence.length + 1 <= maxLen) {

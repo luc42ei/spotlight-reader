@@ -463,8 +463,11 @@ var readAloudDoc = new function() {
   // (headings, <br>-separated bullet points, addresses). Not when the next
   // line starts lowercase: that's a sentence wrapped by <br>, a hard-wrapped
   // <pre> or a display:block span, and the dot made the voice stop mid-sentence.
+  // Any non-newline whitespace counts as indentation (&nbsp; at the line start
+  // is common in HTML). \p{M}: lines ending in a combining vowel sign (Hindi,
+  // Arabic harakat) count as ending in a letter.
   function addMissingPunctuation(text) {
-    return text.replace(/([\p{L}\p{N}])([ \t]*\r?\n)(?![ \t]*\p{Ll})/gu, "$1.$2");
+    return text.replace(/([\p{L}\p{M}\p{N}])([^\S\r\n]*\r?\n)(?![^\S\r\n]*\p{Ll})/gu, "$1.$2");
   }
 
   function findHeadingsFor(block, prevBlock) {

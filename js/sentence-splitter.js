@@ -33,8 +33,12 @@ var raSentenceSplitter = (function() {
     'u.U','usw','v.a','v.Chr','vgl','z.B','z.T',
   ]);
 
-  // punctuation run, optional closing quotes/brackets, whitespace (incl. ZWSP)
-  const BOUNDARY_RE = /([.!?]+)(['"»«)\]’“”]*)([\s\u200b]+)/g;
+  // punctuation run, optional closing quotes/brackets, whitespace (incl. ZWSP).
+  // Besides .!? also script-specific terminators: Arabic question mark ؟
+  // (U+061F), Urdu full stop ۔ (U+06D4), Devanagari danda । / double danda ॥
+  // (U+0964/5). These scripts have no case, so the lowercase check below
+  // never suppresses them.
+  const BOUNDARY_RE = /([.!?\u061f\u06d4\u0964\u0965]+)(['"»«)\]’“”]*)([\s\u200b]+)/g;
 
   function isAbbrev(word) {
     return ABBREVS.has(word)
