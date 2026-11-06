@@ -102,6 +102,8 @@ Paste into the "Notes to reviewer" field, and upload the source package
   activates.
 - `contextMenus` — "Read aloud selected text" entry.
 - `storage` — save settings, favorites, cached voice lists.
+- `unlimitedStorage` — keep the downloaded offline voice models (Supertonic
+  ~250 MB, Piper) from being evicted, so they aren't re-downloaded.
 - `identity` — optional sign-in for the hosted premium voices.
 - `host_permissions: translate.google.com` — the free Google Translate voice.
 - Optional `webRequest`/`webNavigation` and broad host permissions are requested

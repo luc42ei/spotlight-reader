@@ -423,7 +423,7 @@
     const isFav = voiceName && (favoriteVoices || []).includes(voiceName)
     $("#fav-toggle")
       .toggleClass("active", !!isFav)
-      .find(".material-icons").text(isFav ? "star" : "star_border")
+      .find(".material-icons").text(isFav ? "\ue838" : "\ue83a")  // star / star_border (font has no ligatures)
   }
 
   function applyVoiceFilter() {

@@ -52,7 +52,7 @@ New **In Page** option in the highlighting control (alongside Popup / Window / O
 
 ### Supertonic TTS (offline, on-device)
 - Bundled Supertonic TTS engine running entirely in-browser via ONNX Runtime Web (WASM backend) in a Web Worker — no external service
-- Models (~250 MB) downloaded on demand from HuggingFace and cached in the browser Cache API (persistent, not subject to cache eviction)
+- Models (~250 MB) downloaded on demand from HuggingFace and cached in the browser Cache API; the `unlimitedStorage` permission makes the extension's storage persistent in Firefox, so the models are not evicted under storage pressure
 - **Install:** select "Install Supertonic voices…" in the voice dropdown (Offline group); progress is shown inline; the 10 voices (F1–F5, M1–M5) appear only after download completes
 - Models are loaded from cache into the Worker on first use per session; subsequent sentences in the same session are instant
 - Supports all 31 Supertonic 3 languages: ar / bg / cs / da / de / el / en / es / et / fi / fr / hi / hr / hu / id / it / ja / ko / lt / lv / nl / pl / pt / ro / ru / sk / sl / sv / tr / uk / vi

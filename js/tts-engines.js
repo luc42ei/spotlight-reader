@@ -932,7 +932,17 @@ function OpenaiTtsEngine() {
   }
   this.speak = function(utterance, options, playbackState$) {
     const urlPromise = getAudioUrl(utterance, options)
-    return playAudio(urlPromise, options, playbackState$)
+    // null = the server returned no audio (e.g. a chunk that is only punctuation)
+    // → skip the chunk instead of failing the whole read on a decode error.
+    return rxjs.from(urlPromise).pipe(
+      rxjs.switchMap(url => url != null
+        ? playAudio(Promise.resolve(url), options, playbackState$)
+        : playbackState$.pipe(
+            rxjs.filter(state => state == "resumed"),
+            rxjs.take(1),
+            rxjs.concatMap(() => rxjs.of({type: "start"}, {type: "end"}))
+          ))
+    )
   }
   this.prefetch = function(utterance, options) {
     getAudioUrl(utterance, options)
@@ -980,10 +990,36 @@ function OpenaiTtsEngine() {
           if (error) throw error
           throwHttpError(res, host)
         }
-        return URL.createObjectURL(await res.blob())
+        const audio = await res.blob()
+        return await isEmptyAudio(audio) ? null : URL.createObjectURL(audio)
       },
-      blobUrl => URL.revokeObjectURL(blobUrl)
+      blobUrl => { if (blobUrl != null) URL.revokeObjectURL(blobUrl) }
     )
+  }
+  // Empty body, a WAV with no samples, or an MP3 that is only an ID3 tag.
+  // Unknown/malformed formats are left to the decoder so real errors stay visible.
+  async function isEmptyAudio(blob) {
+    if (blob.size == 0) return true
+    if (blob.size > 4096) return false
+    const data = new DataView(await blob.arrayBuffer())
+    const tag = offset => data.getUint32(offset, false)
+    // MP3: "ID3" + version(2) + flags(1) + syncsafe size(4); nothing after the tag
+    if (data.byteLength >= 10 && (tag(0) >>> 8) == 0x494433) {
+      const size = (data.getUint8(6) << 21) | (data.getUint8(7) << 14) | (data.getUint8(8) << 7) | data.getUint8(9)
+      const footer = (data.getUint8(5) & 0x10) ? 10 : 0
+      return 10 + size + footer >= data.byteLength
+    }
+    // WAV: walk the chunks (metadata chunks are optional) to the data chunk
+    if (data.byteLength < 12 || tag(0) != 0x52494646 || tag(8) != 0x57415645) return false
+    for (let offset = 12; offset + 8 <= data.byteLength;) {
+      const size = data.getUint32(offset + 4, true)
+      const start = offset + 8
+      // Streaming servers may write 0xFFFFFFFF until the stream ends.
+      if (tag(offset) == 0x64617461) return size == 0 || start == data.byteLength
+      if (start + size > data.byteLength) return false
+      offset = start + size + (size % 2)
+    }
+    return false
   }
 }
 

@@ -33,7 +33,8 @@
     "contextMenus",
     "identity",
     "scripting",
-    "storage"
+    "storage",
+    "unlimitedStorage"
   ],
   "optional_permissions": [
     "webRequest",
