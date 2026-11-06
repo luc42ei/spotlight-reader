@@ -58,11 +58,15 @@ https://ko-fi.com/lucaseichhorn
 - Bug reports: `https://github.com/luc42ei/spotlight-reader/issues`
 - Contribute (donations): `https://ko-fi.com/lucaseichhorn`
 
-**Data collection:** None. (`manifest.json` declares `data_collection_permissions.required: ["none"]`.)
-A privacy policy is therefore not required, but if AMO asks: "Spotlight Reader
-does not collect, store, or transmit any personal data. Text is sent to a TTS
-provider only for the voice you actively select (e.g. Google Translate or a
-cloud voice you configured); offline voices send nothing."
+**Data collection:** None required; one optional type. (`manifest.json`:
+`data_collection_permissions.required: ["none"]`, `optional: ["websiteContent"]`.)
+The optional `websiteContent` covers PDFs only: they are rendered by the PDF
+viewer hosted on assets.lsdsoftware.com (from the original Read Aloud), which
+receives the PDF. Firefox asks for it the first time the user reads a PDF.
+If AMO asks for a privacy statement: "Spotlight Reader does not collect or
+store any personal data. Text is sent to a TTS provider only for the voice you
+select (e.g. Google Translate or a cloud voice you configured); offline voices
+send nothing. PDFs are only opened in the hosted viewer after you allow it."
 
 **License:** MIT (retains the original copyright; see `LICENSE`).
 
@@ -104,10 +108,16 @@ Paste into the "Notes to reviewer" field, and upload the source package
 - `storage` — save settings, favorites, cached voice lists.
 - `unlimitedStorage` — keep the downloaded offline voice models (Supertonic
   ~250 MB, Piper) from being evicted, so they aren't re-downloaded.
-- `identity` — optional sign-in for the hosted premium voices.
 - `host_permissions: translate.google.com` — the free Google Translate voice.
 - Optional `webRequest`/`webNavigation` and broad host permissions are requested
   only when needed for specific sites/features.
+
+**Remaining requests to the original author's server** (`support.readaloud.app`,
+no page content, no identifiers): the Google voice name list
+(`/read-aloud/list-voices/google`, daily) and the sample sentence for "Test
+voice" in the options (`/read-aloud/get-demo-speech-text/<lang>`). The premium
+voices, sign-in and the MathML-to-speech upload of the original were removed in
+3.2.5; math is now read from `alttext`/`aria-label` or the MathML tokens locally.
 
 **WASM note:** `content_security_policy` allows `wasm-unsafe-eval` solely to run
 the ONNX Runtime that powers offline Supertonic TTS — no remote code is loaded

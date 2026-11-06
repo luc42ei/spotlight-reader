@@ -64,33 +64,6 @@
 
 
 
-  //account button
-  domReadyPromise
-    .then(() => {
-      $("#account-button")
-        .click(function() {
-          getAuthToken({interactive: true})
-            .then(token => brapi.tabs.create({url: config.webAppUrl + "/premium-voices.html?t=" + token}))
-            .catch(handleError)
-          return false;
-        })
-      $("#logout-button")
-        .click(function() {
-          clearAuthToken()
-          return false;
-        })
-    })
-
-  rxjs.combineLatest([
-      observeSetting("authToken").pipe(
-        rxjs.switchMap(token => token ? getAccountInfo(token) : Promise.resolve(null))
-      ),
-      domReadyPromise
-    ])
-    .subscribe(([account]) => showAccountInfo(account))
-
-
-
   //hotkey
   domReadyPromise
     .then(() => {
@@ -106,8 +79,7 @@
       $("#voices")
         .change(function() {
           var voiceName = $(this).val();
-          if (voiceName == "@premium") brapi.tabs.create({url: "premium-voices.html"});
-          else if (voiceName == "@piper") bgPageInvoke("managePiperVoices").catch(console.error)
+          if (voiceName == "@piper") bgPageInvoke("managePiperVoices").catch(console.error)
           else if (voiceName == "@supertonic") {
             const $sel = $(this)
             $sel.prop("disabled", true)
@@ -152,15 +124,14 @@
     observeSetting("ibmCreds"),
     observeSetting("openaiCreds"),
     observeSetting("azureCreds"),
-    observeSetting("authToken"),
     observeSetting("favoriteVoices"),
     domReadyPromise
   ]).pipe(
-      rxjs.tap(([voices, languages, acceptLangs, awsCreds, gcpCreds, ibmCreds, openaiCreds, azureCreds, authToken, favoriteVoices]) => {
+      rxjs.tap(([voices, languages, acceptLangs, awsCreds, gcpCreds, ibmCreds, openaiCreds, azureCreds, favoriteVoices]) => {
         const panelOpen = $("#lang-picker-panel").is(":visible")
         buildLangPicker(voices, languages)
         if (panelOpen) $("#lang-picker-panel").show()
-        populateVoices(voices, {languages, awsCreds, gcpCreds, ibmCreds, openaiCreds, azureCreds, authToken}, acceptLangs)
+        populateVoices(voices, {languages, awsCreds, gcpCreds, ibmCreds, openaiCreds, azureCreds}, acceptLangs)
         buildVoiceChips(favoriteVoices || [])
         applyVoiceFilter()
       }),
@@ -506,12 +477,11 @@
   }
 
   function populateVoices(allVoices, settings, acceptLangs) {
-    const {awsCreds, gcpCreds, ibmCreds, openaiCreds, azureCreds, authToken} = settings
+    const {awsCreds, gcpCreds, ibmCreds, openaiCreds, azureCreds} = settings
 
     // Filter out voices that won't work
     allVoices = allVoices.filter(function(voice) {
       if (isNativeVoice(voice)) return false          // browser built-in (espeak etc.) — poor quality
-      if (isPremiumVoice(voice)) return !!authToken
       if (isAmazonPolly(voice)) return !!awsCreds
       if (isGoogleWavenet(voice)) return !!gcpCreds
       if (isIbmWatson(voice)) return !!ibmCreds
@@ -598,18 +568,6 @@
       $("#status").html(formatError(errInfo)).parent().show();
       $("#status a").click(function() {
         switch ($(this).attr("href")) {
-          case "#sign-in":
-            getAuthToken({interactive: true})
-              .then(function(token) {
-                if (token) {
-                  $("#test-voice").click();
-                  getAccountInfo(token).then(showAccountInfo);
-                }
-              })
-              .catch(function(err) {
-                $("#status").text(err.message).parent().show();
-              })
-            break;
           case "#auth-wavenet":
             brapi.permissions.request(config.wavenetPerms)
               .then(function(granted) {
@@ -644,15 +602,6 @@
     }
   }
 
-  function showAccountInfo(account) {
-    if (account) {
-      $("#account-email").text(account.email);
-      $("#account-info").show();
-    }
-    else {
-      $("#account-info").hide();
-    }
-  }
 
 
 

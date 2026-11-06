@@ -217,26 +217,32 @@ const getMath = (function() {
   return () => promise = promise.then(math => math || makeMath())
 })();
 
+// Speech surrogates for math, computed locally (no page content leaves the
+// browser): the author's alttext/aria-label if present, else the MathML token
+// text in reading order ("x = 2 + 1").
 async function makeMath() {
-  const getXmlFromMathEl = function(mathEl) {
-    const clone = mathEl.cloneNode(true)
-    $("annotation, annotation-xml", clone).remove()
-    removeAllAttrs(clone, true)
-    return clone.outerHTML
+  const tokensOf = function(mathEl) {
+    if (!mathEl) return ""
+    const label = mathEl.getAttribute("alttext") || mathEl.getAttribute("aria-label")
+    if (label) return label
+    return Array.from(mathEl.querySelectorAll("mi, mn, mo, mtext, ms"))
+      .filter(t => !t.closest("annotation, annotation-xml"))
+      .map(t => t.textContent.trim()).filter(Boolean).join(" ")
   }
 
-  //determine the mml markup
+  //where the math lives on this page
   const math =
     when(document.querySelector(".MathJax, .MathJax_Preview"), {
       selector: ".MathJax[data-mathml]",
-      getXML(el) {
+      getText(el) {
         const mathEl = el.querySelector("math")
-        return mathEl ? getXmlFromMathEl(mathEl) : el.getAttribute("data-mathml")
+          || new DOMParser().parseFromString(el.getAttribute("data-mathml"), "text/xml").querySelector("math")
+        return el.getAttribute("aria-label") || tokensOf(mathEl)
       },
     })
     .when(() => document.querySelector("math"), {
       selector: "math",
-      getXML: getXmlFromMathEl,
+      getText: tokensOf,
     })
     .else(null)
 
@@ -246,9 +252,7 @@ async function makeMath() {
 
   //create speech surrogates
   try {
-    const xmls = elems.map(math.getXML)
-    const texts = await ajaxPost(config.serviceUrl + "/read-aloud/mathml", xmls, "json").then(JSON.parse)
-    elems.forEach((el, i) => $("<span>").addClass("readaloud-mathml").text(texts[i] || "math expression").insertBefore(el))
+    elems.forEach(el => $("<span>").addClass("readaloud-mathml").text(math.getText(el) || "math expression").hide().insertBefore(el))
   }
   catch (err) {
     console.error(err)

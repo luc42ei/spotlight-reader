@@ -322,7 +322,6 @@ function closePlayer() {
 function handleError(err) {
   if (err) {
     var code = /^{/.test(err.message) ? JSON.parse(err.message).code : err.message;
-    if (code == "error_payment_required") clearSettings(["voiceName"]);
     reportError(err);
   }
 }

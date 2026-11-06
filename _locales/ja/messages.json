@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "停止"
   },
-  "options_logged_in_as": {
-    "message": "次のユーザーとしてログイン"
-  },
-  "options_account_button": {
-    "message": "アカウント"
-  },
-  "options_logout_button": {
-    "message": "ログアウト"
-  },
   "player_tab_explanation": {
     "message": "読み上げでは、このタブを使用して音声を再生します。このタブは、5 分間操作がないと自動的に閉じます。"
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "このウェブサイトにReadAloudの追加の[権限](request-permissions)を付与する必要があります"
   },
-  "error_login_required": {
-    "message": "プレミアムボイスを使用するには、[サインイン](sign-in)してください"
-  },
   "error_voice_unavailable": {
     "message": "音声が利用できません。別のものを選択してください。"
-  },
-  "error_payment_required": {
-    "message": "クレジットがありません"
   },
   "error_wavenet_auth_required": {
     "message": "Google Wavenetの音声を有効にするには、追加の[権限](auth-wavenet)を付与する必要があります"

@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Қатъ кардан"
   },
-  "options_logged_in_as": {
-    "message": "Бо номи зерин ворид шуд:"
-  },
-  "options_account_button": {
-    "message": "Ҳисоб"
-  },
-  "options_logout_button": {
-    "message": "Баромад"
-  },
   "player_tab_explanation": {
     "message": "Барномаи «Баланд хонед» барои пахши аудиоӣ аз ин варақа истифода мебарад. Ҳангоми бефаъолиятӣ ин варақа пас аз 5 дақиқа ба таври худкор пӯшида мешавад."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Барои ин сомона шумо бояд ба барномаи «Баланд хонед» [иҷозатҳои](request-permissions) иловагиро татбиқ намоед"
   },
-  "error_login_required": {
-    "message": "Барои истифода кардани овозҳои баландсифат, лутфан, [ворид шавед](sign-in)"
-  },
   "error_voice_unavailable": {
     "message": "Ин овоз дастнорас аст, лутфан, забони дигареро интихоб намоед"
-  },
-  "error_payment_required": {
-    "message": "Маблағро илова намоед"
   },
   "error_wavenet_auth_required": {
     "message": "Барои фаъол кардани овозҳои «Google Wavenet» шумо бояд [иҷозатҳои](auth-wavenet) иловагиро татбиқ кунед"

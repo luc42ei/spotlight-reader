@@ -4,7 +4,6 @@ polyfills();
 
 var config = {
   serviceUrl: "https://support.readaloud.app",
-  webAppUrl: "https://readaloud.app",
   pdfViewerUrl: "https://assets.lsdsoftware.com/read-aloud/pdf-viewer-2/web/readaloud.html",
   entityMap: {
     '&': '&amp;',
@@ -177,7 +176,6 @@ const voices$ = rxjs.combineLatest({
     settings.gcpCreds ? googleWavenetTtsEngine.getVoices() : googleWavenetTtsEngine.getFreeVoices(),
     settings.ibmCreds ? ibmWatsonTtsEngine.getVoices() : [],
     settings.azureCreds ? azureTtsEngine.getVoices() : [],
-    premiumTtsEngine.getVoices(),
   ])),
   rxjs.map(arr => arr.flat()),
   rxjs.shareReplay(1)
@@ -319,7 +317,7 @@ async function getSpeechVoice(voiceName, lang) {
       .find(v => (getVoiceLanguages(v) || []).some(l => parseLang(l).lang === speechLang))
       || null
   }
-  //otherwise, auto-select in order: offline, free, premium, any (skip native/espeak until last resort)
+  //otherwise, auto-select in order: offline, free, any (skip native/espeak until last resort)
   if (!voice && lang) {
     voices = voices.filter(voice => !isUseMyPhone(voice))
     const nonNative = voices.filter(v => !isNativeVoice(v))
@@ -328,11 +326,9 @@ async function getSpeechVoice(voiceName, lang) {
     if (!voice) {
       if (!await googleTranslateTtsEngine.ready()) voices = voices.filter(voice => !isGoogleTranslate(voice))
       voice = findVoiceByLang(voices.filter(isGoogleTranslate), lang)
-        || findVoiceByLang(nonNative.filter(isPremiumVoice), lang)
         || findVoiceByLang(nonNative, lang)
         || findVoiceByLang(voices, lang);
     }
-    if (voice && isPremiumVoice(voice)) voice = Object.assign({autoSelect: true}, voice);
   }
   return voice;
 }
@@ -614,22 +610,6 @@ function escapeHtml(text) {
   })
 }
 
-function getUniqueClientId() {
-  return getSettings(["uniqueClientId"])
-    .then(function(settings) {
-      return settings.uniqueClientId || createId(8).then(extraAction(saveId));
-    })
-  function createId(len) {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i=0; i<len; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
-    return Promise.resolve(text);
-  }
-  function saveId(id) {
-    return updateSettings({uniqueClientId: id});
-  }
-}
-
 function getBrowser() {
   if (/Opera|OPR\//.test(navigator.userAgent)) return 'opera';
   if (/firefox/i.test(navigator.userAgent)) return 'firefox';
@@ -682,81 +662,6 @@ function StateMachine(states) {
   }
   this.getState = function() {
     return currentStateName;
-  }
-}
-
-function getAuthToken(opts) {
-  if (!opts) opts = {};
-  return getSettings(["authToken"])
-    .then(function(settings) {
-      return settings.authToken || (opts.interactive ? interactiveLogin().then(extraAction(saveToken)) : null);
-    })
-  //Note: Cognito webAuthFlow is always interactive (if user already logged in, it shows button "Sign in as <email>" or  "Continue with Google/Facebook/etc")
-  function interactiveLogin() {
-    return new Promise(function(fulfill, reject) {
-      if (!brapi.identity || !brapi.identity.launchWebAuthFlow) return fulfill(null);
-      brapi.identity.launchWebAuthFlow({
-        interactive: true,
-        url: config.webAppUrl + "/login.html?returnUrl=" + brapi.identity.getRedirectURL()
-      },
-      function(responseUrl) {
-        if (responseUrl) {
-          var index = responseUrl.indexOf("?");
-          var res = parseQueryString(responseUrl.substr(index));
-          if (res.error) reject(new Error(res.error_description || res.error));
-          else fulfill(res.token);
-        }
-        else {
-          if (brapi.runtime.lastError) reject(new Error(brapi.runtime.lastError.message));
-          else fulfill(null);
-        }
-      })
-    })
-  }
-  function saveToken(token) {
-    if (token) return updateSettings({authToken: token});
-  }
-}
-
-function clearAuthToken() {
-  return clearSettings(["authToken"])
-    .then(function() {
-      return new Promise(function(fulfill) {
-        brapi.identity.launchWebAuthFlow({
-          interactive: false,
-          url: config.webAppUrl + "/logout.html?returnUrl=" + brapi.identity.getRedirectURL()
-        },
-        function(responseUrl) {
-          if (responseUrl) {
-            var index = responseUrl.indexOf("?");
-            var res = index != -1 ? parseQueryString(responseUrl.substr(index)) : {};
-            if (res.error) reject(new Error(res.error_description || res.error));
-            else fulfill();
-          }
-          else {
-            if (brapi.runtime.lastError) console.warn(new Error(brapi.runtime.lastError.message));
-            fulfill();
-          }
-        })
-      })
-    })
-}
-
-async function getAccountInfo(authToken) {
-  const res = await fetch(config.serviceUrl + "/read-aloud/get-account?t=" + authToken)
-  if (res.ok) {
-    const account = await res.json()
-    account.balance += account.freeBalance;
-    return account;
-  }
-  else {
-    if (res.status == 401) {
-      await clearSettings(["authToken"])
-      return null
-    }
-    else {
-      throw new Error("Can't fetch account info, server returns " + res.status)
-    }
   }
 }
 

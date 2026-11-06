@@ -12,7 +12,7 @@
       "strict_min_version": "121.0",
       "data_collection_permissions": {
         "required": ["none"],
-        "optional": []
+        "optional": ["websiteContent"]
       }
     }
   },
@@ -31,7 +31,6 @@
   "permissions": [
     "activeTab",
     "contextMenus",
-    "identity",
     "scripting",
     "storage",
     "unlimitedStorage"

@@ -176,15 +176,6 @@
   "options_reset_button": {
     "message": "Reset"
   },
-  "options_logged_in_as": {
-    "message": "Logged in as"
-  },
-  "options_account_button": {
-    "message": "Account"
-  },
-  "options_logout_button": {
-    "message": "Logout"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader uses this tab for audio playback. This tab will automatically close after 5 minutes of no activity."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "You need to grant Spotlight Reader additional [permissions](request-permissions) for this website"
   },
-  "error_login_required": {
-    "message": "Please [sign in](sign-in) to use the Premium Voices"
-  },
   "error_voice_unavailable": {
     "message": "Voice unavailable, please pick another"
-  },
-  "error_payment_required": {
-    "message": "Out of credits"
   },
   "error_wavenet_auth_required": {
     "message": "You need to grant additional [permissions](auth-wavenet) to enable Google Wavenet voices"

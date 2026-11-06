@@ -143,18 +143,13 @@ function Speech(texts, options) {
     if (isAzure(options.voice)) return azureTtsEngine;
     if (isOpenai(options.voice)) return openaiTtsEngine;
     if (isUseMyPhone(options.voice)) return phoneTtsEngine;
-    if (isGoogleTranslate(options.voice) && !/\s(Hebrew|Telugu)$/.test(options.voice.voiceName)) {
-      return googleTranslateTtsEngine
-    }
     if (isAmazonPolly(options.voice)) return amazonPollyTtsEngine;
     if (isGoogleWavenet(options.voice)) return googleWavenetTtsEngine;
     if (isIbmWatson(options.voice)) return ibmWatsonTtsEngine;
-    if (isPremiumVoice(options.voice) || isReadAloudCloud(options.voice)) {
-      premiumTtsEngine.prepare(options)
-      return premiumTtsEngine;
-    }
-    //browser/native voices removed — fall back to Google Translate for any unrecognized voice
-    return googleTranslateTtsEngine;
+    // Only a voice the user (or auto-select) picked as Google Translate goes to
+    // Google — an unrecognized voice must never silently send the text there.
+    if (isGoogleTranslate(options.voice)) return googleTranslateTtsEngine;
+    throw new Error("Unsupported voice: " + options.voice.voiceName);
   }
 
   function getChunks(text) {

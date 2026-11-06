@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Detener"
   },
-  "options_logged_in_as": {
-    "message": "Conectado como"
-  },
-  "options_account_button": {
-    "message": "Cuenta"
-  },
-  "options_logout_button": {
-    "message": "Cerrar sesión"
-  },
   "player_tab_explanation": {
     "message": "Leer en voz alta utiliza esta pestaña para la reproducción de audio. Esta pestaña se cerrará automáticamente después de 5 minutos sin actividad."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Debe conceder [permisos](request-permissions) adicionales para leer en voz alta para este sitio web"
   },
-  "error_login_required": {
-    "message": "Por favor [inicie sesión](sign-in) para utilizar las voces premium"
-  },
   "error_voice_unavailable": {
     "message": "Voz no disponible, por favor elija otro"
-  },
-  "error_payment_required": {
-    "message": "Sin creditos"
   },
   "error_wavenet_auth_required": {
     "message": "Debe conceder [permisos](auth-wavenet) adicionales para habilitar las voces de Google Wavenet"

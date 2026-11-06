@@ -195,6 +195,11 @@ var contentHandlers = [
   // Read Aloud PDF viewer ---------------------------------------------------
   {
     match: url => url.startsWith(brapi.runtime.getURL("pdf-viewer.html")),
+    // reached again after a reload; consent may have been revoked in about:addons
+    async validate() {
+      const perms = await pdfConsentPerms()
+      if (perms) throw new Error(JSON.stringify({code: "error_add_permissions", perms: perms, reload: true}))
+    },
     getSourceUri: () => "pdfviewer:",
   },
 

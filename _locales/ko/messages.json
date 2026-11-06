@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "중지"
   },
-  "options_logged_in_as": {
-    "message": "로그인 계정"
-  },
-  "options_account_button": {
-    "message": "계정"
-  },
-  "options_logout_button": {
-    "message": "로그아웃"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader는 이 탭을 오디오 재생에 사용합니다. 이 탭은 5분간 활동이 없으면 자동으로 닫힙니다."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "이 웹사이트에 대해 Spotlight Reader에 추가 [권한](request-permissions)을 부여해야 합니다"
   },
-  "error_login_required": {
-    "message": "프리미엄 음성을 사용하려면 [로그인](sign-in)하세요"
-  },
   "error_voice_unavailable": {
     "message": "음성을 사용할 수 없습니다. 다른 음성을 선택하세요"
-  },
-  "error_payment_required": {
-    "message": "크레딧 소진"
   },
   "error_wavenet_auth_required": {
     "message": "Google Wavenet 음성을 활성화하려면 추가 [권한](auth-wavenet)을 부여해야 합니다"

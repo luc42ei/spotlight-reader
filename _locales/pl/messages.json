@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Zatrzymaj"
   },
-  "options_logged_in_as": {
-    "message": "Zalogowano jako"
-  },
-  "options_account_button": {
-    "message": "Konto"
-  },
-  "options_logout_button": {
-    "message": "Wyloguj"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader używa tej karty do odtwarzania dźwięku. Ta karta zostanie automatycznie zamknięta po 5 minutach braku aktywności."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Musisz przyznać Spotlight Reader dodatkowe [uprawnienia](request-permissions) dla tej strony internetowej"
   },
-  "error_login_required": {
-    "message": "Proszę [zaloguj się](sign-in), aby korzystać z głosów Premium"
-  },
   "error_voice_unavailable": {
     "message": "Głos niedostępny, wybierz inny"
-  },
-  "error_payment_required": {
-    "message": "Brak kredytów"
   },
   "error_wavenet_auth_required": {
     "message": "Musisz przyznać dodatkowe [uprawnienia](auth-wavenet), aby włączyć głosy Google Wavenet"

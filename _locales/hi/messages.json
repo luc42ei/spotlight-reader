@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "रोकें"
   },
-  "options_logged_in_as": {
-    "message": "के रूप में लॉग इन"
-  },
-  "options_account_button": {
-    "message": "खाता"
-  },
-  "options_logout_button": {
-    "message": "लॉग आउट"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader इस टैब का उपयोग ऑडियो प्लेबैक के लिए करता है। यह टैब 5 मिनट की निष्क्रियता के बाद स्वचालित रूप से बंद हो जाएगा।"
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "आपको इस वेबसाइट के लिए Spotlight Reader को अतिरिक्त [अनुमतियां](request-permissions) प्रदान करनी होंगी"
   },
-  "error_login_required": {
-    "message": "प्रीमियम आवाज़ों का उपयोग करने के लिए कृपया [साइन इन](sign-in) करें"
-  },
   "error_voice_unavailable": {
     "message": "आवाज़ उपलब्ध नहीं है, कृपया कोई अन्य चुनें"
-  },
-  "error_payment_required": {
-    "message": "क्रेडिट समाप्त"
   },
   "error_wavenet_auth_required": {
     "message": "Google Wavenet आवाज़ों को सक्षम करने के लिए आपको अतिरिक्त [अनुमतियां](auth-wavenet) प्रदान करनी होंगी"

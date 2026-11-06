@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Zastavit"
   },
-  "options_logged_in_as": {
-    "message": "Přihlášen jako"
-  },
-  "options_account_button": {
-    "message": "Účet"
-  },
-  "options_logout_button": {
-    "message": "Odhlásit"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader používá tuto kartu pro přehrávání zvuku. Tato karta se automaticky zavře po 5 minutách nečinnosti."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Musíte udělit Spotlight Reader dodatečná [oprávnění](request-permissions) pro tuto webovou stránku"
   },
-  "error_login_required": {
-    "message": "Prosím [přihlaste se](sign-in) pro použití prémiových hlasů"
-  },
   "error_voice_unavailable": {
     "message": "Hlas není dostupný, vyberte prosím jiný"
-  },
-  "error_payment_required": {
-    "message": "Vyčerpán kredit"
   },
   "error_wavenet_auth_required": {
     "message": "Musíte udělit dodatečná [oprávnění](auth-wavenet) pro povolení hlasů Google Wavenet"

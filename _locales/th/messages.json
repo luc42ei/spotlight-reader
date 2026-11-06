@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "หยุด"
   },
-  "options_logged_in_as": {
-    "message": "เข้าสู่ระบบเป็น"
-  },
-  "options_account_button": {
-    "message": "บัญชี"
-  },
-  "options_logout_button": {
-    "message": "ออกจากระบบ"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader ใช้แท็บนี้สำหรับการเล่นเสียง แท็บนี้จะปิดอัตโนมัติหลังจากไม่มีกิจกรรม 5 นาที"
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "คุณต้องให้[สิทธิ์](request-permissions)เพิ่มเติมแก่ Spotlight Reader สำหรับเว็บไซต์นี้"
   },
-  "error_login_required": {
-    "message": "กรุณา[เข้าสู่ระบบ](sign-in)เพื่อใช้เสียงพรีเมียม"
-  },
   "error_voice_unavailable": {
     "message": "เสียงไม่พร้อมใช้งาน กรุณาเลือกเสียงอื่น"
-  },
-  "error_payment_required": {
-    "message": "เครดิตหมด"
   },
   "error_wavenet_auth_required": {
     "message": "คุณต้องให้[สิทธิ์](auth-wavenet)เพิ่มเติมเพื่อเปิดใช้เสียง Google Wavenet"

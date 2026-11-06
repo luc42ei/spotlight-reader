@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "إيقاف"
   },
-  "options_logged_in_as": {
-    "message": "تسجيل الدخول باسم"
-  },
-  "options_account_button": {
-    "message": "الحساب"
-  },
-  "options_logout_button": {
-    "message": "تسجيل الخروج"
-  },
   "player_tab_explanation": {
     "message": "يستخدم Spotlight Reader علامة التبويب هذه لتشغيل الصوت. ستُغلق علامة التبويب هذه تلقائياً بعد 5 دقائق من عدم النشاط."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "تحتاج إلى منح Spotlight Reader [أذونات](request-permissions) إضافية لهذا الموقع"
   },
-  "error_login_required": {
-    "message": "يرجى [تسجيل الدخول](sign-in) لاستخدام الأصوات المميزة"
-  },
   "error_voice_unavailable": {
     "message": "الصوت غير متوفر، يرجى اختيار صوت آخر"
-  },
-  "error_payment_required": {
-    "message": "نفاد الرصيد"
   },
   "error_wavenet_auth_required": {
     "message": "تحتاج إلى منح [أذونات](auth-wavenet) إضافية لتمكين أصوات Google Wavenet"

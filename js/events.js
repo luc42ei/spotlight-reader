@@ -352,11 +352,22 @@ function authWavenet() {
     })
 }
 
+// PDFs are rendered by a viewer hosted on Ken's server (assets.lsdsoftware.com):
+// the PDF content is handed to that origin. Declared as optional
+// data_collection "websiteContent" — ask once, before the first PDF.
+async function pdfConsentPerms() {
+  const all = await brapi.permissions.getAll()
+  if (!all.data_collection) return null   // Firefox without built-in data consent (<140)
+  return all.data_collection.includes("websiteContent") ? null : {data_collection: ["websiteContent"]}
+}
+
 async function openPdfViewer(tabId, pdfUrl) {
-  const perms = {
-    origins: ["http://*/", "https://*/"]
-  }
-  if (!await brapi.permissions.contains(perms)) {
+  const origins = ["http://*/", "https://*/"]
+  const perms = Object.assign(
+    await brapi.permissions.contains({origins}) ? {} : {origins},
+    await pdfConsentPerms()
+  )
+  if (Object.keys(perms).length) {
     throw new Error(JSON.stringify({code: "error_add_permissions", perms: perms}))
   }
   await setTabUrl(tabId, brapi.runtime.getURL("pdf-viewer.html?url=" + encodeURIComponent(pdfUrl)))
@@ -401,6 +412,11 @@ async function injectContentScript(tab, frameId, extraScripts) {
     ]
   })
   const files = extraScripts || await brapi.tabs.sendMessage(tab.id, {dest: "contentScript", method: "getRequireJs"})
+  if (files.includes("js/content/pdf-doc.js")) {
+    const perms = await pdfConsentPerms()
+    // reload: content.js is already injected, so a plain retry would skip pdf-doc.js
+    if (perms) throw new Error(JSON.stringify({code: "error_add_permissions", perms: perms, reload: true}))
+  }
   await brapi.scripting.executeScript({
     target: {
       tabId: tab.id,

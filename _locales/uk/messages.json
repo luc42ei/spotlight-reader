@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Зупинити"
   },
-  "options_logged_in_as": {
-    "message": "Ви увійшли як"
-  },
-  "options_account_button": {
-    "message": "Обліковий запис"
-  },
-  "options_logout_button": {
-    "message": "Вийти"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader використовує цю вкладку для відтворення аудіо. Ця вкладка автоматично закриється через 5 хвилин бездіяльності."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Вам потрібно надати Spotlight Reader додаткові [дозволи](request-permissions) для цього веб-сайту"
   },
-  "error_login_required": {
-    "message": "Будь ласка, [увійдіть](sign-in), щоб використовувати Преміум-голоси"
-  },
   "error_voice_unavailable": {
     "message": "Голос недоступний, виберіть інший"
-  },
-  "error_payment_required": {
-    "message": "Кредити вичерпано"
   },
   "error_wavenet_auth_required": {
     "message": "Вам потрібно надати додаткові [дозволи](auth-wavenet), щоб увімкнути голоси Google Wavenet"

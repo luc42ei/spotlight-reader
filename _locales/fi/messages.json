@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Pysäytä"
   },
-  "options_logged_in_as": {
-    "message": "Kirjautunut sisään nimellä"
-  },
-  "options_account_button": {
-    "message": "Tili"
-  },
-  "options_logout_button": {
-    "message": "Kirjaudu ulos"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader käyttää tätä välilehteä äänen toistoon. Tämä välilehti sulkeutuu automaattisesti 5 minuutin käyttämättömyyden jälkeen."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Sinun on myönnettävä Spotlight Reader -sovellukselle lisä[oikeudet](request-permissions) tälle verkkosivustolle"
   },
-  "error_login_required": {
-    "message": "[Kirjaudu sisään](sign-in) käyttääksesi Premium-ääniä"
-  },
   "error_voice_unavailable": {
     "message": "Ääni ei ole käytettävissä, valitse toinen"
-  },
-  "error_payment_required": {
-    "message": "Krediitit loppu"
   },
   "error_wavenet_auth_required": {
     "message": "Sinun on myönnettävä lisä[oikeudet](auth-wavenet) Google Wavenet -äänten käyttöönottamiseksi"

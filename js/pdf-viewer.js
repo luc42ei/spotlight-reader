@@ -1,5 +1,6 @@
 
 const ready = new Promise(f => document.addEventListener("DOMContentLoaded", f))
+  .then(checkDataConsent)
   .then(loadViewer)
   .then(loadDocument)
 
@@ -26,6 +27,14 @@ bgPageInvoke("pdfViewerCheckIn")
   .catch(console.error)
 
 
+
+// The viewer is hosted remotely and receives the PDF — only with the optional
+// "websiteContent" data consent (Firefox 140+; older versions have no such gate).
+async function checkDataConsent() {
+  const all = await brapi.permissions.getAll()
+  if (all.data_collection && !all.data_collection.includes("websiteContent"))
+    throw new Error(JSON.stringify({code: "error_add_permissions", perms: {data_collection: ["websiteContent"]}, reload: true}))
+}
 
 async function loadViewer() {
   const viewerUrl = new URL(config.pdfViewerUrl + "?embedded")

@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Stop"
   },
-  "options_logged_in_as": {
-    "message": "Logget ind som"
-  },
-  "options_account_button": {
-    "message": "Konto"
-  },
-  "options_logout_button": {
-    "message": "Log ud"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader bruger denne fane til lydafspilning. Denne fane lukkes automatisk efter 5 minutters inaktivitet."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Du skal give Spotlight Reader yderligere [tilladelser](request-permissions) til denne webside"
   },
-  "error_login_required": {
-    "message": "Venligst [log ind](sign-in) for at bruge Premium-stemmer"
-  },
   "error_voice_unavailable": {
     "message": "Stemme ikke tilgængelig, vælg venligst en anden"
-  },
-  "error_payment_required": {
-    "message": "Ingen kreditter tilbage"
   },
   "error_wavenet_auth_required": {
     "message": "Du skal give yderligere [tilladelser](auth-wavenet) for at aktivere Google Wavenet-stemmer"

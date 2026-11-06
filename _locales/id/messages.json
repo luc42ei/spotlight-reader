@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Berhenti"
   },
-  "options_logged_in_as": {
-    "message": "Masuk sebagai"
-  },
-  "options_account_button": {
-    "message": "Akun"
-  },
-  "options_logout_button": {
-    "message": "Keluar"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader menggunakan tab ini untuk pemutaran audio. Tab ini akan ditutup secara otomatis setelah 5 menit tidak ada aktivitas."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Anda perlu memberikan Spotlight Reader [izin](request-permissions) tambahan untuk situs web ini"
   },
-  "error_login_required": {
-    "message": "Silakan [masuk](sign-in) untuk menggunakan Suara Premium"
-  },
   "error_voice_unavailable": {
     "message": "Suara tidak tersedia, silakan pilih yang lain"
-  },
-  "error_payment_required": {
-    "message": "Kredit habis"
   },
   "error_wavenet_auth_required": {
     "message": "Anda perlu memberikan [izin](auth-wavenet) tambahan untuk mengaktifkan suara Google Wavenet"

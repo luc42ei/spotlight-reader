@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Stoppen"
   },
-  "options_logged_in_as": {
-    "message": "Ingelogd als"
-  },
-  "options_account_button": {
-    "message": "Account"
-  },
-  "options_logout_button": {
-    "message": "Uitloggen"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader gebruikt dit tabblad voor audio afspelen. Dit tabblad wordt automatisch gesloten na 5 minuten inactiviteit."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "U moet Spotlight Reader extra [machtigingen](request-permissions) geven voor deze website"
   },
-  "error_login_required": {
-    "message": "[Log in](sign-in) om de Premium stemmen te gebruiken"
-  },
   "error_voice_unavailable": {
     "message": "Stem niet beschikbaar, kies een andere"
-  },
-  "error_payment_required": {
-    "message": "Geen tegoed meer"
   },
   "error_wavenet_auth_required": {
     "message": "U moet extra [machtigingen](auth-wavenet) verlenen om Google Wavenet-stemmen in te schakelen"

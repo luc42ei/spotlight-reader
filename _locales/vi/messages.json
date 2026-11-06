@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Dừng"
   },
-  "options_logged_in_as": {
-    "message": "đăng nhập như"
-  },
-  "options_account_button": {
-    "message": "Tài khoản"
-  },
-  "options_logout_button": {
-    "message": "Đăng xuất"
-  },
   "player_tab_explanation": {
     "message": "Đọc to sử dụng tab này để phát lại âm thanh. Tab này sẽ tự động đóng sau 5 phút không hoạt động."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Bạn cần cấp thêm [quyền](request-permissions) Đọc to cho trang web này"
   },
-  "error_login_required": {
-    "message": "Vui lòng [đăng nhập](sign-in) để sử dụng các giọng chất lượng cao"
-  },
   "error_voice_unavailable": {
     "message": "Giọng nói không khả dụng, vui lòng chọn một giọng nói khác"
-  },
-  "error_payment_required": {
-    "message": "Hết tín dụng"
   },
   "error_wavenet_auth_required": {
     "message": "Bạn cần cấp thêm [quyền](auth-wavenet) để bật giọng nói của Google Wavenet"

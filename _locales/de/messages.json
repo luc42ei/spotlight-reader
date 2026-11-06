@@ -176,15 +176,6 @@
   "options_stop_button": {
     "message": "Stoppen"
   },
-  "options_logged_in_as": {
-    "message": "Angemeldet als"
-  },
-  "options_account_button": {
-    "message": "Konto"
-  },
-  "options_logout_button": {
-    "message": "Abmelden"
-  },
   "player_tab_explanation": {
     "message": "Spotlight Reader verwendet diesen Tab für die Audio-Wiedergabe. Dieser Tab wird nach 5 Minuten Inaktivität automatisch geschlossen."
   },
@@ -236,14 +227,8 @@
   "error_add_permissions": {
     "message": "Sie müssen Spotlight Reader zusätzliche [Berechtigungen](request-permissions) für diese Webseite gewähren"
   },
-  "error_login_required": {
-    "message": "Bitte [anmelden](sign-in), um die Premium-Stimmen zu nutzen"
-  },
   "error_voice_unavailable": {
     "message": "Stimme nicht verfügbar, bitte wählen Sie eine andere"
-  },
-  "error_payment_required": {
-    "message": "Guthaben aufgebraucht"
   },
   "error_wavenet_auth_required": {
     "message": "Sie müssen zusätzliche [Berechtigungen](auth-wavenet) erteilen, um Google Wavenet-Stimmen zu aktivieren"
