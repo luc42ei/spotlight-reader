@@ -159,6 +159,7 @@ async function updateButtons() {
   var playbackErr = stateInfo.playbackError
 
   if (playbackErr) handleError(playbackErr)
+  if (queryString.isPopup) fitToPanel()
   engineInitializingSubject.next(state == "LOADING" && speech?.engine)
 
   $("#imgLoading").toggle(state == "LOADING");
@@ -168,9 +169,16 @@ async function updateButtons() {
   $("#btnStop").toggle(state == "PAUSED" || state == "PLAYING" || state == "LOADING");
   $("#btnForward, #btnRewind").toggle(state == "PLAYING" || state == "PAUSED");
 
-  if (showHighlighting && showHighlighting != 3 && (state == "LOADING" || state == "PAUSED" || state == "PLAYING") && speech) {
+  const popupHighlight = showHighlighting && showHighlighting != 3
+  if (popupHighlight && (state == "LOADING" || state == "PAUSED" || state == "PLAYING") && speech) {
+    $("#highlight").removeClass("ended")
     $("#highlight, #toolbar").show()
     updateHighlighting(speech)
+  }
+  else if (popupHighlight && $("#highlight").data("texts")) {
+    // Reading ended or was stopped: keep the last text visible (dimmed) until
+    // the next read replaces it — Play restarts the same text.
+    $("#highlight").addClass("ended").data("position", null).find(".active").removeClass("active")
   }
   else {
     $("#highlight, #toolbar").hide()
@@ -312,6 +320,7 @@ function onRewind() {
 }
 
 function onSeek(n) {
+  if ($("#highlight").hasClass("ended")) return
   bgPageInvoke("seek", [n])
     .catch(handleError)
 }
@@ -355,6 +364,7 @@ function refreshSize() {
       $("#highlight").css({
         "font-size": fontSize,
       })
+      lastResizeAt = Date.now()
       if (queryString.isPopup) $("#highlight").css({
         width: isMobileOS() ? "100%" : windowSize[0],
         height: windowSize[1]
@@ -379,6 +389,21 @@ function refreshSize() {
       default: return [750, 450];
     }
   }
+}
+
+// A popup opened from Firefox's toolbar overflow (») menu is squeezed into the
+// panel's fixed width instead of growing to fit — the fixed-width text box would
+// be cut off. Only shrink when the content really overflows, and only once Firefox
+// has had time to grow a normal popup to fit a new box size.
+let lastResizeAt = 0
+function fitToPanel() {
+  const root = document.documentElement
+  if (Date.now() - lastResizeAt < 1000) return
+  if (!$("#highlight").is(":visible")) return   // shown on an earlier tick at the soonest
+  if (root.scrollWidth <= root.clientWidth + 1) return
+  const body = getComputedStyle(document.body)
+  const avail = root.clientWidth - parseFloat(body.marginLeft) - parseFloat(body.marginRight)
+  if (avail > 150) $("#highlight").css("width", avail)
 }
 
 function toggleDarkMode() {

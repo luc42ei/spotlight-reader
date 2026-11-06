@@ -852,7 +852,26 @@ window.raScrollView = function(elem) {
 // Scroll `view` so that the client-coordinate `rectTop` lands `ratio` down its
 // visible window.
 window.raScrollTo = function(view, rectTop, ratio) {
+  // The user scrolled away (to re-read something) → don't yank the view back for
+  // a while. Input events, not scroll events, so our own scrollTo doesn't count.
+  if (Date.now() - window.raUserScrollAt < USER_SCROLL_PAUSE_MS) return;
   var isWindow = view.scroller === window;
   var cur = isWindow ? window.scrollY : view.scroller.scrollTop;
   view.scroller.scrollTo({top: cur + rectTop - view.top - view.height * ratio, behavior: "smooth"});
+}
+
+var USER_SCROLL_PAUSE_MS = 4000;
+if (!window.raUserScrollTracked) {
+  window.raUserScrollTracked = true;
+  window.raUserScrollAt = 0;
+  var markUserScroll = function() { window.raUserScrollAt = Date.now(); };
+  var SCROLL_KEYS = { ArrowUp:1, ArrowDown:1, PageUp:1, PageDown:1, Home:1, End:1, " ":1 };
+  var opts = { capture: true, passive: true };
+  window.addEventListener("wheel", markUserScroll, opts);
+  window.addEventListener("touchmove", markUserScroll, opts);
+  window.addEventListener("keydown", function(e) { if (SCROLL_KEYS[e.key]) markUserScroll(); }, opts);
+  // Scrollbar drag: the press lands outside the page's client area.
+  window.addEventListener("pointerdown", function(e) {
+    if (e.clientX >= document.documentElement.clientWidth || e.clientY >= document.documentElement.clientHeight) markUserScroll();
+  }, opts);
 }

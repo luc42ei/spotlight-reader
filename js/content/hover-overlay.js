@@ -34,6 +34,7 @@
   const HOVER_ALPHA  = '0.18';
   const PLAY_COLOR   = '#f5a623';   // amber   — active playback sentence
   const PLAY_ALPHA   = '0.35';
+  const PLAY_ALPHA_DARK = '0.2';  // light text on a dark page — 0.35 glares there
 
   const INTERACTIVE  = 'a,button,input,select,textarea,[contenteditable],[role="button"],[role="link"]';
 
@@ -49,6 +50,7 @@
   // Playback SVG (amber, below hover layer)
   let actWrap = null, actSvg = null;
   let actRange  = null;   // stored so scroll can repaint without waiting for poll
+  let actAlpha  = PLAY_ALPHA;
   let pollTimer = null;
   let lastPlayKey = '';   // "index:text" — skip repaint when unchanged
   // Forward search cursor — lets a repeated sentence highlight the CURRENT
@@ -286,14 +288,16 @@
     const sorted = [...rects].sort((a, b) => a.top - b.top || a.left - b.left);
     const out = [];
     for (const r of sorted) {
-      const last = out[out.length - 1];
-      if (last && Math.abs(r.top - last.top) < 2 && r.left <= last.right + 1) {
-        out[out.length - 1] = {
-          left: Math.min(last.left, r.left), top: Math.min(last.top, r.top),
-          right: Math.max(last.right, r.right), bottom: Math.max(last.bottom, r.bottom),
-          width: Math.max(last.right, r.right) - Math.min(last.left, r.left),
-          height: Math.max(last.bottom, r.bottom) - Math.min(last.top, r.top),
-        };
+      // Same line (vertical overlap > half the smaller height — inline boxes like
+      // <code> sit a few px off) and touching horizontally → one rect.
+      const j = out.findIndex(o =>
+        Math.min(o.bottom, r.bottom) - Math.max(o.top, r.top) > 0.5 * Math.min(o.height, r.height)
+        && r.left <= o.right + 1 && r.right >= o.left - 1);
+      if (j >= 0) {
+        const o = out[j];
+        const left = Math.min(o.left, r.left), top = Math.min(o.top, r.top);
+        const right = Math.max(o.right, r.right), bottom = Math.max(o.bottom, r.bottom);
+        out[j] = { left, top, right, bottom, width: right - left, height: bottom - top };
       } else {
         out.push(r);
       }
@@ -301,14 +305,44 @@
     return out;
   }
 
+  // Vertical extent to paint per rect: adjacent lines meet at the middle of the
+  // leading gap, so a multi-line sentence reads as one block instead of stripes
+  // (and tight line-heights no longer double-paint the overlap). Only gaps
+  // smaller than ~a line count — anything larger is a real visual break.
+  function paintBands(rects) {
+    const lines = [];
+    for (const r of rects) {
+      // Same line = vertical overlap of more than half the smaller height. Inline
+      // boxes (<code> padding, <small>, <sup>) sit a few px off the text's top.
+      const l = lines.find(l =>
+        Math.min(l.bottom, r.bottom) - Math.max(l.top, r.top) > 0.5 * Math.min(l.bottom - l.top, r.bottom - r.top));
+      if (l) { l.top = Math.min(l.top, r.top); l.bottom = Math.max(l.bottom, r.bottom); l.rects.push(r); }
+      else lines.push({ top: r.top, bottom: r.bottom, rects: [r] });
+    }
+    lines.sort((a, b) => a.top - b.top);
+    const band = new Map();
+    for (const l of lines) for (const r of l.rects) band.set(r, { top: r.top - 1, bottom: r.bottom + 1 });
+    for (let i = 0; i + 1 < lines.length; i++) {
+      const a = lines[i], b = lines[i + 1];
+      const gap = b.top - a.bottom;
+      if (gap > 0.8 * Math.min(a.bottom - a.top, b.bottom - b.top)) continue;
+      const mid = (a.bottom + b.top) / 2;
+      for (const r of a.rects) band.get(r).bottom = mid;
+      for (const r of b.rects) band.get(r).top = mid;
+    }
+    return band;
+  }
+
   function fillSvg(svg, rects, color, alpha) {
     while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const band = paintBands(rects);
     for (const r of rects) {
+      const v = band.get(r);
       const el = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
       el.setAttribute('x',            (r.left   - 1).toFixed(1));
-      el.setAttribute('y',            (r.top    - 1).toFixed(1));
+      el.setAttribute('y',            v.top.toFixed(1));
       el.setAttribute('width',        (r.width  + 2).toFixed(1));
-      el.setAttribute('height',       (r.height + 2).toFixed(1));
+      el.setAttribute('height',       (v.bottom - v.top).toFixed(1));
       el.setAttribute('rx',           '3');
       el.setAttribute('fill',         color);
       el.setAttribute('fill-opacity', alpha);
@@ -379,7 +413,19 @@
 
   function repaintPlayback() {
     if (!actRange || !actSvg) return;
-    fillSvg(actSvg, getLineRects(actRange), PLAY_COLOR, PLAY_ALPHA);
+    fillSvg(actSvg, getLineRects(actRange), PLAY_COLOR, actAlpha);
+  }
+
+  // Dark page = light text. The text colour is reliable where the background
+  // isn't (background images, gradients, transparent chains up to <html>).
+  function playAlphaFor(node) {
+    try {
+      const el = node.nodeType === 1 ? node : node.parentElement;
+      const m = getComputedStyle(el).color.match(/[\d.]+/g);
+      if (!m) return PLAY_ALPHA;
+      const lum = (0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2]) / 255;
+      return lum > 0.6 ? PLAY_ALPHA_DARK : PLAY_ALPHA;
+    } catch (_) { return PLAY_ALPHA; }
   }
 
   // html-doc.js (same content-script world) records one entry per extracted
@@ -560,8 +606,9 @@
     const rects = getLineRects(found.range);
     if (!rects.length) return null;   // nothing to paint — keep the previous highlight
     actRange = found.range;
+    actAlpha = playAlphaFor(found.range.startContainer);
     ensureActSvg();
-    fillSvg(actSvg, rects, PLAY_COLOR, PLAY_ALPHA);
+    fillSvg(actSvg, rects, PLAY_COLOR, actAlpha);
 
     // Only follow the highlight when we trust the location: an anchored match, or
     // an unanchored page-wide one. A page-wide match found DESPITE having an anchor
