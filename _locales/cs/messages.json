@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "Dokumentace API"
+  },
+  "bar_rewind": {
+    "message": "Zpět"
+  },
+  "bar_play": {
+    "message": "Přehrát"
+  },
+  "bar_pause": {
+    "message": "Pozastavit"
+  },
+  "bar_stop": {
+    "message": "Zastavit"
+  },
+  "bar_forward": {
+    "message": "Vpřed"
+  },
+  "bar_minimize": {
+    "message": "Minimalizovat"
+  },
+  "bar_expand": {
+    "message": "Zobrazit ovládání přehrávání"
   }
 }

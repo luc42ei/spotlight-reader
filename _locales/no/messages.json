@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API-dokumentasjon"
+  },
+  "bar_rewind": {
+    "message": "Tilbake"
+  },
+  "bar_play": {
+    "message": "Spill av"
+  },
+  "bar_pause": {
+    "message": "Pause"
+  },
+  "bar_stop": {
+    "message": "Stopp"
+  },
+  "bar_forward": {
+    "message": "Fremover"
+  },
+  "bar_minimize": {
+    "message": "Minimer"
+  },
+  "bar_expand": {
+    "message": "Vis avspillingskontroller"
   }
 }

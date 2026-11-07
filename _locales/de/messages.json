@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API-Doku"
+  },
+  "bar_rewind": {
+    "message": "Zurück"
+  },
+  "bar_play": {
+    "message": "Fortsetzen"
+  },
+  "bar_pause": {
+    "message": "Pause"
+  },
+  "bar_stop": {
+    "message": "Stopp"
+  },
+  "bar_forward": {
+    "message": "Weiter"
+  },
+  "bar_minimize": {
+    "message": "Minimieren"
+  },
+  "bar_expand": {
+    "message": "Wiedergabesteuerung einblenden"
   }
 }

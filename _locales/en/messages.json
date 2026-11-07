@@ -414,5 +414,26 @@
   },
   "pt_link_api_docs": {
     "message": "API Docs"
+  },
+  "bar_rewind": {
+    "message": "Rewind"
+  },
+  "bar_play": {
+    "message": "Play"
+  },
+  "bar_pause": {
+    "message": "Pause"
+  },
+  "bar_stop": {
+    "message": "Stop"
+  },
+  "bar_forward": {
+    "message": "Forward"
+  },
+  "bar_minimize": {
+    "message": "Minimize"
+  },
+  "bar_expand": {
+    "message": "Show playback controls"
   }
 }

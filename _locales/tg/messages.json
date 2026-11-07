@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "Ҳуҷҷатҳои API"
+  },
+  "bar_rewind": {
+    "message": "Ба ақиб"
+  },
+  "bar_play": {
+    "message": "Пахш"
+  },
+  "bar_pause": {
+    "message": "Таваққуф"
+  },
+  "bar_stop": {
+    "message": "Қатъ"
+  },
+  "bar_forward": {
+    "message": "Ба пеш"
+  },
+  "bar_minimize": {
+    "message": "Хурд кардан"
+  },
+  "bar_expand": {
+    "message": "Нишон додани идоракунии пахш"
   }
 }

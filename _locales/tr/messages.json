@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API belgeleri"
+  },
+  "bar_rewind": {
+    "message": "Geri"
+  },
+  "bar_play": {
+    "message": "Oynat"
+  },
+  "bar_pause": {
+    "message": "Duraklat"
+  },
+  "bar_stop": {
+    "message": "Durdur"
+  },
+  "bar_forward": {
+    "message": "İleri"
+  },
+  "bar_minimize": {
+    "message": "Küçült"
+  },
+  "bar_expand": {
+    "message": "Oynatma denetimlerini göster"
   }
 }

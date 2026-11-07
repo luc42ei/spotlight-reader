@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API दस्तावेज़"
+  },
+  "bar_rewind": {
+    "message": "पीछे"
+  },
+  "bar_play": {
+    "message": "चलाएँ"
+  },
+  "bar_pause": {
+    "message": "रोकें"
+  },
+  "bar_stop": {
+    "message": "बंद करें"
+  },
+  "bar_forward": {
+    "message": "आगे"
+  },
+  "bar_minimize": {
+    "message": "छोटा करें"
+  },
+  "bar_expand": {
+    "message": "प्लेबैक नियंत्रण दिखाएँ"
   }
 }

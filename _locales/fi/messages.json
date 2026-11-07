@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API-dokumentaatio"
+  },
+  "bar_rewind": {
+    "message": "Taaksepäin"
+  },
+  "bar_play": {
+    "message": "Toista"
+  },
+  "bar_pause": {
+    "message": "Tauko"
+  },
+  "bar_stop": {
+    "message": "Pysäytä"
+  },
+  "bar_forward": {
+    "message": "Eteenpäin"
+  },
+  "bar_minimize": {
+    "message": "Pienennä"
+  },
+  "bar_expand": {
+    "message": "Näytä toistosäätimet"
   }
 }

@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "وثائق API"
+  },
+  "bar_rewind": {
+    "message": "ترجيع"
+  },
+  "bar_play": {
+    "message": "تشغيل"
+  },
+  "bar_pause": {
+    "message": "إيقاف مؤقت"
+  },
+  "bar_stop": {
+    "message": "إيقاف"
+  },
+  "bar_forward": {
+    "message": "تقديم"
+  },
+  "bar_minimize": {
+    "message": "تصغير"
+  },
+  "bar_expand": {
+    "message": "إظهار عناصر التحكم في التشغيل"
   }
 }

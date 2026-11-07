@@ -315,11 +315,25 @@ setInterval(async function() {
   } catch(e) {}
 }, 2000);
 
+// Tab that received the last highlightBlock. clearHighlight goes there, not to
+// sourceUri: when a new tab starts, sourceUri already points at the new tab
+// before the old doc is closed, which left highlight + control bar behind.
+var highlightTabId = null;
+
 async function sendHighlightToContent(method, args) {
   try {
-    var data = await brapi.storage.local.get("sourceUri");
-    if (!data.sourceUri || !data.sourceUri.startsWith("contentscript:")) return;
-    var tabId = Number(data.sourceUri.substr(14));
+    var tabId;
+    if (method == "clearHighlight") {
+      tabId = highlightTabId;
+      highlightTabId = null;
+      if (tabId == null) return;
+    }
+    else {
+      var data = await brapi.storage.local.get("sourceUri");
+      if (!data.sourceUri || !data.sourceUri.startsWith("contentscript:")) return;
+      tabId = Number(data.sourceUri.substr(14));
+      highlightTabId = tabId;
+    }
     await brapi.tabs.sendMessage(tabId, {dest: "contentScript", method: method, args: args});
   } catch(e) {}
 }

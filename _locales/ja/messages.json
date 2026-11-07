@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API ドキュメント"
+  },
+  "bar_rewind": {
+    "message": "戻る"
+  },
+  "bar_play": {
+    "message": "再生"
+  },
+  "bar_pause": {
+    "message": "一時停止"
+  },
+  "bar_stop": {
+    "message": "停止"
+  },
+  "bar_forward": {
+    "message": "進む"
+  },
+  "bar_minimize": {
+    "message": "最小化"
+  },
+  "bar_expand": {
+    "message": "再生コントロールを表示"
   }
 }

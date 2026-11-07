@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "Dokumentasi API"
+  },
+  "bar_rewind": {
+    "message": "Mundur"
+  },
+  "bar_play": {
+    "message": "Putar"
+  },
+  "bar_pause": {
+    "message": "Jeda"
+  },
+  "bar_stop": {
+    "message": "Berhenti"
+  },
+  "bar_forward": {
+    "message": "Maju"
+  },
+  "bar_minimize": {
+    "message": "Kecilkan"
+  },
+  "bar_expand": {
+    "message": "Tampilkan kontrol pemutaran"
   }
 }

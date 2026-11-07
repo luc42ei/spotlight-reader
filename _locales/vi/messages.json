@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "Tài liệu API"
+  },
+  "bar_rewind": {
+    "message": "Lùi lại"
+  },
+  "bar_play": {
+    "message": "Phát"
+  },
+  "bar_pause": {
+    "message": "Tạm dừng"
+  },
+  "bar_stop": {
+    "message": "Dừng"
+  },
+  "bar_forward": {
+    "message": "Tiến tới"
+  },
+  "bar_minimize": {
+    "message": "Thu nhỏ"
+  },
+  "bar_expand": {
+    "message": "Hiện điều khiển phát"
   }
 }

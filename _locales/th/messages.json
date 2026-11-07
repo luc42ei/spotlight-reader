@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "เอกสาร API"
+  },
+  "bar_rewind": {
+    "message": "ย้อนกลับ"
+  },
+  "bar_play": {
+    "message": "เล่น"
+  },
+  "bar_pause": {
+    "message": "หยุดชั่วคราว"
+  },
+  "bar_stop": {
+    "message": "หยุด"
+  },
+  "bar_forward": {
+    "message": "ไปข้างหน้า"
+  },
+  "bar_minimize": {
+    "message": "ย่อ"
+  },
+  "bar_expand": {
+    "message": "แสดงตัวควบคุมการเล่น"
   }
 }

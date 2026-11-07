@@ -16,10 +16,12 @@
     },
     highlightBlock: function(origTextIndex) {
       if (readAloudDoc.highlightBlock) readAloudDoc.highlightBlock(origTextIndex);
+      raControlBar.show();
     },
     clearHighlight: function() {
       if (readAloudDoc.clearHighlight) readAloudDoc.clearHighlight();
       if (readAloudDoc.detachInPageHandlers) readAloudDoc.detachInPageHandlers();
+      raControlBar.hide();
     }
   })
 

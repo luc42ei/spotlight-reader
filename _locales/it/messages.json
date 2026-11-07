@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "Documentazione API"
+  },
+  "bar_rewind": {
+    "message": "Indietro"
+  },
+  "bar_play": {
+    "message": "Riproduci"
+  },
+  "bar_pause": {
+    "message": "Pausa"
+  },
+  "bar_stop": {
+    "message": "Interrompi"
+  },
+  "bar_forward": {
+    "message": "Avanti"
+  },
+  "bar_minimize": {
+    "message": "Riduci"
+  },
+  "bar_expand": {
+    "message": "Mostra i controlli di riproduzione"
   }
 }

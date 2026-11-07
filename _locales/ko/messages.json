@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API 문서"
+  },
+  "bar_rewind": {
+    "message": "뒤로"
+  },
+  "bar_play": {
+    "message": "재생"
+  },
+  "bar_pause": {
+    "message": "일시정지"
+  },
+  "bar_stop": {
+    "message": "정지"
+  },
+  "bar_forward": {
+    "message": "앞으로"
+  },
+  "bar_minimize": {
+    "message": "최소화"
+  },
+  "bar_expand": {
+    "message": "재생 컨트롤 표시"
   }
 }

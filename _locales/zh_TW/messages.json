@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API 文件"
+  },
+  "bar_rewind": {
+    "message": "倒退"
+  },
+  "bar_play": {
+    "message": "播放"
+  },
+  "bar_pause": {
+    "message": "暫停"
+  },
+  "bar_stop": {
+    "message": "停止"
+  },
+  "bar_forward": {
+    "message": "前進"
+  },
+  "bar_minimize": {
+    "message": "最小化"
+  },
+  "bar_expand": {
+    "message": "顯示播放控制項"
   }
 }

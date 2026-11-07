@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API-dokumentation"
+  },
+  "bar_rewind": {
+    "message": "Bakåt"
+  },
+  "bar_play": {
+    "message": "Spela upp"
+  },
+  "bar_pause": {
+    "message": "Pausa"
+  },
+  "bar_stop": {
+    "message": "Stoppa"
+  },
+  "bar_forward": {
+    "message": "Framåt"
+  },
+  "bar_minimize": {
+    "message": "Minimera"
+  },
+  "bar_expand": {
+    "message": "Visa uppspelningskontroller"
   }
 }

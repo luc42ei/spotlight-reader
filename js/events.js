@@ -525,6 +525,7 @@ async function injectContentScript(tab, frameId, extraScripts) {
       "js/messaging.js",
       "js/sentence-splitter.js",
       "js/content.js",
+      "js/control-bar.js",
     ]
   })
   const files = extraScripts || await brapi.tabs.sendMessage(tab.id, {dest: "contentScript", method: "getRequireJs"})

@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "Документація API"
+  },
+  "bar_rewind": {
+    "message": "Назад"
+  },
+  "bar_play": {
+    "message": "Відтворити"
+  },
+  "bar_pause": {
+    "message": "Пауза"
+  },
+  "bar_stop": {
+    "message": "Стоп"
+  },
+  "bar_forward": {
+    "message": "Вперед"
+  },
+  "bar_minimize": {
+    "message": "Згорнути"
+  },
+  "bar_expand": {
+    "message": "Показати керування відтворенням"
   }
 }

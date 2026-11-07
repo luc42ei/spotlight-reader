@@ -402,5 +402,26 @@
   },
   "pt_link_api_docs": {
     "message": "API-documentatie"
+  },
+  "bar_rewind": {
+    "message": "Terug"
+  },
+  "bar_play": {
+    "message": "Afspelen"
+  },
+  "bar_pause": {
+    "message": "Pauzeren"
+  },
+  "bar_stop": {
+    "message": "Stoppen"
+  },
+  "bar_forward": {
+    "message": "Vooruit"
+  },
+  "bar_minimize": {
+    "message": "Minimaliseren"
+  },
+  "bar_expand": {
+    "message": "Afspeelknoppen tonen"
   }
 }

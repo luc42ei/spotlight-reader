@@ -36,7 +36,7 @@
   const PLAY_ALPHA   = '0.35';
   const PLAY_ALPHA_DARK = '0.2';  // light text on a dark page — 0.35 glares there
 
-  const INTERACTIVE  = 'a,button,input,select,textarea,[contenteditable],[role="button"],[role="link"]';
+  const INTERACTIVE  = 'a,button,input,select,textarea,[contenteditable],[role="button"],[role="link"],[data-spotlight-reader-bar]';
 
   // ── STATE ──────────────────────────────────────────────────────────────────
 
