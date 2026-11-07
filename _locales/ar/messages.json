@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "قراءة النص المحدد بصوت عالٍ"
   },
+  "context_read_from_here": {
+    "message": "القراءة بصوت عالٍ من هنا"
+  },
+  "resume_toast": {
+    "message": "متابعة القراءة من الموضع المحفوظ"
+  },
+  "resume_from_start": {
+    "message": "من البداية"
+  },
   "error_no_text": {
     "message": "لم يتم العثور على نص للقراءة، حاول تحديد النص الذي تريد قراءته أولاً"
   },

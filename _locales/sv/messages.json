@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Läs markerad text högt"
   },
+  "context_read_from_here": {
+    "message": "Läs upp härifrån"
+  },
+  "resume_toast": {
+    "message": "Fortsätter där du slutade"
+  },
+  "resume_from_start": {
+    "message": "Från början"
+  },
   "error_no_text": {
     "message": "Hittade ingen text att läsa, försök att markera texten du vill läsa först"
   },

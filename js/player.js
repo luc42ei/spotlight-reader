@@ -290,6 +290,30 @@ setInterval(async function() {
   } catch(e) {}
 }, 500);
 
+// Remember the reading position (first sentence of the current chunk) so the
+// next start on this page can resume there.
+var lastSavedPosition = null;
+
+setInterval(async function() {
+  try {
+    if (!activeDoc || !activeDoc.getResumeUrl) return;
+    var url = activeDoc.getResumeUrl();
+    if (!url) return;
+    var speech = await activeDoc.getActiveSpeech();
+    if (!speech || await speech.getState() != "PLAYING") return;
+    var info = speech.getInfo();
+    var idx = info.position.index;
+    // chunk 0 is where this run started — nothing new to remember
+    if (!idx || !info.texts[idx]) return;
+    var text = info.texts[idx];
+    var sents = raSentenceSplitter.splitWithOffsets(text);
+    text = (sents.length ? sents[0].text : text).replace(/\s+/g, " ").trim();
+    if (text.length < 3 || url + "\n" + text == lastSavedPosition) return;
+    lastSavedPosition = url + "\n" + text;
+    await saveReadPosition(url, text);
+  } catch(e) {}
+}, 2000);
+
 async function sendHighlightToContent(method, args) {
   try {
     var data = await brapi.storage.local.get("sourceUri");

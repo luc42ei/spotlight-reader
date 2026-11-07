@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "選択したテキストを読み上げる"
   },
+  "context_read_from_here": {
+    "message": "ここから読み上げ"
+  },
+  "resume_toast": {
+    "message": "前回の続きから再生しています"
+  },
+  "resume_from_start": {
+    "message": "最初から"
+  },
   "error_no_text": {
     "message": "読み上げる文章が見つかりませんでした"
   },

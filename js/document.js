@@ -151,6 +151,9 @@ function Doc(source, onEnd) {
   this.forward = forward;
   this.rewind = rewind;
   this.seek = seek;
+  // url of a page whose reading position can be saved and resumed
+  // (not while reading a selection: currentIndex is negative then)
+  this.getResumeUrl = () => (info && info.canSeek && currentIndex >= 0) ? info.url : null;
 
   //method close
   function close() {
@@ -193,6 +196,8 @@ function Doc(source, onEnd) {
     }
     else {
       if (!foundText) throw new Error(JSON.stringify({code: "error_no_text"}))
+      // read to the end: next start begins at the top again
+      if (info.canSeek && currentIndex >= 0) await clearReadPosition(info.url).catch(console.error)
       if (onEnd) onEnd()
     }
   }

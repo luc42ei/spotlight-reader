@@ -4,6 +4,9 @@ var readAloudDoc = new function() {
 
   this.ignoreTags = "select, textarea, button, label, audio, video, dialog, embed, menu, nav, noframes, noscript, object, script, style, svg, aside, footer, #footer, .no-read-aloud, [aria-hidden=true]";
 
+  // html-doc supports __raSeekTarget (click-to-seek, read from here, resume)
+  this.canSeek = true;
+
   this.getCurrentIndex = function() {
     return 0;
   }
@@ -165,10 +168,11 @@ var readAloudDoc = new function() {
         var sentSplit = raSentenceSplitter.splitWithOffsets(finalTexts[ti]);
         var sentStart = -1;
         for (var sp = 0; sp < probes.length && sentStart < 0; sp++) {
+          var skip = seekTarget.occurrence || 0;
           for (var si2 = 0; si2 < sentSplit.length; si2++) {
             var sHay = normalizeHaystack(sentSplit[si2].text);
             if (probes[sp].ci) sHay = sHay.toLowerCase();
-            if (sHay.indexOf(probes[sp].s) >= 0) { sentStart = sentSplit[si2].start; break; }
+            if (sHay.indexOf(probes[sp].s) >= 0 && skip-- <= 0) { sentStart = sentSplit[si2].start; break; }
           }
         }
         if (sentStart > 0) {
@@ -178,6 +182,9 @@ var readAloudDoc = new function() {
           self._seekSlicePrefix = prefix;
           self._seekSliceElem = self._highlightEntries[ti].elem;
         }
+      }
+      if (ti >= 0 && seekTarget.resume && typeof window.__raOnResumed == 'function') {
+        try { window.__raOnResumed(); } catch (e) { console.error(e); }
       }
       if (ti > 0) {
         self._highlightEntriesOffset = ti;

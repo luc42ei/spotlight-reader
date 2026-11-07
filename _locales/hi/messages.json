@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "चयनित टेक्स्ट जोर से पढ़ें"
   },
+  "context_read_from_here": {
+    "message": "यहाँ से पढ़कर सुनाएँ"
+  },
+  "resume_toast": {
+    "message": "जहाँ छोड़ा था वहीं से जारी"
+  },
+  "resume_from_start": {
+    "message": "शुरू से"
+  },
   "error_no_text": {
     "message": "पढ़ने के लिए कोई टेक्स्ट नहीं मिला, पहले वह टेक्स्ट चुनने का प्रयास करें जिसे आप पढ़ना चाहते हैं"
   },

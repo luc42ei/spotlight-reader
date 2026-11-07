@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Lire le texte sélectionné à haute voix"
   },
+  "context_read_from_here": {
+    "message": "Lire à voix haute à partir d'ici"
+  },
+  "resume_toast": {
+    "message": "Reprise là où vous vous étiez arrêté"
+  },
+  "resume_from_start": {
+    "message": "Recommencer"
+  },
   "error_no_text": {
     "message": "Aucun texte trouvé à lire, essayez d'abord de sélectionner le texte que vous souhaitez lire"
   },

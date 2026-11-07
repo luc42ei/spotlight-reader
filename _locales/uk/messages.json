@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Прочитати вголос виділений текст"
   },
+  "context_read_from_here": {
+    "message": "Читати вголос звідси"
+  },
+  "resume_toast": {
+    "message": "Продовження зі збереженого місця"
+  },
+  "resume_from_start": {
+    "message": "З початку"
+  },
   "error_no_text": {
     "message": "Не знайдено тексту для читання, спробуйте спочатку виділити текст, який хочете прочитати"
   },

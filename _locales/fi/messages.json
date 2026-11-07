@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Lue valittu teksti ääneen"
   },
+  "context_read_from_here": {
+    "message": "Lue ääneen tästä eteenpäin"
+  },
+  "resume_toast": {
+    "message": "Jatketaan tallennetusta kohdasta"
+  },
+  "resume_from_start": {
+    "message": "Alusta"
+  },
   "error_no_text": {
     "message": "Luettavaa tekstiä ei löytynyt, yritä ensin valita teksti, jonka haluat lukea"
   },

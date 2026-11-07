@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Прочитать вслух выделенный текст"
   },
+  "context_read_from_here": {
+    "message": "Читать вслух отсюда"
+  },
+  "resume_toast": {
+    "message": "Продолжение с сохранённого места"
+  },
+  "resume_from_start": {
+    "message": "С начала"
+  },
   "error_no_text": {
     "message": "Не удалось найти текст для чтения. Попробуйте сначала выделить текст, который хотите прочитать."
   },

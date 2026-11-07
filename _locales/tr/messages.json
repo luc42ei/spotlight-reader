@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Seçilen metni yüksek sesle oku"
   },
+  "context_read_from_here": {
+    "message": "Buradan itibaren sesli oku"
+  },
+  "resume_toast": {
+    "message": "Kaldığınız yerden devam ediliyor"
+  },
+  "resume_from_start": {
+    "message": "Baştan başla"
+  },
   "error_no_text": {
     "message": "Okunacak metin bulamadım"
   },

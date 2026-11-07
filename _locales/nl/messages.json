@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Geselecteerde tekst hardop voorlezen"
   },
+  "context_read_from_here": {
+    "message": "Vanaf hier voorlezen"
+  },
+  "resume_toast": {
+    "message": "Verder waar je gebleven was"
+  },
+  "resume_from_start": {
+    "message": "Opnieuw beginnen"
+  },
   "error_no_text": {
     "message": "Geen tekst gevonden om voor te lezen, probeer eerst de tekst te selecteren die u wilt lezen"
   },

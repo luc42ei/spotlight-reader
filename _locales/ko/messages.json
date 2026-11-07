@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "선택한 텍스트 소리 내어 읽기"
   },
+  "context_read_from_here": {
+    "message": "여기서부터 읽기"
+  },
+  "resume_toast": {
+    "message": "마지막 위치부터 이어서 읽습니다"
+  },
+  "resume_from_start": {
+    "message": "처음부터"
+  },
   "error_no_text": {
     "message": "읽을 텍스트를 찾을 수 없습니다. 먼저 읽고 싶은 텍스트를 선택해 보세요"
   },

@@ -77,6 +77,46 @@ async function setupDarkMode() {
 
 
 /**
+ * Last reading position per page: local only, LRU-capped. The position is the
+ * first sentence of the chunk being spoken; html-doc's seek path finds it again.
+ */
+var READ_POSITIONS_MAX = 100
+
+function readPositionKey(url) {
+  return url ? String(url).split("#")[0] : null
+}
+
+async function getReadPosition(url) {
+  const key = readPositionKey(url)
+  if (!key) return null
+  const {readPositions} = await brapi.storage.local.get("readPositions")
+  return (readPositions && readPositions[key]) || null
+}
+
+async function saveReadPosition(url, text) {
+  const key = readPositionKey(url)
+  if (!key || !text) return
+  const {readPositions = {}} = await brapi.storage.local.get("readPositions")
+  readPositions[key] = {text, time: Date.now()}
+  const keys = Object.keys(readPositions)
+  if (keys.length > READ_POSITIONS_MAX) {
+    keys.sort((a, b) => readPositions[a].time - readPositions[b].time)
+      .slice(0, keys.length - READ_POSITIONS_MAX)
+      .forEach(k => delete readPositions[k])
+  }
+  await brapi.storage.local.set({readPositions})
+}
+
+async function clearReadPosition(url) {
+  const key = readPositionKey(url)
+  const {readPositions} = await brapi.storage.local.get("readPositions")
+  if (!key || !readPositions || !readPositions[key]) return
+  delete readPositions[key]
+  await brapi.storage.local.set({readPositions})
+}
+
+
+/**
  * HELPERS
  */
 function lazy(get) {

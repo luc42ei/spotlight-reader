@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Baca keras teks yang dipilih"
   },
+  "context_read_from_here": {
+    "message": "Bacakan dari sini"
+  },
+  "resume_toast": {
+    "message": "Melanjutkan dari posisi terakhir"
+  },
+  "resume_from_start": {
+    "message": "Dari awal"
+  },
   "error_no_text": {
     "message": "Tidak menemukan teks untuk dibaca, coba pilih teks yang ingin Anda baca terlebih dahulu"
   },

@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Đọc"
   },
+  "context_read_from_here": {
+    "message": "Đọc to từ đây"
+  },
+  "resume_toast": {
+    "message": "Tiếp tục từ chỗ bạn đã dừng"
+  },
+  "resume_from_start": {
+    "message": "Từ đầu"
+  },
   "error_no_text": {
     "message": "Không tìm thấy bất kỳ văn bản nào để đọc"
   },

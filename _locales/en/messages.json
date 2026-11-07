@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Read aloud selected text"
   },
+  "context_read_from_here": {
+    "message": "Read aloud from here"
+  },
+  "resume_toast": {
+    "message": "Resuming where you left off"
+  },
+  "resume_from_start": {
+    "message": "Start over"
+  },
   "error_no_text": {
     "message": "Didn't find any text to read, try selecting the text you want to read first"
   },

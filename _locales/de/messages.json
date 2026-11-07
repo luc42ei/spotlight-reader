@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Markierten Text vorlesen"
   },
+  "context_read_from_here": {
+    "message": "Ab hier vorlesen"
+  },
+  "resume_toast": {
+    "message": "Weiter an der gespeicherten Stelle"
+  },
+  "resume_from_start": {
+    "message": "Von vorn"
+  },
   "error_no_text": {
     "message": "Kein Text zum Lesen gefunden, versuchen Sie zuerst den Text auszuwählen, den Sie lesen möchten"
   },

@@ -22,6 +22,7 @@
       url: location.href,
       title: document.title,
       lang: getLang(),
+      canSeek: typeof readAloudDoc != "undefined" && !!readAloudDoc.canSeek,
     }
   }
 

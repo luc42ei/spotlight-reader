@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Przeczytaj na głos zaznaczony tekst"
   },
+  "context_read_from_here": {
+    "message": "Czytaj na głos od tego miejsca"
+  },
+  "resume_toast": {
+    "message": "Wznowiono od zapisanego miejsca"
+  },
+  "resume_from_start": {
+    "message": "Od początku"
+  },
   "error_no_text": {
     "message": "Nie znaleziono tekstu do przeczytania, najpierw spróbuj zaznaczyć tekst, który chcesz przeczytać"
   },

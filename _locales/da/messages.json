@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Læs markeret tekst højt"
   },
+  "context_read_from_here": {
+    "message": "Læs højt herfra"
+  },
+  "resume_toast": {
+    "message": "Fortsætter fra den gemte position"
+  },
+  "resume_from_start": {
+    "message": "Fra starten"
+  },
   "error_no_text": {
     "message": "Fandt ingen tekst at læse, prøv først at markere den tekst, du vil læse"
   },

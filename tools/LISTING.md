@@ -104,8 +104,9 @@ Paste into the "Notes to reviewer" field, and upload the source package
 **Permissions rationale**
 - `activeTab` / `scripting` — inject the reader/highlight into the page the user
   activates.
-- `contextMenus` — "Read aloud selected text" entry.
-- `storage` — save settings, favorites, cached voice lists.
+- `contextMenus` — "Read aloud selected text" and "Read aloud from here" entries.
+- `menus` — lets "Read aloud from here" find the right-clicked element (`menus.getTargetElement`); nothing else.
+- `storage` — save settings, favorites, cached voice lists, and the last reading position per page (sentence + URL, local only, max. 100 pages) so reading can resume.
 - `unlimitedStorage` — keep the downloaded offline voice models (Supertonic
   ~250 MB, Piper) from being evicted, so they aren't re-downloaded.
 - `host_permissions: translate.google.com` — the free Google Translate voice.

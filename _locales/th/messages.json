@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "อ่านออกเสียงข้อความที่เลือก"
   },
+  "context_read_from_here": {
+    "message": "อ่านออกเสียงจากตรงนี้"
+  },
+  "resume_toast": {
+    "message": "อ่านต่อจากตำแหน่งที่บันทึกไว้"
+  },
+  "resume_from_start": {
+    "message": "เริ่มใหม่"
+  },
   "error_no_text": {
     "message": "ไม่พบข้อความที่จะอ่าน ลองเลือกข้อความที่คุณต้องการอ่านก่อน"
   },

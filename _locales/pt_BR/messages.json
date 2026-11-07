@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Ler texto selecionado em voz alta"
   },
+  "context_read_from_here": {
+    "message": "Ler em voz alta a partir daqui"
+  },
+  "resume_toast": {
+    "message": "Continuando de onde você parou"
+  },
+  "resume_from_start": {
+    "message": "Do início"
+  },
   "error_no_text": {
     "message": "Não foi encontrado texto para ler, tente selecionar o texto que deseja ler primeiro"
   },

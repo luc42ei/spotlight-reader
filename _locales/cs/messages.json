@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "Přečíst nahlas vybraný text"
   },
+  "context_read_from_here": {
+    "message": "Předčítat odsud"
+  },
+  "resume_toast": {
+    "message": "Pokračuje se od uloženého místa"
+  },
+  "resume_from_start": {
+    "message": "Od začátku"
+  },
   "error_no_text": {
     "message": "Nebyl nalezen žádný text ke čtení, zkuste nejprve vybrat text, který chcete přečíst"
   },

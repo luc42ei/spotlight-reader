@@ -206,6 +206,15 @@
   "context_read_selection": {
     "message": "朗讀所選文字"
   },
+  "context_read_from_here": {
+    "message": "從這裡開始朗讀"
+  },
+  "resume_toast": {
+    "message": "從上次的位置繼續"
+  },
+  "resume_from_start": {
+    "message": "從頭開始"
+  },
   "error_no_text": {
     "message": "沒有找到任何文字閱讀"
   },

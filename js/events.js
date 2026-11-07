@@ -67,6 +67,11 @@ function installContextMenus() {
     contexts: ["selection"]
   }, () => { brapi.runtime.lastError })
   brapi.contextMenus.create({
+    id: "read-from-here",
+    title: brapi.i18n.getMessage("context_read_from_here"),
+    contexts: ["page", "selection", "link"]
+  }, () => { brapi.runtime.lastError })
+  brapi.contextMenus.create({
     id: "open-settings",
     title: "Open settings",
     contexts: ["action"]
@@ -88,6 +93,9 @@ brapi.contextMenus.onClicked.addListener(function(info, tab) {
       .then(function(lang) {
         return playText(info.selectionText, {lang: lang})
       })
+      .catch(handleHeadlessError)
+  if (info.menuItemId == "read-from-here")
+    readFromHere(info, tab)
       .catch(handleHeadlessError)
   if (info.menuItemId == "open-settings")
     brapi.tabs.create({url: brapi.runtime.getURL("options.html")})
@@ -192,7 +200,111 @@ async function playText(text, opts) {
   await sendToPlayer({method: "playText", args: [text, opts]})
 }
 
-async function playTab(tabId) {
+async function readFromHere(info, tab) {
+  // The seek target must live in the frame html-doc reads (the top frame).
+  let marked = false
+  if (tab && tab.id != -1 && !info.frameId) {
+    const target = {tabId: tab.id}
+    try {
+      await brapi.scripting.executeScript({target, files: ["js/sentence-splitter.js"]})
+      const [res] = await brapi.scripting.executeScript({target, func: markReadFromHere, args: [info.targetElementId != null ? info.targetElementId : null]})
+      marked = !!(res && res.result)
+    }
+    catch (err) {
+      // not injectable (extension page, PDF viewer, blocked site): playTab reports it properly
+      console.warn(err)
+    }
+  }
+  await playTab(tab && tab.id != -1 ? tab.id : undefined, marked ? {fromHere: true} : undefined)
+}
+
+// Runs in the page: turn the selection start (or the right-clicked element)
+// into a seek target for html-doc's parse().
+function markReadFromHere(targetElementId) {
+  const sel = window.getSelection()
+  let el = null, node = null, offset = 0
+  if (sel && sel.rangeCount && !sel.isCollapsed) {
+    const range = sel.getRangeAt(0)
+    node = range.startContainer
+    offset = range.startOffset
+    el = node.nodeType == 1 ? node : node.parentElement
+  }
+  else if (targetElementId != null && typeof browser != "undefined" && browser.menus && browser.menus.getTargetElement) {
+    el = browser.menus.getTargetElement(targetElementId)
+  }
+  if (!el) return false
+  let block = el
+  while (block.parentElement && block !== document.body && getComputedStyle(block).display.startsWith("inline")) block = block.parentElement
+  // Sentence at the selection start, else the block's first sentence: html-doc
+  // may treat a whole <article> as one block, so the element alone isn't enough.
+  let at = 0
+  if (node) {
+    const pre = document.createRange()
+    pre.selectNodeContents(block)
+    pre.setEnd(node, offset)
+    at = pre.toString().length
+    // a live selection would make content.js read only the selection
+    sel.removeAllRanges()
+  }
+  let sentenceText = null, occurrence = 0
+  if (typeof raSentenceSplitter != "undefined") {
+    const norm = s => s.text.replace(/\s+/g, " ").trim()
+    const sents = raSentenceSplitter.splitWithOffsets(block.textContent)
+    const i = sents.findIndex(s => s.end > at)
+    if (i >= 0) {
+      sentenceText = norm(sents[i])
+      // same sentence earlier in the block (a refrain): tell html-doc which one
+      occurrence = sents.slice(0, i).filter(s => norm(s) == sentenceText).length
+    }
+  }
+  window.__raSeekTarget = {el: block, sentenceText, occurrence}
+  return true
+}
+
+// Runs in the page: resume at the saved sentence unless another seek target is
+// pending; html-doc calls __raOnResumed once it found the sentence.
+function markResumePosition(text, labels) {
+  if (window.__raSeekTarget || typeof readAloudDoc == "undefined" || !readAloudDoc.canSeek) return false
+  // a selection is read on its own (content.js), not the page
+  if (String(window.getSelection() || "").trim()) return false
+  window.__raSeekTarget = {el: null, sentenceText: text, resume: true}
+  window.__raOnResumed = function() {
+    const old = document.getElementById("ra-resume-toast")
+    if (old) old.remove()
+    const host = document.createElement("div")
+    host.id = "ra-resume-toast"
+    host.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147483647;"
+    const root = host.attachShadow({mode: "closed"})
+    root.innerHTML = '<style>div{font:14px/1.4 system-ui,sans-serif;background:#323232;color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;gap:14px;align-items:center}'
+      + 'button{font:inherit;font-weight:600;background:none;border:0;color:#8ab4f8;cursor:pointer;padding:0}</style><div><span></span><button type="button"></button></div>'
+    root.querySelector("span").textContent = labels.resumed
+    const button = root.querySelector("button")
+    button.textContent = labels.fromStart
+    button.addEventListener("click", function() {
+      host.remove()
+      const api = typeof browser != "undefined" ? browser : chrome
+      api.runtime.sendMessage({dest: "serviceWorker", method: "playTab", args: [null, {fromStart: true}]})
+    })
+    document.documentElement.appendChild(host)
+    setTimeout(() => host.remove(), 8000)
+  }
+  return true
+}
+
+async function applyResumePosition(tab) {
+  const pos = await getReadPosition(tab.url)
+  if (!pos) return
+  await brapi.scripting.executeScript({
+    target: {tabId: tab.id},
+    func: markResumePosition,
+    args: [pos.text, {
+      resumed: brapi.i18n.getMessage("resume_toast"),
+      fromStart: brapi.i18n.getMessage("resume_from_start"),
+    }]
+  })
+}
+
+async function playTab(tabId, opts) {
   const tab = tabId ? await getTab(tabId) : await getActiveTab()
   if (!tab) throw new Error(JSON.stringify({code: "error_page_unreadable"}))
 
@@ -207,6 +319,7 @@ async function playTab(tabId) {
       const frameId = handler.getFrameId && await getAllFrames(tab.id).then(frames => handler.getFrameId(frames))
       if (!await contentScriptAlreadyInjected(tab, frameId)) await injectContentScript(tab, frameId, handler.extraScripts)
       await brapi.storage.local.set({"sourceUri": "contentscript:" + tab.id})
+      if (!frameId && !(opts && (opts.fromHere || opts.fromStart))) await applyResumePosition(tab).catch(console.error)
     }
   }
   finally {
@@ -214,6 +327,8 @@ async function playTab(tabId) {
   }
 
   const hasPlayer = await stop().then(res => res == true, err => false)
+  // after stop(): the player can't write the old position back anymore
+  if (opts && opts.fromStart) await clearReadPosition(tab.url)
   if (!hasPlayer) await injectPlayer(tab)
   await sendToPlayer({method: "playTab"})
 }
