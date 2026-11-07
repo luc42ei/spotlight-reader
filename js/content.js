@@ -1,5 +1,11 @@
 
 (function() {
+  // Keep the page being read awake on Android while it speaks.
+  if (window === window.top) maintainPlaybackWakeLock(async () => {
+    const info = await bgPageInvoke("getPlaybackState", [{peek: true}])
+    return !!info && info.state == "PLAYING"
+  })
+
   registerMessageListener("contentScript", {
     getRequireJs: getRequireJs,
     getDocumentInfo: getInfo,

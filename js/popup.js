@@ -2,6 +2,11 @@
 var queryString = getQueryString()
 const playerCheckIn$ = new rxjs.Subject()
 
+maintainPlaybackWakeLock(async () => {
+  const info = await bgPageInvoke("getPlaybackState", [{peek: true}])
+  return !!info && info.state == "PLAYING"
+})
+
 registerMessageListener("popup", {
   playerCheckIn() {
     playerCheckIn$.next()

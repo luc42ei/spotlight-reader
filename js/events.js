@@ -370,10 +370,11 @@ function resume() {
   return sendToPlayer({method: "resume"})
 }
 
-async function getPlaybackState() {
+// opts.peek: leave a pending playbackError for the popup to report
+async function getPlaybackState(opts) {
   if (currentTask.isActive()) return {state: "LOADING"}
   try {
-    return await sendToPlayer({method: "getPlaybackState"}) || {state: "STOPPED"}
+    return await sendToPlayer({method: "getPlaybackState", args: opts ? [opts] : undefined}) || {state: "STOPPED"}
   }
   catch (err) {
     return {state: "STOPPED"}
@@ -586,7 +587,9 @@ async function createPlayerTab() {
     index: 0,
     active: false,
   })
-  await brapi.tabs.update(tab.id, {pinned: true})
+  //Firefox for Android cannot pin tabs
+  try { await brapi.tabs.update(tab.id, {pinned: true}) }
+  catch (err) { console.warn(err) }
 }
 
 

@@ -611,3 +611,19 @@ input[type=checkbox] + label {
 #extra-options .extra-option-row select {
   width: auto;
 }
+
+/* Narrow screens (Firefox for Android): one column, wrap button groups */
+@media (max-width: 600px) and (pointer: coarse) {
+  .layout {
+    min-width: 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-gap: 6px 0;
+  }
+  #extra-options { min-width: 0; }
+  #extra-options .extra-option-row { flex-wrap: wrap; }
+  #extra-options .extra-option-row select { max-width: 100%; }
+  .provider-table { display: block; overflow-x: auto; }
+  .layout > * { min-width: 0; }
+  .layout > :nth-child(2n+1):not(:first-child) { margin-top: 14px; }
+  .btn-group { flex-wrap: wrap; }
+}

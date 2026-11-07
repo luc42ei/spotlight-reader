@@ -230,7 +230,8 @@ function resume() {
   else return Promise.resolve()
 }
 
-function getPlaybackState() {
+function getPlaybackState(opts) {
+  const peek = opts && opts.peek
   if (activeDoc) {
     return Promise.all([activeDoc.getState(), activeDoc.getActiveSpeech()])
       .then(function(results) {
@@ -241,7 +242,7 @@ function getPlaybackState() {
         }
       })
       .finally(() => {
-        playbackError = null
+        if (!peek) playbackError = null
       })
   }
   else {
@@ -422,7 +423,7 @@ function managePiperVoices() {
       .catch(console.error)
     brapi.tabs.getCurrent()
       .then(tab => Promise.all([
-        brapi.windows.update(tab.windowId, {focused: true}),
+        brapi.windows && brapi.windows.update(tab.windowId, {focused: true}),
         brapi.tabs.update(tab.id, {active: true})
       ]))
       .catch(console.error)
