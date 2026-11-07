@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "ここから読み上げ"
   },
+  "options_word_replacements_heading": {
+    "message": "単語の置き換え"
+  },
+  "options_word_replacements_help": {
+    "message": "1行に1ルール: 表記 = 読み。右側を空にするとその語を読み飛ばします。単語単位で一致し、大文字・小文字は区別しません。正規表現は /regex/ = 置換 ($$1 でグループ)。ページ自体は変更されません。"
+  },
+  "options_word_replacements_invalid": {
+    "message": "無視された行 (無効または重複):"
+  },
+  "options_word_replacements_example": {
+    "message": "AI = エーアイ\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "前回の続きから再生しています"
   },

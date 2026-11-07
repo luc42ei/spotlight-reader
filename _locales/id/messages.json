@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Bacakan dari sini"
   },
+  "options_word_replacements_heading": {
+    "message": "Penggantian kata"
+  },
+  "options_word_replacements_help": {
+    "message": "Satu aturan per baris: tertulis = diucapkan. Sisi kanan kosong melewati kata. Mencocokkan kata utuh tanpa membedakan huruf besar/kecil. /regex/ = pengganti untuk ekspresi reguler ($$1 untuk grup). Halaman itu sendiri tidak diubah."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Baris diabaikan (tidak valid atau duplikat):"
+  },
+  "options_word_replacements_example": {
+    "message": "dll. = dan lain-lain\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Melanjutkan dari posisi terakhir"
   },

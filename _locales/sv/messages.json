@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Läs upp härifrån"
   },
+  "options_word_replacements_heading": {
+    "message": "Ordersättningar"
+  },
+  "options_word_replacements_help": {
+    "message": "En regel per rad: skrivet = uttalat. Tom högersida hoppar över ordet. Matchar hela ord oavsett skiftläge. /regex/ = ersättning för reguljära uttryck ($$1 för grupper). Själva sidan ändras inte."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Ignorerade rader (ogiltiga eller dubbletter):"
+  },
+  "options_word_replacements_example": {
+    "message": "t.ex. = till exempel\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Fortsätter där du slutade"
   },

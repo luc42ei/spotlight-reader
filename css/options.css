@@ -385,17 +385,21 @@ input[type=checkbox] + label {
 }
 
 
-#custom-voices-section {
+#custom-voices-section, #word-replacements-section {
   margin-top: 1.5rem;
   font-size: .9rem;
 }
-#custom-voices-section > summary {
+#word-replacements {
+  font-family: monospace;
+  font-size: .85rem;
+}
+#custom-voices-section > summary, #word-replacements-section > summary {
   cursor: pointer;
   color: #666;
   user-select: none;
   padding: .25rem 0;
 }
-.dark-mode #custom-voices-section > summary {
+.dark-mode #custom-voices-section > summary, .dark-mode #word-replacements-section > summary {
   color: #aaa;
 }
 .cv-provider {

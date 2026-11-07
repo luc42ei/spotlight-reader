@@ -331,6 +331,7 @@ function Doc(source, onEnd) {
     options.rateSettingKey = "rate" + (settings.voiceName || "")
     if (!settings.voiceName) await updateSettings({lastAutoVoice: voice.voiceName})
     if (settings.emphasizeItalics !== false) options.italics = italics
+    if (settings.wordReplacements) options.wordReplacements = settings.wordReplacements
     return new Speech(texts, options);
   }
 

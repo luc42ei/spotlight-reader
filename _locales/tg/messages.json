@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Аз ин ҷо бо овоз хондан"
   },
+  "options_word_replacements_heading": {
+    "message": "Ивазкунии калимаҳо"
+  },
+  "options_word_replacements_help": {
+    "message": "Як қоида дар як сатр: навишта = талаффуз. Тарафи рости холӣ калимаро мегузарад. Калимаҳои пурра, бе фарқи ҳарфҳои калон/хурд. /regex/ = ивазкунанда барои ифодаҳои мунтазам ($$1 барои гурӯҳҳо). Худи саҳифа тағйир намеёбад."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Сатрҳои нодидагирифта (нодуруст ё такрорӣ):"
+  },
+  "options_word_replacements_example": {
+    "message": "ва ғ. = ва ғайра\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Аз ҷои захирашуда идома дода мешавад"
   },

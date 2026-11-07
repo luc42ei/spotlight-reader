@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Les høyt herfra"
   },
+  "options_word_replacements_heading": {
+    "message": "Ordutskifting"
+  },
+  "options_word_replacements_help": {
+    "message": "Én regel per linje: skrevet = uttalt. Tom høyre side hopper over ordet. Treffer hele ord uten hensyn til store/små bokstaver. /regex/ = erstatning for regulære uttrykk ($$1 for grupper). Selve siden endres ikke."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Ignorerte linjer (ugyldige eller duplikater):"
+  },
+  "options_word_replacements_example": {
+    "message": "f.eks. = for eksempel\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Fortsetter der du slapp"
   },

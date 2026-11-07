@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Ab hier vorlesen"
   },
+  "options_word_replacements_heading": {
+    "message": "Wortersetzungen"
+  },
+  "options_word_replacements_help": {
+    "message": "Eine Regel pro Zeile: geschrieben = gesprochen. Leere rechte Seite überspringt das Wort. Trifft ganze Wörter, Groß-/Kleinschreibung egal. /Regex/ = Ersatz für reguläre Ausdrücke ($$1 für Gruppen). Die Seite selbst bleibt unverändert."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Ignorierte Zeilen (ungültig oder doppelt):"
+  },
+  "options_word_replacements_example": {
+    "message": "z. B. = zum Beispiel\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Weiter an der gespeicherten Stelle"
   },

@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "القراءة بصوت عالٍ من هنا"
   },
+  "options_word_replacements_heading": {
+    "message": "استبدال الكلمات"
+  },
+  "options_word_replacements_help": {
+    "message": "قاعدة واحدة في كل سطر: المكتوب = المنطوق. الجانب الأيمن الفارغ يتخطى الكلمة. يطابق الكلمات الكاملة دون مراعاة حالة الأحرف. /regex/ = بديل للتعابير النمطية ($$1 للمجموعات). لا تتغير الصفحة نفسها."
+  },
+  "options_word_replacements_invalid": {
+    "message": "أسطر تم تجاهلها (غير صالحة أو مكررة):"
+  },
+  "options_word_replacements_example": {
+    "message": "إلخ = إلى آخره\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "متابعة القراءة من الموضع المحفوظ"
   },

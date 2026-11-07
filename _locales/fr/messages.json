@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Lire à voix haute à partir d'ici"
   },
+  "options_word_replacements_heading": {
+    "message": "Remplacements de mots"
+  },
+  "options_word_replacements_help": {
+    "message": "Une règle par ligne : écrit = prononcé. Un côté droit vide fait sauter le mot. Correspond aux mots entiers, sans tenir compte de la casse. /regex/ = remplacement pour les expressions régulières ($$1 pour les groupes). La page elle-même n'est pas modifiée."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Lignes ignorées (invalides ou en double) :"
+  },
+  "options_word_replacements_example": {
+    "message": "p. ex. = par exemple\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Reprise là où vous vous étiez arrêté"
   },

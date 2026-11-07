@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Lue ääneen tästä eteenpäin"
   },
+  "options_word_replacements_heading": {
+    "message": "Sanojen korvaukset"
+  },
+  "options_word_replacements_help": {
+    "message": "Yksi sääntö riviä kohden: kirjoitettu = lausuttu. Tyhjä oikea puoli ohittaa sanan. Vastaa kokonaisia sanoja kirjainkoosta riippumatta. /regex/ = korvaus säännöllisille lausekkeille ($$1 ryhmille). Itse sivu ei muutu."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Ohitetut rivit (virheelliset tai kaksoiskappaleet):"
+  },
+  "options_word_replacements_example": {
+    "message": "esim. = esimerkiksi\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Jatketaan tallennetusta kohdasta"
   },

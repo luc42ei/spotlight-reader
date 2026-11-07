@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Leer en voz alta desde aquí"
   },
+  "options_word_replacements_heading": {
+    "message": "Reemplazo de palabras"
+  },
+  "options_word_replacements_help": {
+    "message": "Una regla por línea: escrito = pronunciado. Si el lado derecho está vacío, se omite la palabra. Coincide con palabras completas sin distinguir mayúsculas. /regex/ = reemplazo para expresiones regulares ($$1 para grupos). La página no se modifica."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Líneas ignoradas (no válidas o duplicadas):"
+  },
+  "options_word_replacements_example": {
+    "message": "p. ej. = por ejemplo\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Continuando donde lo dejaste"
   },

@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "यहाँ से पढ़कर सुनाएँ"
   },
+  "options_word_replacements_heading": {
+    "message": "शब्द प्रतिस्थापन"
+  },
+  "options_word_replacements_help": {
+    "message": "हर पंक्ति में एक नियम: लिखा = बोला। दायाँ भाग खाली हो तो शब्द छोड़ दिया जाता है। पूरे शब्दों से मेल, बड़े/छोटे अक्षर का फ़र्क नहीं। रेगुलर एक्सप्रेशन के लिए /regex/ = प्रतिस्थापन ($$1 समूहों के लिए)। पेज खुद नहीं बदलता।"
+  },
+  "options_word_replacements_invalid": {
+    "message": "अनदेखी पंक्तियाँ (अमान्य या दोहराई गई):"
+  },
+  "options_word_replacements_example": {
+    "message": "आदि = इत्यादि\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "जहाँ छोड़ा था वहीं से जारी"
   },

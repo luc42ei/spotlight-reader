@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Czytaj na głos od tego miejsca"
   },
+  "options_word_replacements_heading": {
+    "message": "Zamiana słów"
+  },
+  "options_word_replacements_help": {
+    "message": "Jedna reguła na wiersz: napisane = wymawiane. Pusta prawa strona pomija słowo. Dopasowuje całe słowa bez względu na wielkość liter. /regex/ = zamiana dla wyrażeń regularnych ($$1 dla grup). Sama strona nie jest zmieniana."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Pominięte wiersze (nieprawidłowe lub zduplikowane):"
+  },
+  "options_word_replacements_example": {
+    "message": "np. = na przykład\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Wznowiono od zapisanego miejsca"
   },

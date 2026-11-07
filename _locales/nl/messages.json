@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Vanaf hier voorlezen"
   },
+  "options_word_replacements_heading": {
+    "message": "Woordvervangingen"
+  },
+  "options_word_replacements_help": {
+    "message": "Eén regel per lijn: geschreven = uitgesproken. Een lege rechterkant slaat het woord over. Komt overeen met hele woorden, hoofdletters maken niet uit. /regex/ = vervanging voor reguliere expressies ($$1 voor groepen). De pagina zelf verandert niet."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Genegeerde regels (ongeldig of dubbel):"
+  },
+  "options_word_replacements_example": {
+    "message": "bijv. = bijvoorbeeld\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Verder waar je gebleven was"
   },

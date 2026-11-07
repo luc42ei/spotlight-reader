@@ -90,7 +90,15 @@ function Speech(texts, options) {
 
   // Number-comma stripping shortens the chunk, so shift the ranges by the number
   // of removed commas that sit before them.
+  var wordRules = parseWordReplacements(options.wordReplacements).rules;
+  var replaceWords = wordRules.length ? createWordReplacer(wordRules) : null;
+
   function spokenChunk(text, ranges) {
+    // User word replacements: lengths change, so emphasis ranges can't be
+    // mapped — drop them for this chunk. A chunk the rules would empty (e.g. a
+    // lone footnote marker) is spoken as is: engines fail on empty input.
+    var replaced = replaceWords ? replaceWords(text) : text;
+    if (replaced != text && /[\p{L}\p{N}]/u.test(replaced)) return {text: spokenText(replaced), ranges: null};
     var spoken = spokenText(text);
     if (!ranges || spoken.length == text.length) return {text: spoken, ranges: ranges};
     var cuts = [], re = /(?<=\d),(?=\d{3}(?:\D|$))/g, m;

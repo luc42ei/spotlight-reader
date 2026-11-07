@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Читать вслух отсюда"
   },
+  "options_word_replacements_heading": {
+    "message": "Замена слов"
+  },
+  "options_word_replacements_help": {
+    "message": "Одно правило на строку: написано = произносится. Пустая правая часть пропускает слово. Совпадают целые слова без учёта регистра. /regex/ = замена для регулярных выражений ($$1 для групп). Сама страница не меняется."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Пропущенные строки (неверные или повторяющиеся):"
+  },
+  "options_word_replacements_example": {
+    "message": "т. е. = то есть\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Продолжение с сохранённого места"
   },

@@ -33,6 +33,30 @@
   //advanced settings
   Promise.all([getSettings(), domReadyPromise])
     .then(([settings]) => {
+      const showReplacementErrors = text => {
+        const lines = parseWordReplacements(text).errors.map(e => e.line)
+        $("#word-replacements-errors").text(lines.length ? brapi.i18n.getMessage("options_word_replacements_invalid") + " " + lines.join(", ") : "")
+      }
+      let replacementsTimer = null
+      const saveReplacements = () => {
+        clearTimeout(replacementsTimer)
+        replacementsTimer = null
+        updateSettings({wordReplacements: $("#word-replacements").val()}).catch(console.error)
+      }
+      $("#word-replacements")
+        .val(settings.wordReplacements || "")
+        .on("input", function() {
+          showReplacementErrors(this.value)
+          clearTimeout(replacementsTimer)
+          replacementsTimer = setTimeout(saveReplacements, 400)
+        })
+        .on("blur", () => { if (replacementsTimer) saveReplacements() })
+      window.addEventListener("pagehide", () => { if (replacementsTimer) saveReplacements() })
+      if (settings.wordReplacements) {
+        $("#word-replacements-section").prop("open", true)
+        showReplacementErrors(settings.wordReplacements)
+      }
+
       $("#fix-bt-silence-gap")
         .prop("checked", settings.fixBtSilenceGap)
         .change(function() {

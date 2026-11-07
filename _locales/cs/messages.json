@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Předčítat odsud"
   },
+  "options_word_replacements_heading": {
+    "message": "Nahrazování slov"
+  },
+  "options_word_replacements_help": {
+    "message": "Jedno pravidlo na řádek: psáno = vysloveno. Prázdná pravá strana slovo přeskočí. Hledají se celá slova bez ohledu na velikost písmen. /regex/ = náhrada pro regulární výrazy ($$1 pro skupiny). Stránka sama se nemění."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Ignorované řádky (neplatné nebo duplicitní):"
+  },
+  "options_word_replacements_example": {
+    "message": "např. = například\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Pokračuje se od uloženého místa"
   },

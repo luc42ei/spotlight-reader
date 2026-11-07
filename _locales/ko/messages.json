@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "여기서부터 읽기"
   },
+  "options_word_replacements_heading": {
+    "message": "단어 바꾸기"
+  },
+  "options_word_replacements_help": {
+    "message": "한 줄에 규칙 하나: 표기 = 발음. 오른쪽을 비우면 그 단어를 건너뜁니다. 대소문자 구분 없이 단어 전체가 일치해야 합니다. 정규식은 /regex/ = 바꿀 내용 ($$1은 그룹). 페이지 자체는 바뀌지 않습니다."
+  },
+  "options_word_replacements_invalid": {
+    "message": "무시된 줄 (잘못되었거나 중복):"
+  },
+  "options_word_replacements_example": {
+    "message": "AI = 에이아이\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "마지막 위치부터 이어서 읽습니다"
   },

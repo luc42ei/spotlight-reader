@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Читати вголос звідси"
   },
+  "options_word_replacements_heading": {
+    "message": "Заміна слів"
+  },
+  "options_word_replacements_help": {
+    "message": "Одне правило на рядок: написано = вимовляється. Порожня права частина пропускає слово. Збігаються цілі слова без урахування регістру. /regex/ = заміна для регулярних виразів ($$1 для груп). Сама сторінка не змінюється."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Пропущені рядки (недійсні або повторювані):"
+  },
+  "options_word_replacements_example": {
+    "message": "напр. = наприклад\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Продовження зі збереженого місця"
   },

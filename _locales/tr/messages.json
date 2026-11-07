@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Buradan itibaren sesli oku"
   },
+  "options_word_replacements_heading": {
+    "message": "Kelime değiştirme"
+  },
+  "options_word_replacements_help": {
+    "message": "Satır başına bir kural: yazılan = okunan. Sağ taraf boşsa kelime atlanır. Büyük/küçük harf fark etmeksizin tam kelimeler eşleşir. Düzenli ifadeler için /regex/ = yerine ($$1 gruplar için). Sayfanın kendisi değişmez."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Yok sayılan satırlar (geçersiz veya yinelenen):"
+  },
+  "options_word_replacements_example": {
+    "message": "vb. = ve benzeri\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Kaldığınız yerden devam ediliyor"
   },

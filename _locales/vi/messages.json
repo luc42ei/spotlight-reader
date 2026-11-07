@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "Đọc to từ đây"
   },
+  "options_word_replacements_heading": {
+    "message": "Thay thế từ"
+  },
+  "options_word_replacements_help": {
+    "message": "Mỗi dòng một quy tắc: viết = đọc. Để trống bên phải để bỏ qua từ. Khớp cả từ, không phân biệt hoa thường. /regex/ = thay thế cho biểu thức chính quy ($$1 cho nhóm). Bản thân trang không bị thay đổi."
+  },
+  "options_word_replacements_invalid": {
+    "message": "Dòng bị bỏ qua (không hợp lệ hoặc trùng lặp):"
+  },
+  "options_word_replacements_example": {
+    "message": "v.v. = vân vân\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "Tiếp tục từ chỗ bạn đã dừng"
   },

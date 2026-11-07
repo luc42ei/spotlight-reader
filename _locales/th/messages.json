@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "อ่านออกเสียงจากตรงนี้"
   },
+  "options_word_replacements_heading": {
+    "message": "การแทนที่คำ"
+  },
+  "options_word_replacements_help": {
+    "message": "หนึ่งกฎต่อบรรทัด: ที่เขียน = ที่อ่าน เว้นด้านขวาว่างเพื่อข้ามคำนั้น จับคู่ทั้งคำโดยไม่สนตัวพิมพ์ใหญ่เล็ก ใช้ /regex/ = ข้อความแทน สำหรับนิพจน์ปกติ ($$1 สำหรับกลุ่ม) หน้าเว็บจะไม่ถูกเปลี่ยนแปลง"
+  },
+  "options_word_replacements_invalid": {
+    "message": "บรรทัดที่ถูกข้าม (ไม่ถูกต้องหรือซ้ำ):"
+  },
+  "options_word_replacements_example": {
+    "message": "ฯลฯ = และอื่น ๆ\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "อ่านต่อจากตำแหน่งที่บันทึกไว้"
   },

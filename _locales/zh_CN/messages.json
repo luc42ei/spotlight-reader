@@ -209,6 +209,18 @@
   "context_read_from_here": {
     "message": "从这里开始朗读"
   },
+  "options_word_replacements_heading": {
+    "message": "词语替换"
+  },
+  "options_word_replacements_help": {
+    "message": "每行一条规则：书写 = 朗读。右侧留空则跳过该词。匹配完整单词，不区分大小写。正则表达式写作 /regex/ = 替换内容（$$1 表示分组）。页面本身不会改变。"
+  },
+  "options_word_replacements_invalid": {
+    "message": "已忽略的行（无效或重复）："
+  },
+  "options_word_replacements_example": {
+    "message": "AI = 人工智能\nNginx = Engine-X\n/\\[\\d+\\]/ ="
+  },
   "resume_toast": {
     "message": "从上次的位置继续"
   },

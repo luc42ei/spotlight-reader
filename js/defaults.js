@@ -117,6 +117,74 @@ async function clearReadPosition(url) {
 
 
 /**
+ * Word replacements (ported from upstream read-aloud, MIT): one rule per line,
+ * "written = spoken". An empty right side removes the word. "/regex/ = text"
+ * is a JS regex (global, case-sensitive, $1 for groups). Literal rules match
+ * whole words case-insensitively and run first, longest first, without
+ * cascading; regex rules then run in listed order. Applied only to the text
+ * sent to the engine (speech.js spokenChunk), so highlighting stays aligned.
+ */
+function parseWordReplacements(text) {
+  const rules = [], errors = [], seen = Object.create(null)
+  String(text || "").split(/\r?\n/).forEach((line, index) => {
+    if (!line.trim()) return
+    const lineNumber = index + 1
+    // "/pattern/flags =": the pattern may itself contain "=" and escaped "/"
+    const regexPrefix = /^\s*\/((?:\\.|\[(?:\\.|[^\]\\])*\]|[^/\\])*)\/([a-z]*)\s*=/.exec(line)
+    const separator = regexPrefix ? regexPrefix[0].length - 1 : line.indexOf("=")
+    if (separator < 0) return errors.push({line: lineNumber, code: "missing_separator"})
+    const isRegex = !!regexPrefix
+    const from = isRegex ? regexPrefix[1] : line.slice(0, separator).trim()
+    const to = line.slice(separator + 1).trim()
+    if (!from) return errors.push({line: lineNumber, code: "missing_word"})
+    let pattern
+    if (isRegex) {
+      const flags = "g" + regexPrefix[2].replace(/[gu]/g, "")
+      try { pattern = new RegExp(from, flags + "u") }
+      catch (err) {
+        try { pattern = new RegExp(from, flags) }
+        catch (err) { return errors.push({line: lineNumber, code: "invalid_regex"}) }
+      }
+    }
+    const key = isRegex ? "regex:" + from : "literal:" + from.toLowerCase()
+    if (key in seen) return errors.push({line: lineNumber, code: "duplicate"})
+    seen[key] = lineNumber
+    rules.push(pattern ? {from, to, pattern} : {from, to})
+  })
+  return {rules, errors}
+}
+
+function createWordReplacer(rules) {
+  const regexRules = rules.filter(rule => rule.pattern)
+  const literalRules = rules.filter(rule => !rule.pattern)
+  let replaceLiterals = text => text
+  if (literalRules.length) {
+    // Any whitespace in a rule matches any whitespace run (pages write
+    // "z.&nbsp;B." or a narrow no-break space).
+    const keyOf = from => from.toLowerCase().replace(/\s+/g, " ")
+    const lookup = Object.create(null)
+    literalRules.forEach(rule => lookup[keyOf(rule.from)] = rule.to)
+    const sources = literalRules.map(rule => rule.from)
+      .sort((a, b) => b.length - a.length)
+      .map(from => from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+"))
+    // Whole words — but CJK, Thai and Hangul text has no spaces between words
+    // (or attaches particles), so those scripts don't count as word neighbours.
+    const W = "(?:(?![\\p{sc=Han}\\p{sc=Hiragana}\\p{sc=Katakana}\\p{sc=Hangul}\\p{sc=Thai}])[\\p{L}\\p{N}_])"
+    const pattern = new RegExp("(?<!" + W + ")(?:" + sources.join("|") + ")(?!" + W + ")", "giu")
+    replaceLiterals = text => text.replace(pattern, match => {
+      const key = keyOf(match)
+      return key in lookup ? lookup[key] : match
+    })
+  }
+  return text => {
+    text = replaceLiterals(text)
+    for (const rule of regexRules) text = text.replace(rule.pattern, rule.to)
+    return text
+  }
+}
+
+
+/**
  * HELPERS
  */
 function lazy(get) {
@@ -155,7 +223,7 @@ const settingsChange$ = rxjs.fromEventPattern(
 
 function getSettings(names) {
   return new Promise(function(fulfill) {
-    brapi.storage.local.get(names || ["voiceName", "rate", "showHighlighting", "languages", "highlightFontSize", "highlightWindowSize", "useEmbeddedPlayer", "fixBtSilenceGap", "darkMode", "emphasizeItalics", "supertonicSteps", "supertonicParallel"], fulfill);
+    brapi.storage.local.get(names || ["voiceName", "rate", "showHighlighting", "languages", "highlightFontSize", "highlightWindowSize", "useEmbeddedPlayer", "fixBtSilenceGap", "darkMode", "emphasizeItalics", "supertonicSteps", "supertonicParallel", "wordReplacements"], fulfill);
   });
 }
 
