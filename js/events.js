@@ -273,7 +273,8 @@ function markResumePosition(text, labels) {
     if (old) old.remove()
     const host = document.createElement("div")
     host.id = "ra-resume-toast"
-    host.style.cssText = "position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:2147483647;"
+    // bottom 76px: clears the in-page control bar (js/control-bar.js, 16px + 48px)
+    host.style.cssText = "position:fixed;left:50%;bottom:76px;transform:translateX(-50%);z-index:2147483647;"
     const root = host.attachShadow({mode: "closed"})
     root.innerHTML = '<style>div{font:14px/1.4 system-ui,sans-serif;background:#323232;color:#fff;padding:10px 14px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.3);display:flex;gap:14px;align-items:center}'
       + 'button{font:inherit;font-weight:600;background:none;border:0;color:#8ab4f8;cursor:pointer;padding:0}</style><div><span></span><button type="button"></button></div>'
