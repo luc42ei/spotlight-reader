@@ -12,32 +12,38 @@ release / `updates.json` step anymore (that was the old unlisted flow — see
    numbers are unique per add-on — pick a higher one each time. (A version
    rejected at validation was never created, so its number can be reused; an
    accepted/in-review version's number cannot.)
-3. `bash tools/build.sh` → `../spotlight-reader.zip`
-4. `bash tools/source-package.sh` → `../spotlight-reader-source.zip`
-5. AMO → the add-on (`read-aloud-fork-le`) → **Upload New Version** → channel
-   **On this site (listed)** → upload `../spotlight-reader.zip`.
-6. When asked *"Do you use minified, concatenated or machine-generated code?"* →
-   **Yes** → upload `../spotlight-reader-source.zip`.
-7. Fill the two text fields on the "Version beschreiben" page:
-   - **Versionshinweise** (public changelog) — see template below.
-   - **Anmerkungen für Kontrolleure** — paste the reviewer-notes block from
-     `tools/LISTING.md` §2 (build steps + third-party provenance). Required every
-     version because of the bundled minified libs + ONNX WASM.
+3. `bash tools/amo-submit.sh --dry-run` (optional) — builds both zips and runs
+   AMO validation only; no version is created.
+4. `bash tools/amo-submit.sh "<release notes>"` — checks keys, clean working tree
+   and matching versions, builds `../spotlight-reader.zip` and
+   `../spotlight-reader-source.zip`, and uploads a **listed** version (Firefox +
+   Android) with the source zip, the en-US release notes (template below) and
+   the reviewer notes from `tools/LISTING.md` §2. Keys live in `amo.env` in the
+   repo root (`JWT_ISSUER`, `JWT_KEY`), never committed. If it fails, use the
+   manual upload below.
+5. Wait for human review. On approval AMO signs and publishes; existing users
+   auto-update from AMO.
+6. Tag git for history and push: `git tag v<version> && git push origin master --tags`.
 
-     Don't paste the block into the chat — copying it back out of the transcript
-     is awkward. Instead **print the command** as a copyable line so the user can
-     run it in their own terminal and select the output there:
-     ```
-     ! cat tools/LISTING.md
-     ```
-     The `!` prefix runs it in this session. Plain `cat tools/LISTING.md` works
-     too; for §2 alone:
-     ```
-     ! awk '/^## 2\./{flag=1} /^## 3\./{flag=0} flag' tools/LISTING.md
-     ```
-8. Submit → wait for human review. On approval AMO signs and publishes; existing
-   users auto-update from AMO.
-9. Tag git for history and push: `git tag v<version> && git push origin master --tags`.
+## Manual upload (fallback)
+
+If `tools/amo-submit.sh` fails before a version exists. If it already created
+the version (check the versions page in the Developer Hub), edit that version
+instead and add only the missing source zip / notes (steps 3–4).
+
+1. `bash tools/build.sh` and `bash tools/source-package.sh`.
+2. AMO → the add-on (`read-aloud-fork-le`) → **Upload New Version** → channel
+   **On this site (listed)** → upload `../spotlight-reader.zip`.
+3. *"Do you use minified, concatenated or machine-generated code?"* → **Yes** →
+   upload `../spotlight-reader-source.zip`.
+4. **Versionshinweise** — release notes; **Anmerkungen für Kontrolleure** — the
+   reviewer-notes block from `tools/LISTING.md` §2 (required every version
+   because of the bundled minified libs + ONNX WASM). Don't paste the block into
+   the chat; give the user a copyable line to run in their own terminal:
+   ```
+   ! awk '/^## 2\./{flag=1} /^## 3\./{flag=0} flag' tools/LISTING.md
+   ```
+5. Submit, then continue with step 5 above.
 
 ## Version notes template (public — "Versionshinweise")
 

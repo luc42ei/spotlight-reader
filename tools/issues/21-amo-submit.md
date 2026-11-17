@@ -1,7 +1,7 @@
 # Issue #21 – Release: AMO-Upload per web-ext sign automatisieren (release.md Schritte 5–7)
 
 **Issue:** luc42ei/spotlight-reader#21 · **Upstream:** – · **Erstellt:** 2026-11-18
-**Status:** Go · **Branch:** `feat/21-amo-submit`
+**Status:** umgesetzt · **Branch:** `feat/21-amo-submit`
 **Umsetzung mit:** Opus – mehrere ungeprüfte AMO-API-Annahmen; weicht der Probelauf ab, muss das Skript in der Umsetzung angepasst werden, und Schlüssel-Handling verlangt Sorgfalt
 
 # Teil A: Spec (Was/Warum)
@@ -128,13 +128,13 @@ Keine Add-on-Oberfläche betroffen; nur Entwickler-Skript.
 
 ## 10. Definition of Done
 
-- [ ] `bash tools/amo-submit.sh --dry-run` → Auth ok, „3.4.0 vergeben“ erkannt, AMO-Validierung `valid` mit 0 errors (oder einziger Fehler „Version existiert“)
-- [ ] 0 Schlüssel-Treffer in der Probelauf-Ausgabe
-- [ ] Echter Modus bricht ohne Release-Notes, bei schmutzigem Arbeitsverzeichnis und bei abweichender Version ab (lokal geprüft, ohne Upload)
-- [ ] `tools/release.md` und `implement-issue` Phase 5b angepasst
+- [x] `bash tools/amo-submit.sh --dry-run` → Auth ok, „3.4.0 vergeben“ erkannt, AMO-Validierung `valid` mit 0 errors (oder einziger Fehler „Version existiert“)
+- [x] 0 Schlüssel-Treffer in der Probelauf-Ausgabe
+- [x] Echter Modus bricht ohne Release-Notes, bei schmutzigem Arbeitsverzeichnis und bei abweichender Version ab (lokal geprüft, ohne Upload)
+- [x] `tools/release.md` und `implement-issue` Phase 5b angepasst
 - [ ] Beim ersten echten Release (Offener Punkt 1): AMO-Versionsseite zeigt Firefox **und** Android, Lizenz, Source, Notizen
-- [ ] XPI-Inhalt unverändert (`unzip -Z1` vorher/nachher gleich) → Desktop/Android unberührt
-- [ ] Review ohne offene Blocker/High
+- [x] XPI-Inhalt unverändert (`unzip -Z1` vorher/nachher gleich) → Desktop/Android unberührt
+- [x] Review ohne offene Blocker/High
 
 # Teil B: Plan (Wie)
 
@@ -174,13 +174,13 @@ QUELLE: web-ext `JwtApiAuth.signJWT` – HS256, `iss` = API-Key, `iat`, `exp` (+
 
 ### Schritt 0: Baseline messen
 
-- [ ] erledigt
+- [x] erledigt
 - **Umsetzen:** Handgriffe aus `release.md:17-37` zählen (8, §4); `unzip -Z1 ../spotlight-reader.zip | sort > <scratchpad>/zip-before.txt` nach `bash tools/build.sh`.
 - **Prüfen:** Werte in §4, Datei existiert.
 
 ### Schritt 1: `tools/amo-submit.sh` – Grundgerüst, Vorbedingungen, Schlüssel
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** CREATE · **Datei:** `tools/amo-submit.sh`
 - **Umsetzen:** Shebang/`set -euo pipefail`, Usage-Kommentar, `cd "$(dirname "$0")/.."`, Argumente (`--dry-run` | Notes), Prüfungen aus §3 Punkt 2, Funktion `load_keys` (liest nur `JWT_ISSUER=`/`JWT_KEY=` per `sed -n`, exportiert `WEB_EXT_API_KEY`/`WEB_EXT_API_SECRET`), Version per `node -p "require('./manifest.json').version"`.
 - **Muster:** `tools/build.sh:1-4`
@@ -189,7 +189,7 @@ QUELLE: web-ext `JwtApiAuth.signJWT` – HS256, `iss` = API-Key, `iat`, `exp` (+
 
 ### Schritt 2: Kontrolleur-Notiz und Metadaten-JSON
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `tools/amo-submit.sh`
 - **Umsetzen:** Funktion `approval_notes` (awk §2 ab `**Build instructions**`, endet vor `---`; Leerzeilen am Ende weg); `node -e` schreibt `meta.json` aus `process.argv`/stdin (UTF-8, `JSON.stringify`).
 - **Falle:** Notes nicht in Shell-String interpolieren (Anführungszeichen) → über argv/stdin an `node`.
@@ -197,7 +197,7 @@ QUELLE: web-ext `JwtApiAuth.signJWT` – HS256, `iss` = API-Key, `iat`, `exp` (+
 
 ### Schritt 3: JWT, Auth-/Versionsprüfung
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `tools/amo-submit.sh`
 - **Umsetzen:** Funktion `amo_auth_header` → schreibt `Authorization: JWT <token>` in `$TMP/auth.hdr` (`chmod 600`), Token per `node -e` aus `process.env`; `curl -sS -o /dev/null -w '%{http_code}' -H @"$TMP/auth.hdr" …/versions/v$VERSION/` → 404 weiter, 200 → im echten Modus Abbruch mit Hinweis „ggf. vorheriger Teil-Upload → Developer Hub prüfen, Source/Notiz im Webinterface nachtragen“, im Probelauf Warnung; 401/403 Abbruch „Schlüssel prüfen (amo.env)“, sonst Abbruch mit Code.
 - **Falle:** JWT läuft nach 60 s ab → vor jedem API-Aufruf neu erzeugen; `jti` zufällig (`crypto.randomUUID()`).
@@ -205,7 +205,7 @@ QUELLE: web-ext `JwtApiAuth.signJWT` – HS256, `iss` = API-Key, `iat`, `exp` (+
 
 ### Schritt 4: Probelauf `--dry-run`
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `tools/amo-submit.sh`
 - **Umsetzen:** Versionsprüfung im Probelauf nur Warnung; Upload `curl -sS -H @auth.hdr -F "upload=@../spotlight-reader.zip" -F channel=listed https://addons.mozilla.org/api/v5/addons/upload/`; `uuid` per `node -p`; Polling bis `processed` (2 s, max. 150 Versuche, Header jeweils neu); Ausgabe `valid`, `errors`, `warnings`, `notices`; Exit ≠ 0 bei `valid: false` mit Fehlermeldungen (`validation.messages[].message` der Typ-`error`-Einträge).
 - **Falle:** Antworten nur über `node` parsen (kein `jq` installiert? → `command -v jq` nicht voraussetzen).
@@ -213,7 +213,7 @@ QUELLE: web-ext `JwtApiAuth.signJWT` – HS256, `iss` = API-Key, `iat`, `exp` (+
 
 ### Schritt 5: Echter Modus per web-ext
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `tools/amo-submit.sh`
 - **Umsetzen:** `mktemp -d` + `trap 'rm -rf "$TMP"' EXIT` (gilt für alle Modi, früh anlegen); `unzip -q ../spotlight-reader.zip -d "$TMP/src"`; `meta.json`; `npx --yes web-ext@10.8.0 sign …` wie §3; bei Fehler Hinweis auf Fallback; bei Erfolg: „Eingereicht: Version X, Review läuft bei AMO; Tag erst nach Freigabe“ + Edit-URL (`https://addons.mozilla.org/developers/addon/read-aloud-fork-le/versions`).
 - **Falle:** keinen `--verbose`; `--api-key`/`--api-secret` **nicht** als Argumente.
@@ -221,14 +221,14 @@ QUELLE: web-ext `JwtApiAuth.signJWT` – HS256, `iss` = API-Key, `iat`, `exp` (+
 
 ### Schritt 6: Doku – `tools/release.md`
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `tools/release.md` · **Zeilen:** 17–37
 - **Umsetzen:** Schritte 5–7 → „5. `bash tools/amo-submit.sh "<release notes>"` (builds both zips, checks version/keys, uploads listed version with source zip, en-US release notes and reviewer notes from LISTING.md §2; `--dry-run` = AMO validation only). Keys in `amo.env` (`JWT_ISSUER`, `JWT_KEY`), never committed.“ Fallback-Abschnitt „Manual upload (fallback)“ mit dem bisherigen Webinterface-Text (gekürzt, awk-Zeile bleibt). Schritte 3/4 entfallen als eigene Schritte (Skript baut beide Zips; Hinweis im neuen Schritt); Nummerierung anpassen.
 - **Prüfen:** Datei lesen, Nummerierung fortlaufend, awk-Zeile im Fallback vorhanden.
 
 ### Schritt 7: Doku – `implement-issue` Phase 5b
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `.claude/skills/implement-issue/SKILL.md` · **Zeilen:** 3, 89–96, 106, 116ff.
 - **Umsetzen:** Beschreibung: „Release (Bump, AMO-Upload per Skript)“. 5b Schritt 2+3 → „`bash tools/amo-submit.sh --dry-run` (Validierung), dann `bash tools/amo-submit.sh "<notes>"` (Notes vorher im Freigabe-Dialog gezeigt)“; Fallback: bei Skriptfehler Webinterface-Anleitung wie bisher. Regel: „AMO-Upload nur nach Lucas' Release-Freigabe und nur per `tools/amo-submit.sh`; Tag nie vor AMO-Freigabe.“ Report-Zeile: „eingereicht bei AMO, wartet auf Freigabe → dann Tag“. Fehlertabelle: „amo-submit.sh scheitert → Ausgabe zeigen, Fallback Webinterface“.
 - **Falle:** `.claude/` ist (noch) nicht versioniert → Änderung landet nicht im Umsetzungs-Commit; im Bericht vermerken.
@@ -257,17 +257,38 @@ Neu: `tools/amo-submit.sh` (~120 Zeilen). Geändert: `tools/release.md` (~25 Zei
 
 ## Umsetzungsbericht
 
-Nach der Umsetzung ausfüllen. **Datum:** …
+**Datum:** 2026-11-18
 
 | Aspekt | Plan | Tatsächlich | Grund |
 | --- | --- | --- | --- |
+| Schlüssel-Weitergabe | `export WEB_EXT_API_KEY/SECRET` | unexportiert, `with_keys` nur für JWT-`node` und `npx web-ext` | Review: Secret nicht an build.sh/zip/curl/npx-Install-Skripte des ganzen Skripts |
+| Paket-Guard | – | `check_package`: Abbruch, falls Zip Dotfiles/`*.zip`/`*.xpi`/`node_modules` enthält (beide Modi) | Review: web-ext würde sie still verwerfen → Upload ≠ validiertes Zip |
+| Argumente | `--dry-run` \| Notes | Optionen `-x`/`--x` → Usage; Notes dürfen mit „- “ beginnen | Review: Bullet-Notes sonst abgelehnt, `-h` sonst echter Upload |
+| curl | ohne Limit | `--max-time 300` | Review: Hänger blockierten Polling unbegrenzt |
+| `release.md` | Schritte 5–7 → einer | Schritte 3 (Probelauf) + 4 (Submit), Fallback-Abschnitt inkl. „Version existiert schon → bearbeiten statt neu hochladen“ | Probelauf sichtbar; Review zum Teil-Upload-Fall |
+| Notizlänge | 2941 Byte | 2936 Byte | Leerzeilen am Ende abgeschnitten |
+| `implement-issue` | Phase 5b | zusätzlich Freigabe-Frage 2: Option „jetzt“ nennt Versionshinweise wörtlich | Notes gehen ohne Webinterface raus → Lucas sieht sie vorher |
 
 | KPI | Vorher | Nachher |
 | --- | --- | --- |
+| Manuelle Handgriffe Schritte 5–7 | 8 | 0 (ein Befehl) |
+| AMO-Validierung per Befehl | – | `valid=true errors=0 warnings=12` |
+| Schlüssel-Treffer in Ausgabe (4 Probeläufe) / Diff | – | 0 / 0 |
+| Versionsprüfung | – | 3.4.0 → 200 „exists“; 99.0.0 → 404 „not taken“; falsches Secret → 401 Abbruch |
+| XPI-Inhalt | 136 Dateien | identisch |
 
 | Syntax/Build/Lint | Verhalten | Silent-Failure | Review |
 | --- | --- | --- | --- |
+| `bash -n` ✓ · build ✓ · web-ext lint 0 errors | Probelauf ✓; Abbruch ohne Notes/unsauber/Versionsabweichung ✓ (vor Netz) | 2 Befunde (uuid ungeprüft, Parse-Fehler im Polling maskiert) behoben | 2 Runden, Befunde unten |
 
-Entschieden vom Agenten (Umsetzung): „keine“ oder Tabelle (Entscheidung · Verworfen · Warum · Prinzip).
+Entschieden vom Agenten (Umsetzung):
 
-Behobene Review-Befunde, nicht behobene mit Grund:
+| Entscheidung | Verworfen | Warum | Prinzip |
+| --- | --- | --- | --- |
+| Paket-Guard bricht ab statt web-ext-Ignore abzuschalten | `--ignore-files` leeren | web-ext erzwingt Default-Ignore; heutiges Paket trifft nichts davon | 4 |
+| Keys nur per `with_keys` an zwei Kommandos | globales `export` | weniger Prozesse sehen das Secret | 2 |
+
+Behobene Review-Befunde: Bullet-Notes (Arg-Parsing + `node -e … --`), `-h` als Notes, Secret-Export, `$0` nach `cd`, Paket-Guard (beide Modi, ohne SIGPIPE-Falle), `--max-time`, Fallback-Text für bereits angelegte Version.
+Nicht behoben: gitignorierte Dateien landen im Zip (Verhalten von `build.sh`, unverändert ggü. manuell); gelöschte Versionsnummern liefern 404 (im Plan bekannt, PUT meldet es); 404 bei falscher GUID (fest im Skript, PUT scheitert sichtbar); kein master-Check (Workflow submittet nach Merge auf master); amo.env mit Quotes/CRLF (Datei von uns, plain); doppeltes Notiz-Extrakt im Fallback-awk (Plan: awk-Zeile bleibt); Probelauf baut Source-Zip mit, JWT/`node` pro Poll (Effizienz, unkritisch).
+Beobachtung: 2 von 6 Probelauf-Uploads brachen mit „Connection reset“ (curl 35/56) ab, sichtbar; Wiederholung ok.
+Hinweis: `.claude/skills/implement-issue/SKILL.md` geändert, aber unversioniert (`.claude/`) → nicht im Commit.
