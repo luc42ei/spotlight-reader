@@ -2,6 +2,7 @@
 
 **Issue:** luc42ei/spotlight-reader#21 · **Upstream:** – · **Erstellt:** 2026-11-18
 **Status:** Go · **Branch:** `feat/21-amo-submit`
+**Umsetzung mit:** Opus – mehrere ungeprüfte AMO-API-Annahmen; weicht der Probelauf ab, muss das Skript in der Umsetzung angepasst werden, und Schlüssel-Handling verlangt Sorgfalt
 
 # Teil A: Spec (Was/Warum)
 
