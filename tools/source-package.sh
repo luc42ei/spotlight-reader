@@ -10,6 +10,7 @@ zip -r "$OUT" . \
   --exclude "*.git*" \
   --exclude "node_modules/*" \
   --exclude ".claude/*" \
+  --exclude "amo.env" \
   -q
 
 echo "Built source package: $OUT ($(du -sh "$OUT" | cut -f1))"

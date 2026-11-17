@@ -19,6 +19,7 @@ zip -r "$OUT" . \
   --exclude "img/options_redesigned.png" \
   --exclude "*.map" \
   --exclude ".claude/*" \
+  --exclude "amo.env" \
   -q
 
 echo "Built: $OUT ($(du -sh "$OUT" | cut -f1))"

@@ -44,3 +44,6 @@ jspm_packages
 # Python bytecode
 __pycache__/
 *.pyc
+
+# AMO API credentials (local only)
+amo.env
