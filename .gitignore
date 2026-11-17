@@ -47,3 +47,6 @@ __pycache__/
 
 # AMO API credentials (local only)
 amo.env
+
+# Claude Code skills/settings (local only; public repo)
+.claude/
