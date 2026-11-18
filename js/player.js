@@ -457,7 +457,10 @@ function playAudio(urlPromise, options, playbackState$) {
 // or audible autoplay blocked) rejects play() with NotAllowedError until the page
 // gets a user gesture — then the dialog waits for a click on "Allow", which counts
 // as one and unblocks every later play() in this tab. A failure isn't cached, so
-// the next read asks again.
+// the next read asks again. Afterwards (also on failure) it returns to the tab that
+// was visible at start, unless the player tab already was (e.g. Piper voice manager).
+// Firefox for Android gives every tab its own window, so the window query finds
+// none; fall back to the active tab of the last focused window (#22).
 var requestAudioPlaybackPermission = (function() {
   let granted = null
   return () => granted || (granted = request().catch(err => { granted = null; throw err }))
@@ -465,23 +468,29 @@ var requestAudioPlaybackPermission = (function() {
   async function request() {
     const thisTab = await brapi.tabs.getCurrent()
     const prevTab = await brapi.tabs.query({windowId: thisTab.windowId, active: true}).then(tabs => tabs[0])
-    await brapi.tabs.update(thisTab.id, {active: true})
-    const dialog = $("#dialog-backdrop, #audio-playback-permission-dialog").show()
-    const playSilence = () => new Audio(brapi.runtime.getURL("sound/silence.mp3")).play()
+    const returnTab = thisTab.active ? null : prevTab || await getActiveTab()
+    const returnTabId = returnTab && returnTab.id != thisTab.id ? returnTab.id : null
+    const dialog = $("#dialog-backdrop, #audio-playback-permission-dialog")
     try {
-      await playSilence()
+      await brapi.tabs.update(thisTab.id, {active: true})
+      dialog.show()
+      const playSilence = () => new Audio(brapi.runtime.getURL("sound/silence.mp3")).play()
+      try {
+        await playSilence()
+      }
+      catch (err) {
+        if (!err || err.name != "NotAllowedError") throw err
+        await new Promise((fulfill, reject) => {
+          $("#audio-playback-permission-dialog .btn-primary").off("click").one("click", () => playSilence().then(fulfill, reject))
+          $("#audio-playback-permission-dialog .close").off("click").one("click", () => reject(new Error("Audio playback blocked by the browser's autoplay setting")))
+        })
+      }
+      audioUnlocked = true
     }
-    catch (err) {
-      if (!err || err.name != "NotAllowedError") { dialog.hide(); throw err }
-      await new Promise((fulfill, reject) => {
-        $("#audio-playback-permission-dialog .btn-primary").off("click").one("click", () => playSilence().then(fulfill, reject))
-        $("#audio-playback-permission-dialog .close").off("click").one("click", () => reject(new Error("Audio playback blocked by the browser's autoplay setting")))
-      })
-      .finally(() => dialog.hide())
+    finally {
+      dialog.hide()
+      if (returnTabId) await brapi.tabs.update(returnTabId, {active: true}).catch(console.warn)
     }
-    audioUnlocked = true
-    dialog.hide()
-    if (prevTab) await brapi.tabs.update(prevTab.id, {active: true})
   }
 })()
 

@@ -1,7 +1,7 @@
 # Issue #22 – Android: Artikel-Tab bleibt nach Start im Vordergrund (nicht der Player-Tab)
 
 **Issue:** luc42ei/spotlight-reader#22 · **Upstream:** – · **Erstellt:** 2026-11-18
-**Status:** Go (v3) · **Branch:** `chore/22-android-artikel-tab`
+**Status:** umgesetzt · **Branch:** `chore/22-android-artikel-tab`
 **Umsetzung mit:** Opus – Ursache erst am Gerät zu ermitteln (Diagnose-Gate Fall A/B/C), Fenix-Tab-Verhalten unbelegt
 
 # Teil A: Spec (Was/Warum)
@@ -69,12 +69,12 @@ Gerät: Pixel 7a, Android 17, Firefox 160 (wie #20). Desktop: Firefox Linux. Tes
 
 | KPI | Methode | Baseline | Ziel |
 | --- | --- | --- | --- |
-| K1 Android, In-Page-Modus: Artikel-Tab aktiv ~3 s nach Start | P1a, 5 Läufe, D1 | ? / 5 | 5 / 5 |
-| K2 Android, „Separates Fenster“: Lese-Tab (`popup.html?tab=…`) aktiv ~3 s nach Play | P1b, 5 Läufe, D1 | ? / 5 | 5 / 5 |
-| K2b Android, „Im Popup“: Popup-Sheet noch sichtbar bzw. nach Schließen Artikel-Tab aktiv | P1c, 5 Läufe, Sicht + D1 | Sheet ?/5, Artikel ?/5 | Artikel 5/5; Sheet = Baseline oder besser |
-| K3 Diagnose: Fall A/A′/B/C/X | D2 (Diagnose-Log) | ? | – (Gate) |
-| K4 Desktop, In-Page + Tastenkürzel: Artikel-Tab aktiv | P2, je 3 Läufe | ? / 6 | = Baseline |
-| K5 Autoplay-Dialog Desktop: „Erlauben“ → Wiedergabe + Rückkehr; „×“ → Fehlertext + Rückkehr | P2 Schritt 3 | Erlauben ?; × ? | Erlauben ok; × kehrt zurück |
+| K1 Android, In-Page-Modus: Artikel-Tab aktiv ~3 s nach Start | P1a, 5 Läufe, D1 | 0 / 4 | 5 / 5 |
+| K2 Android, „Separates Fenster“: Lese-Tab (`popup.html?tab=…`) aktiv ~3 s nach Play | P1b, 5 Läufe, D1 | 0 / 4 (1× manuell zurück) | 5 / 5 |
+| K2b Android, „Im Popup“: Popup-Sheet noch sichtbar bzw. nach Schließen Artikel-Tab aktiv | P1c, 5 Läufe, Sicht + D1 | Sheet 1/1, Artikel 0/1 | Artikel 5/5; Sheet = Baseline oder besser |
+| K3 Diagnose: Fall A/A′/B/C/X | D2 (Diagnose-Log) | **A** (`prevTab` immer `null`) | – (Gate) |
+| K4 Desktop, In-Page + Tastenkürzel: Artikel-Tab aktiv | P2, je 3 Läufe | entfallen | = Baseline |
+| K5 Autoplay-Dialog Desktop: „Erlauben“ → Wiedergabe + Rückkehr; „×“ → Fehlertext + Rückkehr | P2 Schritt 3 | entfallen | Erlauben ok; × kehrt zurück |
 | K6 Wiedergabe startet und läuft (erste 3 Chunks), Highlight wie gewohnt | P1/P2 | ja | ja |
 
 ## Entschieden vom Agenten
@@ -169,7 +169,7 @@ QUELLE: `js/events.js:592-593` (Fehler bei Tab-Aufruf nur warnen)
 
 ### Schritt 0: Baseline + Diagnose
 
-- [ ] erledigt
+- [x] erledigt
 - **Umsetzen:** P1a–P1c (mit Diagnose-Patch) und P2 auf `master`-Code; Werte in §4.
 - **Prüfen:** §4 Baseline-Spalte vollständig, Fall notiert. **Gate:** Fall A/A′ und D2 zeigt `getActiveTab()` = sichtbarer Tab → Schritt 1. Sonst Befund + Logauszug an Lucas, Patch verwerfen, Stopp.
 
@@ -206,7 +206,7 @@ QUELLE: `js/events.js:592-593` (Fehler bei Tab-Aufruf nur warnen)
 
 ### Schritt 1: `js/events.js` – `returnTab` an Player-Tab
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `js/events.js` · **Zeilen:** 586-595
 - **Umsetzen:** vor `tabs.create`: `const returnTab = await getActiveTab()`; `url: brapi.runtime.getURL("player.html?autoclose" + (returnTab ? "&returnTab=" + returnTab.id : ""))`. Kommentar: Firefox für Android aktiviert den Player-Tab evtl. trotz `active: false`; der Player kehrt dann zu diesem Tab zurück (#22).
 - **Muster:** `js/events.js:199`
@@ -215,7 +215,7 @@ QUELLE: `js/events.js:592-593` (Fehler bei Tab-Aufruf nur warnen)
 
 ### Schritt 2: `js/player.js` – Rücksprungziel + `finally` in `request()`
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `js/player.js` · **Zeilen:** 457-485
 - **Umsetzen:**
   - Nach `prevTab`: `const returnTabId = prevTab && prevTab.id != thisTab.id ? prevTab.id : Number(queryString.get("returnTab")) || null`; zusätzlich `null`, wenn `== thisTab.id`. (Fall A′: Reihenfolge laut §3 tauschen.)
@@ -253,17 +253,39 @@ QUELLE: `js/events.js:592-593` (Fehler bei Tab-Aufruf nur warnen)
 
 ## Umsetzungsbericht
 
-Nach der Umsetzung ausfüllen. **Datum:** …
+**Datum:** 2026-11-19
 
 | Aspekt | Plan | Tatsächlich | Grund |
 | --- | --- | --- | --- |
+| Ursache | Fall A/A′/B/C/X offen | Fall A: Fenix gibt jedem Tab eine eigene `windowId` → `tabs.query({windowId, active})` aus dem Player-Tab findet nichts, `prevTab = null`, kein Rückwechsel; `thisTab.active` beim Eintritt `false`; `getActiveTab()` im Background = sichtbarer Text-Tab (Artikel bzw. Lese-Tab) | D2-Log |
+| Diagnose auslesen | Background-Konsole per about:debugging | eigener RDP-Client (Scratchpad, Watcher + Add-on-Reload, da Event-Page gestoppt); D1 zusätzlich automatisch nach 3/8 s geloggt | `console.info` landet nicht im Logcat; spart Copy-Paste |
+| Läufe | je 5 | Baseline P1a 4, P1b 4, P1c 1; Abnahme je ≥ 1 (Lucas) | Befund eindeutig (9/9 `prevTab = null`), Lucas: reproduzierbar |
+| P2 Desktop (K4/K5) | Baseline + Abnahme | entfallen | Lucas: Desktop nie betroffen; Code-Lesung: Desktop findet `prevTab` ≠ Player → gleicher Rückwechsel wie vorher |
+| Lösung | `returnTab` vom Background per URL (`js/events.js` + `js/player.js`) | nur `js/player.js`: ist der Player-Tab beim Eintritt nicht aktiv und `prevTab` fehlt → `getActiveTab()` (`lastFocusedWindow`) zur `request()`-Zeit; ist der Player-Tab schon aktiv → kein Rückwechsel | Review: URL-Wert friert ein (Piper-Verwaltung, späterer erster `playAudio`, Wiederholung nach „×“ springen zu falschem Tab; Piper-Verwaltung auch Desktop). D2: dieselbe Abfrage liefert auf Fenix den sichtbaren Tab, Player beim Eintritt 9/9 inaktiv. Am Gerät nachgetestet (3 Modi ✓) |
+| `dialog.hide()` | im `finally` | so umgesetzt; `tabs.update(thisTab)` ebenfalls im `try` | ein Hide-/Rückkehr-Pfad auch bei Fehler beim Aktivieren |
 
 | KPI | Vorher | Nachher |
 | --- | --- | --- |
+| K1 In-Page: Artikel aktiv | 0/4 | ✓ (Zurück landet im Artikel statt Tab-Übersicht) |
+| K2 Separates Fenster: Lese-Tab aktiv | 0/4 | ✓ |
+| K2b Im Popup: Sheet / Artikel nach Schließen | 1/1 / 0/1 | ✓ / ✓ |
+| K6 Wiedergabe + Highlight | ja | ja |
 
 | Syntax/Build/Lint | Verhalten | Silent-Failure | Review |
 | --- | --- | --- | --- |
+| ✓ / ✓ / ✓ (0 Fehler, 12 vorbestehende Warnungen) | Android ✓, Desktop per Code-Lesung | 2 Befunde, durch Lösungsänderung erledigt bzw. nicht behoben (s. u.) | 2 Runden |
 
-Entschieden vom Agenten (Umsetzung): „keine“ oder Tabelle (Entscheidung · Verworfen · Warum · Prinzip).
+Entschieden vom Agenten (Umsetzung):
+
+| Entscheidung | Verworfen | Warum | Prinzip |
+| --- | --- | --- | --- |
+| Ziel-Tab in `request()` ermitteln | `?returnTab` aus Background (Plan) | kein eingefrorener Wert, eine Datei, Piper-Verwaltung nicht gestört | 3 Funktion, 4 Einfachheit |
+| Kein Rückwechsel, wenn Player-Tab schon aktiv | immer zurück | Nutzer schaut den Player-Tab an (Piper-Verwaltung); Embedded-Player wie bisher | 3 Funktion |
+
+Silent-Failure, nicht behoben: (1) `getActiveTab` ohne Reject-Pfad – bestehender Helfer, in `playText` identisch genutzt, `tabs.query` ohne praktischen Fehlerfall; (2) `Number(returnTab) || null` – mit Lösungsänderung entfallen.
+
+Nebenbefund: „In separatem Fenster anzeigen“ auf Android ohne Mehrwert ggü. „Im Popup“ → Issue #23.
 
 Behobene Review-Befunde, nicht behobene mit Grund:
+- Behoben: Piper-Verwaltung springt weg (High) · veralteter/gelöschter `returnTab` bei Wiederholung · Kommentare widersprüchlich · `getActiveTab` doppelt · Vereinfachung — alle durch Ermittlung zur `request()`-Zeit.
+- Nicht behoben: Rückwechsel nach „×“ schließt Toolbar-Popup (Fehlertext erst nach Neuöffnen) – so im Plan entschieden; Android-Sheet blieb sichtbar. Fenster nicht fokussiert – Fallback greift nur ohne `prevTab` (Fenix, ein sichtbares „Fenster“). Stop bei offenem Dialog lässt Promise hängen – bekannte Grenze (§6), vorbestehend. Fenix könnte Player-Tab künftig selbst aktivieren → kein Rückwechsel – gemessen nicht der Fall (9/9).
