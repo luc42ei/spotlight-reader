@@ -1,7 +1,7 @@
 # Issue #20 – Android: Vorlesen bei gesperrtem Bildschirm weiterlaufen lassen
 
 **Issue:** luc42ei/spotlight-reader#20 · **Upstream:** ken107/read-aloud#512 (Fix aa42a92 laut Reporter wirkungslos) · **Erstellt:** 2026-11-18
-**Status:** Go (v3) · **Branch:** `feat/20-android-lockscreen`
+**Status:** umgesetzt · **Branch:** `feat/20-android-lockscreen`
 **Umsetzung mit:** Opus – Ursache erst am Gerät zu ermitteln (Baseline kann den Plan kippen), Messdeutung Android/Doze/Timing, Gecko-Verhalten (Mediensteuerung, Hörbarkeit) unbelegt
 
 # Teil A: Spec (Was/Warum)
@@ -148,12 +148,12 @@ Auswahltext (kein Titel): Titel = Add-on-Name, kein Künstler. Keine neuen Texte
 
 ## 10. Definition of Done
 
-- [ ] K1 ≥ 15 min für GT und Supertonic bei gesperrtem Bildschirm – oder dokumentierter Messbefund + Stopp gemäß §9
-- [ ] K4 4/4 Sperrbildschirm-Aktionen
-- [ ] K6 Desktop: Medientaste steuert Vorlesen, Popup-Status stimmt; sonst Desktop unverändert (Smoke P3)
-- [ ] Vorher/Nachher-Zahlen K1–K6 im Umsetzungsbericht
-- [ ] Locales: keine neuen Texte
-- [ ] Review ohne offene Blocker/High
+- [x] K1 ≥ 15 min für GT und Supertonic bei gesperrtem Bildschirm – oder dokumentierter Messbefund + Stopp gemäß §9
+- [x] K4 4/4 Sperrbildschirm-Aktionen
+- [x] K6 Desktop: Medientaste steuert Vorlesen, Popup-Status stimmt; sonst Desktop unverändert (Smoke P3)
+- [x] Vorher/Nachher-Zahlen K1–K6 im Umsetzungsbericht
+- [x] Locales: keine neuen Texte
+- [x] Review ohne offene Blocker/High
 
 # Teil B: Plan (Wie)
 
@@ -194,7 +194,7 @@ Silence-Track-API (QUELLE: `js/defaults.js:53, 997-1004`): `getSilenceTrack().st
 
 ### Schritt 0: Baseline messen (Gerät, unveränderter Stand)
 
-- [ ] erledigt
+- [x] erledigt
 - **Umsetzen:** Protokolle P1–P3 mit `master`-Stand (oder AMO 3.4.0) durchführen, Werte in §4 „Baseline“ eintragen. Zusätzlich in der Remote-Konsole des Player-Tabs `'mediaSession' in navigator` notieren (Offener Punkt 2).
 - **Prüfen:** §4 Baseline-Spalte vollständig; Firefox-Version, Android-Version, Gerät notiert.
 
@@ -215,7 +215,7 @@ Silence-Track-API (QUELLE: `js/defaults.js:53, 997-1004`): `getSilenceTrack().st
 
 ### Schritt 1: `js/document.js` – Getter für Doc-Info
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `js/document.js` · **Zeilen:** nach 156 (`this.getResumeUrl`)
 - **Umsetzen:** `this.getInfo = () => info;` (liefert `undefined`, solange `ready` offen; bei TabSource `{url, title, lang, canSeek, detectedLang}`, bei SimpleSource `{lang}`).
 - **Muster:** `js/document.js:154-156`
@@ -224,7 +224,7 @@ Silence-Track-API (QUELLE: `js/defaults.js:53, 997-1004`): `getSilenceTrack().st
 
 ### Schritt 2: `js/player.js` – Media Session (Baustein A)
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `js/player.js` · **Zeilen:** neuer Block nach dem Leseposition-Intervall (nach 316), Aufrufe in `openDoc`/`closeDoc` (256-273)
 - **Umsetzen:**
   1. Guard: `const mediaSession = navigator.mediaSession` (fehlt → alles No-op).
@@ -241,7 +241,7 @@ Silence-Track-API (QUELLE: `js/defaults.js:53, 997-1004`): `getSilenceTrack().st
 
 ### Schritt 3: `js/player.js` – Silence-Track durchgehend (Baustein B)
 
-- [ ] erledigt
+- [x] erledigt
 - **Aktion:** UPDATE · **Datei:** `js/player.js` · **Zeilen:** in `syncMediaSession` bzw. daneben, `closeDoc` (266-273), `requestAudioPlaybackPermission` (380-408)
 - **Umsetzen:** Modul-Variable `audioUnlocked = false`. In `requestAudioPlaybackPermission` (`js/player.js:385-408`): `granted = request().then(() => { audioUnlocked = true })` vor dem bestehenden `.catch(...)` – Freigabe gilt pro Tab und bleibt (wie `granted`). Im 1-s-Takt aus Schritt 2 (Zustand dort ohnehin abgefragt): wenn `audioUnlocked` und Zustand `LOADING`/`PLAYING` → `getSilenceTrack().start()`. In `closeDoc` (im `if (activeDoc)`-Zweig): `getSilenceTrack().stop()`. Pause: nichts extra (der Auslauf in `playAudioHere` stoppt nach 15 s). Unabhängig davon, ob `navigator.mediaSession` existiert (Guard aus Schritt 2 nicht für B).
 - **Muster:** `js/defaults.js:966-1004` (`start` idempotent, bricht STOPPING ab)
@@ -250,7 +250,7 @@ Silence-Track-API (QUELLE: `js/defaults.js:53, 997-1004`): `getSilenceTrack().st
 
 ### Schritt 4: Entscheidung nach Messung
 
-- [ ] erledigt
+- [x] erledigt
 - **Umsetzen:**
   - K1 ≥ 15 für GT und Supertonic → weiter mit Schritt 5.
   - B ohne messbaren Unterschied zu „nach A“ (K1/K2 gleich, auch Supertonic) → B wieder entfernen (Prinzip 4), in Umsetzungsbericht notieren.
@@ -259,7 +259,7 @@ Silence-Track-API (QUELLE: `js/defaults.js:53, 997-1004`): `getSilenceTrack().st
 
 ### Schritt 5: Abnahme
 
-- [ ] erledigt
+- [x] erledigt
 - **Umsetzen:** P1 (GT, Supertonic), P2, P3 auf dem Endstand; §4 „Nachher“ im Umsetzungsbericht.
 - **Prüfen:** DoD §10.
 
@@ -287,17 +287,47 @@ Silence-Track-API (QUELLE: `js/defaults.js:53, 997-1004`): `getSilenceTrack().st
 
 ## Umsetzungsbericht
 
-Nach der Umsetzung ausfüllen. **Datum:** …
+**Datum:** 2026-11-18 · Gerät: Pixel 7a, Android 17, Firefox 160 · Desktop: Firefox 153 ESR (Linux)
+
+**Baseline-Befund (Ursache, gemessen):** Firefox Android legt pro Chunk eine eigene Android-MediaSession an und beendet sie am Chunk-Ende. Nach Sperre wird der Neustart des Medien-Foreground-Service abgelehnt (`Background started FGS: Disallowed … startForeground() not allowed`) → keine Benachrichtigung, Firefox gedrosselt, Ton stoppt nach ~35 s; weiter erst nach Einschalten. Der stumme Silence-Track hielt die Session nicht (Gecko zählt unhörbare Medien nicht). → Hypothese 1 bestätigt; kein Netzfehler, kein Prozess-Kill.
 
 | Aspekt | Plan | Tatsächlich | Grund |
 | --- | --- | --- | --- |
+| Reihenfolge Messung | Baseline P1–P3 komplett, dann A, dann B | Baseline GT P1+P2, dann A (GT, Supertonic), dann A+B (Supertonic) | Baseline zeigte Ursache eindeutig in einem Lauf; Lucas wählte nach Befund „Experiment“; Supertonic-Baseline ohne Fix entfiel (gleicher Mechanismus, A allein schon K1 < 15) |
+| Rolle Baustein B | Keepalive für Medium-Kennung | hält Android-CPU/Audio-Stream wach, während Supertonic den nächsten Chunk synthetisiert | ohne B (nur A) Supertonic-Stillstand nach 12 min: Silence-Track lief 15 s nach Chunk-Ende aus, nächste Synthese hing bis Bildschirm an |
+| `audioUnlocked` | im `.then` nach `request()` | direkt nach erfolgreichem `playSilence()` in `request()` | Review: Fehler beim Tab-Rückwechsel hätte Keepalive für die Sitzung abgeschaltet |
+| B bei Pause | nichts extra (Auslauf in `playAudioHere`) | Sync ruft bei PAUSED `getSilenceTrack().stop()` | Review: Pause während Laden lief sonst endlos Stille (kein `finalize`) |
+| `play`-Handler | `resume()` | nur wenn Doc PAUSED | Review: `Doc.play()` während Laden startet zweites `readCurrent` |
+| Leerlauf-Sync | jede Sekunde `none`/`null` setzen | nur bei Änderung | Review: unnötige Writes |
+| Artwork `sizes` | 128x128 | 640x640 | tatsächliche Größe von `img/icon.png` |
+| Firefox-Prozessnamen | `:tabN` | `:sandboxed_tab_…` | Firefox 160 |
+| Testbuild ohne Kabel (Offener Punkt 4) | web-ext run | web-ext run, Prozess nach Installation hart beenden | sonst stoppt web-ext beim Kabel-Abziehen Firefox |
 
-| KPI | Vorher | Nachher |
+| KPI | Vorher (AMO 3.4.0) | Nachher (A+B) |
 | --- | --- | --- |
+| K1 GT (min gesperrt) | ~0,6 (Ton bis 35 s nach Sperre) | ≥ 16 (nur A gemessen; B ändert GT nicht, s. u.) |
+| K1 Supertonic | – (nicht gemessen) | ≥ 23 (nur A: 12) |
+| K2 Benachrichtigung / FGS | nein, FGS-Neustart „Disallowed“ je Chunk | ja, eine Session durchgehend, 0× Disallowed |
+| K3 Art des Stopps | Drosselung (kein FGS), kein Netzfehler/Kill | kein Stopp |
+| K4 Sperrbildschirm Play/Pause/Vor/Zurück | 0/4 (keine Karte) | 4/4, Popup-Status stimmt |
+| K4b Play nach 3 min Pause | – | ja |
+| K5 Fortsetzen nach Stopp | Wiedergabe lief nach Entsperren selbst an gleicher Stelle weiter | n/a (kein Stopp) |
+| K6 Desktop Medientasten (MPRIS) | – | Pause/Play/Next/Previous wirken, Popup-Status stimmt, Metadaten Titel/Website/Add-on |
 
 | Syntax/Build/Lint | Verhalten | Silent-Failure | Review |
 | --- | --- | --- | --- |
+| ✓ / ✓ / 0 Fehler (12 Warnungen = master) | Android P1 (GT, Supertonic), P2, Endstand-Kurzcheck; Desktop P3 (1)–(3) | keine neuen Befunde mit Handlungsbedarf | 2 Runden, keine Blocker/High offen |
 
-Entschieden vom Agenten (Umsetzung): „keine“ oder Tabelle (Entscheidung · Verworfen · Warum · Prinzip).
+Nicht gemessen: GT-Dauerlauf mit A+B (GT zum Testzeitpunkt „temporarily unavailable“; B wirkt nur in Ladepausen und ändert an der GT-Wiedergabe nichts); P3 (4) Autoplay-Dialog erschien bei „Audio und Video blockieren“ nicht (Extension-Seite nicht blockiert) → Schranke nicht auslösbar, Logik unverändert wie geplant.
 
-Behobene Review-Befunde, nicht behobene mit Grund:
+Entschieden vom Agenten (Umsetzung):
+
+| Entscheidung | Verworfen | Warum | Prinzip |
+| --- | --- | --- | --- |
+| Lock-Screen-`play` nur bei PAUSED | immer `resume()` | doppeltes Lesen bei Play während Laden (z. B. BT-Headset) | 3 Funktion |
+| Bekannte Grenze: Pause vom Sperrbildschirm, während ein Chunk noch lädt, kann die Medienkarte entfernen (Firefox setzt Session auf NONE); Fortsetzen dann über Popup | Audio-Element über die Ladephase halten | Umbau der Chunk-Wiedergabe, selten (einmal beobachtet, nicht reproduzierbar) | 4 Einfachheit |
+
+Behobene Review-Befunde: Stille läuft bei Pause während Laden endlos; `play` während Laden → zweites `readCurrent`; `audioUnlocked` hing am Tab-Rückwechsel; Leerlauf-Writes.
+Nicht behoben (Grund): Pause ohne `activeSpeech` wirkungslos (bestehendes Doc-Verhalten, Popup gleich); Silence-State-Machine erkennt abgelehntes/extern pausiertes `play()` nicht (bestehender Code `defaults.js`, durch `audioUnlocked` abgedeckt); Stop am Sperrbildschirm bricht laufenden Reload-Task im Background nicht ab (selten); 15 s Stille-Auslauf nach Stop (unhörbar, planmäßig); Polling statt Zustands-Events (Plan-Entscheidung); `getInfo` liefert Live-Objekt (planmäßig); PhoneTts ohne Keepalive (bekannte Grenze §6).
+
+Offene Punkte (außerhalb #20, von Lucas notiert): Player-Tab rückt beim Start am Handy in den Vordergrund, man muss zurückwechseln; lange Chunk-Lücken bei Supertonic am Handy (bis ~40 s, CPU; #17-Rest); Supertonic-Aussprache teils schlecht.

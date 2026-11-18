@@ -154,6 +154,8 @@ function Doc(source, onEnd) {
   // url of a page whose reading position can be saved and resumed
   // (not while reading a selection: currentIndex is negative then)
   this.getResumeUrl = () => (info && info.canSeek && currentIndex >= 0) ? info.url : null;
+  // source info ({url, title, ...}), undefined until the source is ready; read-only
+  this.getInfo = () => info;
 
   //method close
   function close() {

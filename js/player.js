@@ -221,12 +221,12 @@ function stop() {
 }
 
 function pause() {
-  if (activeDoc) return activeDoc.pause();
+  if (activeDoc) return activeDoc.pause().finally(() => { syncMediaSession() });
   else return Promise.resolve();
 }
 
 function resume() {
-  if (activeDoc) return activeDoc.play()
+  if (activeDoc) return activeDoc.play().finally(() => { syncMediaSession() })
   else return Promise.resolve()
 }
 
@@ -261,6 +261,7 @@ function openDoc(source, onEnd) {
   })
   idleSubject.next(false)
   lastUrlPromise = Promise.resolve(source.getUri())
+  syncMediaSession()
 }
 
 function closeDoc() {
@@ -270,7 +271,9 @@ function closeDoc() {
     idleSubject.next(true)
     sendHighlightToContent("clearHighlight", [])
     lastHighlightedIndex = null
+    getSilenceTrack().stop()
   }
+  syncMediaSession()
 }
 
 var lastHighlightedIndex = null;
@@ -314,6 +317,79 @@ setInterval(async function() {
     await saveReadPosition(url, text);
   } catch(e) {}
 }, 2000);
+
+// Media Session: title/site on the lock screen and OS media controls; media
+// keys and lock-screen buttons go through the same functions as the popup.
+// Without it Firefox for Android ends its media session at every chunk end and
+// may not restart it (foreground service) while the screen is locked.
+const mediaSession = navigator.mediaSession
+var mediaSessionKey = null;
+
+if (mediaSession) {
+  // play only from pause: Doc.play() while a chunk is loading would start a second read
+  const playIfPaused = async () => { if (activeDoc && await activeDoc.getState() == "PAUSED") return resume() }
+  const actions = {play: playIfPaused, pause: pause, stop: stop, nexttrack: forward, previoustrack: rewind}
+  for (const [action, fn] of Object.entries(actions)) {
+    try {
+      mediaSession.setActionHandler(action, () => { Promise.resolve().then(fn).catch(console.error) })
+    } catch(e) {
+      console.warn("mediaSession action not supported:", action, e)
+    }
+  }
+}
+
+// Set once this tab may play audio (autoplay permission granted). Before that,
+// starting the silence track would fail and leave it stuck in PLAYING.
+var audioUnlocked = false;
+
+// Keeps media session and silence track in sync with the playback state. The
+// silence track runs while reading (also while the next chunk is loading) so
+// Android keeps the CPU awake with the screen locked; on pause it runs out
+// after 15 s (see playAudioHere).
+async function syncMediaSession() {
+  try {
+    if (!activeDoc) {
+      if (mediaSession && mediaSession.playbackState != "none") {
+        mediaSession.playbackState = "none";
+        mediaSession.metadata = null;
+      }
+      mediaSessionKey = null;
+      return;
+    }
+    var doc = activeDoc;
+    var state = await doc.getState();
+    if (doc != activeDoc) return;
+    if (state == "PAUSED") getSilenceTrack().stop();
+    else if (audioUnlocked) getSilenceTrack().start();
+    if (!mediaSession) return;
+    mediaSession.playbackState = state == "PAUSED" ? "paused" : "playing";
+    var info = doc.getInfo();
+    if (!info) return;
+    var key = info.url + "\n" + info.title;
+    if (key == mediaSessionKey) return;
+    mediaSessionKey = key;
+    var extName = brapi.i18n.getMessage("extension_name");
+    mediaSession.metadata = new MediaMetadata({
+      title: info.title || extName,
+      artist: hostnameOf(info.url),
+      album: extName,
+      artwork: [{src: brapi.runtime.getURL("img/icon.png"), sizes: "640x640", type: "image/png"}],
+    });
+  } catch(e) {
+    console.error(e);
+  }
+}
+
+function hostnameOf(url) {
+  try {
+    var u = new URL(url);
+    return /^https?:$/.test(u.protocol) ? u.hostname : "";
+  } catch(e) {
+    return "";
+  }
+}
+
+setInterval(syncMediaSession, 1000);
 
 // Tab that received the last highlightBlock. clearHighlight goes there, not to
 // sourceUri: when a new tab starts, sourceUri already points at the new tab
@@ -403,6 +479,7 @@ var requestAudioPlaybackPermission = (function() {
       })
       .finally(() => dialog.hide())
     }
+    audioUnlocked = true
     dialog.hide()
     if (prevTab) await brapi.tabs.update(prevTab.id, {active: true})
   }
