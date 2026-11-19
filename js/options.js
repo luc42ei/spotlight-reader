@@ -239,6 +239,8 @@
   //showHighlighting
   domReadyPromise
     .then(() => {
+      //Firefox for Android has no windows API, hide the separate-window mode there
+      if (!brapi.windows) $('#show-highlighting button[data-value="2"]').hide()
       $("#show-highlighting").on("click", "button", function() {
         updateSettings({showHighlighting: $(this).data("value")})
       })
@@ -246,7 +248,8 @@
 
   rxjs.combineLatest([observeSetting("showHighlighting"), domReadyPromise])
     .subscribe(([showHighlighting]) => {
-      const val = String(showHighlighting != null ? showHighlighting : defaults.showHighlighting)
+      let val = String(showHighlighting != null ? showHighlighting : defaults.showHighlighting)
+      if (val == "2" && !brapi.windows) val = "1"
       $("#show-highlighting button").removeClass("active").filter(`[data-value="${val}"]`).addClass("active")
     })
 

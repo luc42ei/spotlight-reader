@@ -31,7 +31,8 @@ $(function() {
 
 
 getSettings(["showHighlighting", "readAloudTab"]).then(async settings => {
-  if (settings.showHighlighting == 2 && queryString.isPopup) {
+  //Firefox for Android has no windows API, there mode 2 behaves like mode 1
+  if (settings.showHighlighting == 2 && queryString.isPopup && brapi.windows) {
     await popout(settings.readAloudTab)
   } else {
     await init()

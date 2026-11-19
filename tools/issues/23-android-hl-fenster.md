@@ -1,7 +1,7 @@
 # Issue #23 – Android: Hervorhebungs-Modus „In separatem Fenster anzeigen“ auf dem Handy ausblenden
 
 **Issue:** luc42ei/spotlight-reader#23 · **Upstream:** – · **Erstellt:** 2026-11-19
-**Status:** Go · **Branch:** `chore/23-android-hl-fenster`
+**Status:** umgesetzt · **Branch:** `chore/23-android-hl-fenster`
 **Umsetzung mit:** Sonnet – 2 Stellen eindeutig festgelegt, Gerätetest per Protokoll mit klarem Gate (K0)
 
 # Teil A: Spec (Was/Warum)
@@ -220,17 +220,28 @@ QUELLE: `js/options.js:264` (bedingte Sichtbarkeit per jQuery `toggle`)
 
 ## Umsetzungsbericht
 
-Nach der Umsetzung ausfüllen. **Datum:** …
+**Datum:** 2026-11-19
 
 | Aspekt | Plan | Tatsächlich | Grund |
 | --- | --- | --- | --- |
+| K0 Messkontext | Optionsseite + Popup-Tab | Background-Kontext (RDP) | RDP-Client hing danach; gleiche Extension-API-Oberfläche |
+| Desktop P3/K4/K5 | echtes Desktop-Firefox | Optionsseite in Playwright-Firefox mit API-Stub (mit/ohne `windows`); Popup-Fenster nicht real gemessen | Fenster-Pfad nur um `&& brapi.windows` ergänzt (auf Desktop wahr) |
+| K3 Button-Zahl | zählen | Lucas meldete nur „Im Popup“ aktiv; Zahl 3 nicht ausdrücklich genannt (Stub: 3) | – |
 
 | KPI | Vorher | Nachher |
 | --- | --- | --- |
+| K0 `chrome.windows` Fenix | `undefined` | – |
+| K1 Tab `popup.html?tab=` (Wert 2) | 3/3 | 0/3 |
+| K2 Sheet + Wiedergabe | 0/3 (Tab) | 3/3 |
+| K3 Optionen Android | 4 Buttons, „Separates Fenster“ aktiv | „Im Popup“ aktiv (Stub: 3 Buttons) |
+| K5 Desktop Optionen (Stub) | 4 · 2 aktiv | 4 · 2 aktiv |
 
 | Syntax/Build/Lint | Verhalten | Silent-Failure | Review |
 | --- | --- | --- | --- |
+| ✓ / ✓ / 0 Fehler, 12 Warnungen (vorbestehend) | Gerät ✓, Desktop-Optionen ✓ | n/a (keine neue Fehlerbehandlung) | 1 Runde, 2 Nits |
 
-Entschieden vom Agenten (Umsetzung): „keine“ oder Tabelle (Entscheidung · Verworfen · Warum · Prinzip).
+Entschieden vom Agenten (Umsetzung): keine.
 
 Behobene Review-Befunde, nicht behobene mit Grund:
+- Nit „`windows` evtl. partiell auf Fenix“: durch K0 (`undefined`) und Gerätetest widerlegt.
+- Nit „Bedingung 3× dupliziert“: Helfer laut Plan §3 bewusst verworfen.
